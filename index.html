@@ -1,48 +1,43 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>KQBinary</title>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rader Trader</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
 body{background:#0A0A0A;color:#fff}
-.top{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#121212;border-bottom:1px solid #222}
-.logo{display:flex;align-items:center;gap:6px;font-weight:800}
-.logo span{background:#FF6444;color:#000;width:26px;height:26px;display:grid;place-items:center;border-radius:6px;font-size:12px}
-.bal{background:#1E1E1E;padding:6px 10px;border-radius:20px;font-size:13px;display:flex;align-items:center;gap:6px}
-.dep{background:#FF6444;color:#000;border:0;padding:7px 14px;border-radius:8px;font-weight:800;font-size:13px}
-.tabs{display:flex;gap:8px;padding:10px 12px}
-.tabs div{flex:1;text-align:center;padding:8px;border-radius:20px;background:#1E1E1E;font-size:12px;color:#888}
-.tabs .on{background:#2A1A18;color:#FF6444;border:1px solid #FF6444}
-.chartBox{margin:0 12px;background:#121212;border-radius:12px;padding:10px;border:1px solid #222}
-.chartHead{display:flex;justify-content:space-between;font-size:11px;color:#888}
-#chart{width:100%;height:160px;margin-top:8px;position:relative;background:#0A0A0A;border-radius:8px;overflow:hidden}
-.digits{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin:12px 12px 0}
-.digits div{background:#1E1E1E;padding:8px 0;text-align:center;border-radius:6px;font-size:12px;color:#888}
-.digits .hot{background:#FF6444;color:#000;font-weight:800}
-.controls{display:flex;gap:8px;margin:12px 12px 0}
-.btnMode{flex:1;padding:10px;border-radius:10px;border:0;font-weight:800}
-.btnMode.on{background:#FF6444;color:#000}
-.btnMode.off{background:#1E1E1E;color:#888}
-.stakeBox{display:flex;align-items:center;justify-content:space-between;background:#121212;margin:12px;border-radius:12px;padding:12px;border:1px solid #222}
-.stakeBox button{background:#1E1E1E;border:0;color:#fff;width:32px;height:32px;border-radius:8px;font-size:18px}
-.presets{display:flex;gap:6px;padding:0 12px}
-.presets div{flex:1;background:#1E1E1E;padding:8px;text-align:center;border-radius:8px;font-size:12px;border:1px solid #222}
-.presets .on{border-color:#FF6444;color:#FF6444;background:#2A1A18}
-.tradeBtns{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
-.tradeBtns button{padding:14px;border-radius:12px;border:0;font-weight:900;text-align:left}
-.even{background:#2A1818;color:#FF6444;border:1px solid #FF6444 !important}
-.odd{background:#1A1A2A;color:#8B8BFF;border:1px solid #444 !important}
-.bot{display:flex;justify-content:space-around;padding:12px;background:#121212;position:fixed;bottom:0;left:0;right:0;border-top:1px solid #222}
+.top{display:flex;justify-content:space-between;align-items:center;padding:12px;background:#121212;border-bottom:1px solid #222}
+.logo{font-weight:900;font-size:18px;letter-spacing:1px}
+.logo b{color:#FF6444}
+.bal{background:#1E1E1E;padding:6px 12px;border-radius:20px;font-size:14px}
+.dep{background:#FF6444;color:#000;border:0;padding:8px 16px;border-radius:10px;font-weight:800}
+.tabs{display:flex;gap:8px;padding:12px}
+.tabs div{flex:1;text-align:center;padding:10px;border-radius:20px;background:#1E1E1E;color:#888;font-size:13px}
+.tabs div.active{background:#251512;color:#FF6444;border:1px solid #FF6444}
+.box{margin:0 12px;background:#121212;border-radius:14px;padding:12px;border:1px solid #222}
+#chart{width:100%;height:200px;display:block}
+.digits{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin:14px 12px 0}
+.digits div{background:#1E1E1E;padding:10px 0;text-align:center;border-radius:8px;color:#888;font-size:13px}
+.digits div.hot{background:#FF6444;color:#000;font-weight:900;transform:scale(1.1)}
+.row{display:flex;gap:8px;margin:12px}
+.row button{flex:1;padding:12px;border-radius:12px;border:0;font-weight:800}
+.modeOn{background:#FF6444;color:#000}
+.modeOff{background:#1E1E1E;color:#666}
+.stake{margin:12px;background:#121212;border-radius:12px;padding:14px;border:1px solid #222;display:flex;justify-content:space-between;align-items:center}
+.pres{display:flex;gap:6px;padding:0 12px}
+.pres div{flex:1;background:#1E1E1E;padding:9px;text-align:center;border-radius:8px;font-size:12px;border:1px solid #222}
+.pres div.on{border-color:#FF6444;color:#FF6444}
+.trades{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
+.trades button{padding:16px;border-radius:14px;border:0;font-weight:900;text-align:left;line-height:1.2}
+.even{background:#1A1212;border:1px solid #FF6444!important;color:#FF6444}
+.odd{background:#12121A;border:1px solid #555!important;color:#aaa}
 </style>
 </head>
 <body>
 <div class="top">
-<div class="logo"><span>KQ</span> KQbinary</div>
-<div class="bal"><span style="background:#333;width:18px;height:18px;border-radius:50%;display:grid;place-items:center">R</span> <span id="bal">$0.00</span></div>
-<button class="dep" onclick="deposit()">Deposit</button>
+<div class="logo"><b>R</b>ADER</div>
+<div class="bal">R <span id="bal">$0.00</span> ▾</div>
+<button class="dep" onclick="dep()">Deposit</button>
 </div>
 
-<div class="tabs"><div>Matches/Differs</div><div class="on">Even/Odd</div><div>Over/Under</div></div>
+<div class="tabs"><div>Matches/Differs</div><div class="active">Even/Odd</div><div>Over/Under</div></div>
 
-<div class="chartBox">
-<div class="chartHead"><div><b style="color:#fff">Volatility 10 (1s) Index</b><br><span id="price">9450.81 +0.02 (+0.02%)</span></div><div style="background:#1E1E1E;padding:4px 8px;border-radius:6px">50%</div></div>
-<canvas id="chart"></canvas>
-<div style="display:flex;justify-content:space-between;font-size:10px;color:#555;margin-top:4
+<div class="box">
+<div style="display:flex;justify-content:space-between"><div><b>

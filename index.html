@@ -2,9 +2,23 @@
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard</title></head>
 <body style="margin:0;background:#0F0F0F;color:#fff;font-family:system-ui;padding:16px">
 <div style="max-width:390px;margin:auto">
+<h2>Welcome, <span style="color:#FF6444" id="name">Kipkoech</span> 👋</h2>
+<p id="email" style="color:#888;font-size:14px">you@gmail.com</p>
 
-<!-- HEADER -->
-<div id="homeHead">
-<h2 style="margin:0">Welcome, <span id="name" style="color:#FF6444">Kipkoech</span> 👋</h2>
-<p id="email" style="color:#888;margin-top:6px;font-size:14px"></p>
-<div style="background:#1C1C1E;border-radius:16px;padding:
+<div style="background:#1C1C1E;border-radius:16px;padding:20px;margin-top:16px">
+<p style="color:#888;font-size:12px;margin:0">BALANCE</p>
+<h1 id="bal" style="margin:6px 0">$0.00</h1>
+<p style="color:#22C55E;margin:0">+0.00% today</p>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px">
+<div onclick="location.href='#trade'" style="background:#1C1C1E;padding:18px;border-radius:14px;text-align:center">📈<br><b>Trade</b><br><small style="color:#888">Buy/Sell</small></div>
+<div onclick="document.getElementById('depositBox').style.display='block'" style="background:#1C1C1E;padding:18px;border-radius:14px;text-align:center">💰<br><b>Deposit</b><br><small style="color:#888">M-Pesa</small></div>
+<div onclick="alert('Market: BTC $67,420 +2.4% | ETH $3,410 +1.2% | GOLD $2,340')" style="background:#1C1C1E;padding:18px;border-radius:14px;text-align:center">📊<br><b>Market</b><br><small style="color:#888">Live prices</small></div>
+<div onclick="alert('Profile: '+localStorage.getItem('traderName')+' - '+localStorage.getItem('traderEmail'))" style="background:#1C1C1E;padding:18px;border-radius:14px;text-align:center">👤<br><b>Profile</b><br><small style="color:#888">View</small></div>
+</div>
+
+<div id="depositBox" style="display:none;background:#1C1C1E;padding:16px;border-radius:12px;margin-top:16px">
+<h4>M-Pesa Deposit</h4>
+<p style="color:#888;font-size:13px">Paybill 400200 Acc 123456</p>
+<input id="amt" type="number" placeholder="Amount KES (e.g. 1000)" style="width:100%;padding

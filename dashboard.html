@@ -1,11 +1,24 @@
-<!DOCTYPE html><html><body style="background:#000;color:#fff;font-family:sans-serif;padding:20px">
-<h1>KQbinary TEST</h1>
-<h2>Balance: $<span id="b">9938.80</span></h2>
-<button onclick="trade('over')" style="padding:20px;background:#FF4444;border:0;border-radius:10px;margin:5px">OVER 5 $19.80</button>
-<button onclick="trade('under')" style="padding:20px;background:#333;border:1px solid #fff;border-radius:10px;margin:5px">UNDER 5 $15.83</button>
-<p>Last Digit: <b id="d">5</b></p>
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KQbinary</title><style>body{margin:0;background:#0E0E0E;color:#fff;font-family:system-ui;padding-bottom:20px}.top{padding:12px;background:#141414;display:flex;justify-content:space-between}.bal{background:#2A1515;border:1px solid #FF4444;padding:6px 12px;border-radius:20px}.tab{flex:1;padding:10px;text-align:center;border-radius:20px;background:#1A1A1A;color:#666;border:1px solid #333;margin:0 3px}.on{background:#2A1815!important;color:#FF6444!important;border-color:#FF4444!important}.card{margin:10px;background:#161616;border-radius:12px;padding:10px;border:1px solid #222}.d{flex:1;padding:10px 0;text-align:center;border-radius:8px;background:#1E1E1E;border:1px solid #333}.d.on2{background:#2A1815;color:#FF6444;border-color:#FF6444}.chip{flex:1;background:#1A1A1A;border:1px solid #333;padding:8px;border-radius:10px;color:#fff;font-size:12px}.tbtn{flex:1;background:#1A1A1A;border:1px solid #333;border-radius:14px;padding:14px;color:#fff}</style></head><body>
+<div class="top"><b>KQbinary • LIVE R10</b><div class="bal">$<span id="bal">9938.80</span> <span id="live" style="color:#0f0;font-size:9px">●LIVE</span></div></div>
+<div style="display:flex;padding:10px"><div class="tab">Matches</div><div class="tab">Even/Odd</div><div class="tab on">Over/Under</div></div>
+<div class="card"><div style="display:flex;justify-content:space-between"><small id="price" style="color:#FF6444">Volatility 10: <span id="pr">9450.12</span></small><small>Last: <b id="lastD">5</b></small></div><canvas id="ch" width="320" height="100" style="width:100%;margin-top:6px"></canvas><div id="bars" style="display:flex;gap:2px;height:22px;margin-top:8px"></div><div id="digs" style="display:flex;gap:4px;margin-top:8px"></div><div style="height:4px;background:#333;border-radius:10px;margin-top:8px"><div style="width:60%;height:100%;background:#FF6444"></div></div></div>
+<div style="display:flex;gap:8px;padding:10px"><button class="tbtn" onclick="trade('over')"><b style="color:#FF6444">Over <span class="sv">5</span></b><span style="float:right">$<span id="op">19.80</span></span><br><small style="color:#666">98% Payout</small></button><button class="tbtn" onclick="trade('under')"><b style="color:#FF6B6B">Under <span class="sv">5</span></b><span style="float:right">$<span id="up">15.83</span></span><br><small style="color:#666">58.3% Payout</small></button></div>
+<div id="autoBtn" onclick="toggleAuto()" style="margin:10px;background:#FF6444;color:#000;padding:12px;border-radius:20px;text-align:center;font-weight:900">AUTO OFF</div>
+<div style="margin:10px;background:#161616;border-radius:12px;padding:12px;display:flex;justify-content:space-between;align-items:center"><button onclick="cs(-1)" style="width:44px;height:44px;background:#222;border:0;color:#fff;border-radius:10px">-</button><div style="text-align:center"><small style="color:#888">STAKE</small><br><b>$<span id="stk">10</span></b></div><button onclick="cs(1)" style="width:44px;height:44px;background:#222;border:0;color:#fff;border-radius:10px">+</button></div>
+<div style="display:flex;gap:5px;padding:0 10px"><button onclick="ss(1)" class="chip">$1</button><button onclick="ss(5)" class="chip">$5</button><button onclick="ss(10)" class="chip" style="border-color:#FF6444;color:#FF6444">$10</button><button onclick="ss(25)" class="chip">$25</button><button onclick="ss(50)" class="chip">$50</button><button onclick="ss(100)" class="chip">$100</button></div>
 <script>
-let bal=9938.80;setInterval(()=>{document.getElementById('d').innerText=Math.floor(Math.random()*10)},800);
-function trade(t){let d=Math.floor(Math.random()*10);let win=(t=='over'?d>5:d<5);if(win){bal+=9.8;alert('WIN digit '+d)}else{bal-=10;alert('LOSS digit '+d)}document.getElementById('b').innerText=bal.toFixed(2)}
-</script>
-</body></html>
+let bal=Number(localStorage.getItem('kqb')||9938.80),sel=5,stake=10,data=[],lastD=5,auto=false;
+for(let i=0;i<50;i++)data.push(9450+Math.sin(i/5));
+let cv=document.getElementById('ch'),ctx=cv.getContext('2d');
+function $(i){return document.getElementById(i)}
+function draw(){ctx.clearRect(0,0,320,100);ctx.beginPath();ctx.strokeStyle='#fff';ctx.lineWidth=2;for(let i=0;i<data.length;i++){let x=i*6.4,y=50-(data[i]-9450)*4;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();}
+function render(){let h='';for(let i=0;i<10;i++)h+=`<div class="d ${i==sel?'on2':''}" onclick="sel=${i};render()">${i}</div>`;$('digs').innerHTML=h;let b='';for(let j=0;j<10;j++)b+=`<div style="flex:1;height:${6+Math.random()*16}px;background:${j==lastD?'#FF6444':'#333'};border-radius:3px"></div>`;$('bars').innerHTML=b;$('bal').innerText=bal.toFixed(2);document.querySelectorAll('.sv').forEach(e=>e.innerText=sel);$('op').innerText=(stake*1.98).toFixed(2);$('up').innerText=(stake*1.583).toFixed(2);}
+function cs(v){stake=Math.max(1,stake+v);$('stk').innerText=stake;render();}
+function ss(v){stake=v;$('stk').innerText=v;render();}
+function trade(t){if(bal<stake){alert('Low Balance');return;}bal-=stake;localStorage.setItem('kqb',bal);render();let entry=lastD;setTimeout(()=>{let win=(t=='over'?lastD>sel:lastD<sel);if(win){let p=t=='over'?stake*0.98:stake*0.583;bal+=stake+p;localStorage.setItem('kqb',bal);alert('WIN! Digit '+lastD+' (was '+entry+') +$'+p.toFixed(2));}else{alert('LOSS! Digit '+lastD+' (was '+entry+')');}render();},900);}
+// Deriv Live
+try{let ws=new WebSocket('wss://ws.derivws.com/websockets/v3?app_id=1089');ws.onopen=()=>{ws.send(JSON.stringify({ticks:'R_10',subscribe:1}));$('live').innerText='●LIVE';};ws.onmessage=m=>{let d=JSON.parse(m.data);if(d.tick){let q=d.tick.quote;$('pr').innerText=q;let s=q.toString();lastD=parseInt(s[s.length-1]);$('lastD').innerText=lastD;data.push(q);if(data.length>50)data.shift();draw();render();}};ws.onerror=()=>{fallback();}}catch(e){fallback();}
+function fallback(){setInterval(()=>{let f=9450+Math.sin(Date.now()/600)+Math.random();$('pr').innerText=f.toFixed(2);lastD=Math.floor(Math.random()*10);$('lastD').innerText=lastD;data.push(f);if(data.length>50)data.shift();draw();render();},800);}
+function toggleAuto(){auto=!auto;$('autoBtn').innerText=auto?'AUTO ON - Stop to cancel':'AUTO OFF';$('autoBtn').style.background=auto?'#00ff88':'#FF6444';if(auto){(function loop(){if(!auto)return;trade(Math.random()>0.5?'over':'under');setTimeout(loop,2500);})();}}
+render();draw();
+</script></body></html>

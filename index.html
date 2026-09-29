@@ -1,40 +1,42 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RADER</title>
-<style>
-body{margin:0;background:#0A0A0A;color:#fff;font-family:system-ui}
-.top{display:flex;justify-content:space-between;align-items:center;padding:12px;background:#121212;border-bottom:1px solid #222}
-.logo{font-weight:900;font-size:20px} .logo span{color:#FF6444}
-.bal{background:#1E1E1E;padding:6px 14px;border-radius:20px}
-.dep{background:#FF6444;color:#000;border:0;padding:8px 16px;border-radius:10px;font-weight:800}
-.tabs{display:flex;gap:8px;padding:12px}
-.tabs div{flex:1;text-align:center;padding:10px;border-radius:20px;background:#1E1E1E;color:#777}
-.tabs .on{background:#251512;color:#FF6444;border:1px solid #FF6444}
-.card{margin:0 12px;background:#121212;border:1px solid #222;border-radius:14px;padding:12px}
-#chart{width:100%;height:190px;background:#070707;border-radius:10px;margin-top:10px}
-.digs{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:14px 12px}
-.digs div{background:#1E1E1E;padding:10px 0;text-align:center;border-radius:8px;color:#777}
-.digs div.hot{background:#FF6444;color:#000;font-weight:900}
-.controls{display:flex;gap:8px;padding:0 12px}
-.controls button{flex:1;padding:11px;border-radius:10px;border:0;font-weight:800}
-.stake{display:flex;justify-content:space-between;align-items:center;margin:12px;background:#121212;border:1px solid #222;padding:14px;border-radius:12px}
-.pres{display:flex;gap:6px;padding:0 12px}
-.pres div{flex:1;background:#1E1E1E;border:1px solid #222;padding:8px;text-align:center;border-radius:8px;font-size:12px}
-.pres .on{border-color:#FF6444;color:#FF6444}
-.trade{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 12px 80px}
-.trade button{padding:15px;border-radius:14px;border:0;font-weight:900;text-align:left}
-.even{background:#1A1212;border:1px solid #FF6444!important;color:#FF6444}
-.odd{background:#12121A;border:1px solid #444!important;color:#bbb}
-</style>
 </head>
-<body>
-<div class="top"><div class="logo"><span>R</span>ADER</div><div class="bal">R <span id="bal">$0.00</span></div><button class="dep" onclick="dep()">Deposit</button></div>
-<div class="tabs"><div>Matches/Differs</div><div class="on">Even/Odd</div><div>Over/Under</div></div>
-
-<div class="card">
-<div style="display:flex;justify-content:space-between"><div><b>Volatility 10 (1s) Index</b><br><small id="pr" style="color:#888">9450.81 +0.02</small></div><div style="background:#1E1E1E;padding:4px 10px;border-radius:8px;font-size:12px">50%</div></div>
-<canvas id="chart"></canvas>
+<body style="margin:0;background:#0A0A0A;color:#fff;font-family:system-ui">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:#121212">
+<div style="font-weight:900;font-size:20px"><span style="color:#FF6444">R</span>ADER</div>
+<div style="background:#1E1E1E;padding:6px 14px;border-radius:20px">R <span id="bal">$0.00</span></div>
+<button onclick="dep()" style="background:#FF6444;border:0;padding:8px 16px;border-radius:10px;font-weight:800">Deposit</button>
 </div>
 
-<div class="digs" id="digs"></div>
-<div class="controls"><button style="background:#FF644
+<div style="display:flex;gap:8px;padding:12px">
+<div style="flex:1;background:#1E1E1E;padding:10px;border-radius:20px;text-align:center;color:#666;font-size:13px">Matches/Differs</div>
+<div style="flex:1;background:#251512;border:1px solid #FF6444;padding:10px;border-radius:20px;text-align:center;color:#FF6444;font-size:13px">Even/Odd</div>
+<div style="flex:1;background:#1E1E1E;padding:10px;border-radius:20px;text-align:center;color:#666;font-size:13px">Over/Under</div>
+</div>
+
+<div style="margin:0 12px;background:#121212;border:1px solid #222;border-radius:14px;padding:12px">
+<div style="display:flex;justify-content:space-between"><div><b>Volatility 10 (1s) Index</b><br><small style="color:#888" id="price">9450.81 +0.02 (+0.02%)</small></div><div style="background:#1E1E1E;padding:6px 10px;border-radius:8px;font-size:12px">50%</div></div>
+<div style="margin-top:12px;background:#000;height:140px;border-radius:10px;position:relative;overflow:hidden" id="chartArea">
+<div id="line" style="position:absolute;bottom:40%;left:0;right:0;height:2px;background:#FF6444"></div>
+<div style="position:absolute;bottom:10px;left:10px;color:#555;font-size:10px">10:27:38 • LIVE</div>
+</div>
+</div>
+
+<div style="display:flex;justify-content:space-between;padding:10px 12px;color:#666;font-size:10px"><span>EVEN / ODD</span><span>HOT 1 COLD 4 LAST 1</span></div>
+<div style="display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:0 12px" id="digits"></div>
+
+<div style="display:flex;gap:8px;margin:12px">
+<button style="flex:1;background:#FF6444;color:#000;border:0;padding:11px;border-radius:10px;font-weight:800">AUTO</button>
+<button style="flex:1;background:#1E1E1E;color:#666;border:0;padding:11px;border-radius:10px">MANUAL</button>
+</div>
+
+<div style="margin:12px;background:#121212;border:1px solid #222;border-radius:12px;padding:14px;display:flex;justify-content:space-between;align-items:center">
+<button onclick="stake=Math.max(1,stake-1);update()" style="background:#1E1E1E;border:0;color:#fff;width:36px;height:36px;border-radius:8px;font-size:20px">-</button>
+<div style="text-align:center">STAKE<br><b>$<span id="stk">10</span></b></div>
+<button onclick="stake=Math.min(100,stake+1);update()" style="background:#1E1E1E;border:0;color:#fff;width:36px;height:36px;border-radius:8px;font-size:20px">+</button>
+</div>
+
+<div style="display:flex;gap:6px;padding:0 12px" id="pres">
+<div onclick="setStake(1)" style="flex:1;background:#1E1E1E;border:1px solid #222;padding:8px;text-align:center;border-radius:8px;font-size:12px">$1</div>
+<div onclick="setStake(5)" style="flex:1;background:#1E1

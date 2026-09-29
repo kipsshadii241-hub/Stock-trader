@@ -1,24 +1,53 @@
 <script>
+let lastDigit = 5;
 const ws = new WebSocket('wss://ws.derivws.com/websockets/v3?app_id=1089');
-let lastPrice=0;
-ws.onopen = ()=>{ ws.send(JSON.stringify({ticks:"R_10"})); document.querySelector('.top-price').innerText="$39.95 • CONNECTED"; }
-ws.onmessage = (msg)=>{
-  const data=JSON.parse(msg.data);
-  if(data.tick){
-    lastPrice=data.tick.quote;
-    const digit = String(lastPrice).slice(-1);
-    document.body.innerHTML = document.body.innerHTML.replace(/Last Digit: -/,'Last Digit: '+digit);
-    // update your 0-9 highlight
-    document.querySelectorAll('.digit').forEach(d=>d.classList.remove('active'));
-    let el=document.getElementById('d'+digit);
-    if(el) el.classList.add('active');
-  }
-}
+ws.onopen = () => {
+  ws.send(JSON.stringify({ticks:"R_10"}));
+  console.log("Connected to Volatility 10");
+};
+
+ws.onmessage = (msg) => {
+  try {
+    const data = JSON.parse(msg.data);
+    if(data.tick){
+      const price = data.tick.quote.toString();
+      lastDigit = parseInt(price.slice(-1));
+      
+      // Update price display safely
+      const priceEl = document.querySelector('#price-display') || document.body;
+      if(document.querySelector('.price-text')){
+        document.querySelector('.price-text').innerText = "$" + price + " • LIVE";
+      }
+      if(document.querySelector('.digit-display')){
+        document.querySelector('.digit-display').innerText = "Last Digit: " + lastDigit;
+      }
+      
+      // Highlight digit 0-9
+      document.querySelectorAll('.digit-box').forEach(b => b.style.background = "");
+      const active = document.getElementById('digit-'+lastDigit);
+      if(active) active.style.background = "red";
+      
+      console.log("Price:",price,"Digit:",lastDigit);
+    }
+  } catch(e){ console.log(e); }
+};
+
+ws.onerror = () => { console.log("WS error, retrying..."); setTimeout(()=>location.reload(),3000); };
+
 async function deposit(){
-  const phone=prompt("Phone 2547...","254708374149");
-  const amount=prompt("Amount","10");
-  const r=await fetch("/api/mpesa",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({phone,amount})});
-  const j=await r.json();
-  alert(JSON.stringify(j));
+  const phone = prompt("M-PESA Phone (2547...)", "254708374149");
+  const amount = prompt("Amount in KES", "10");
+  if(!phone || !amount) return;
+  alert("Sending STK to "+phone+"... Wait for PIN popup");
+  try{
+    const r = await fetch("/api/mpesa",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({phone: phone, amount: amount})
+    });
+    const j = await r.json();
+    alert("M-PESA Response: "+JSON.stringify(j));
+    if(j.success) alert("✅ Check phone "+phone+" - Enter PIN 0000 for sandbox test");
+  }catch(e){ alert("Deposit failed: "+e.message); }
 }
 </script>

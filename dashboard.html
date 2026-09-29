@@ -1,19 +1,140 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KQbinary FIXED</title><style>body{margin:0;background:#0A0A0A;color:#fff;font-family:system-ui} .top{display:flex;justify-content:space-between;padding:12px;background:#111} .live{color:#00FF00} .card{margin:10px;background:#111;border:1px solid #222;border-radius:14px;padding:12px} canvas{width:100%;height:120px;background:#0F0F0F;border-radius:10px} .d{flex:1;padding:10px;text-align:center;background:#1C1C1C;border:1px solid #333;border-radius:8px} .d.on{background:#FF6A00;color:#000} .t{flex:1;background:#151515;border:1px solid #333;border-radius:12px;padding:14px} .auto{background:#FF6A00;color:#000;padding:14px;border-radius:24px;text-align:center;font-weight:900;margin:10px} .chip{padding:8px 14px;background:#1A1A1A;border:1px solid #333;border-radius:20px} .chip.on{border-color:#FF6A00;color:#FF6A00}</style></head><body>
-<div class="top"><b>KQbinary • <span style="color:#00FF00">● LIVE R_10</span></b><div style="background:#222;padding:6px 12px;border-radius:20px">$<span id="bal">9908.80</span> • <span style="color:#0F0">● LIVE</span></div></div>
-<div class="card"><div style="display:flex;justify-content:space-between"><span id="vol" style="color:#FF6A00;font-weight:900">Volatility 10: 9449.12</span><span>Last: <b id="ld">5</b></span></div><canvas id="cv" width="340" height="120"></canvas><div style="display:flex;gap:4px;margin-top:10px" id="bars"></div><div style="display:flex;gap:4px;margin-top:10px" id="digs"></div></div>
-<div style="display:flex;gap:10px;margin:10px"><div class="t" onclick="trade('over')"><b id="oL">Over 5</b> $<span id="oP">19.80</span></div><div class="t" onclick="trade('under')"><b id="uL">Under 5</b> $<span id="uP">15.83</span></div></div>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KQbinary LIVE</title>
+<style>
+body{margin:0;background:#0A0A0A;color:#fff;font-family:sans-serif}
+.top{display:flex;justify-content:space-between;padding:12px;background:#111;border-bottom:1px solid #222}
+.live{color:#00FF66}
+.card{margin:12px;background:#121212;border-radius:14px;padding:12px;border:1px solid #222}
+canvas{width:100%;height:130px;background:#0E0E0E;border-radius:10px}
+.row{display:flex;gap:6px;margin-top:10px}
+.bar{flex:1;border-radius:4px}
+.d{flex:1;text-align:center;padding:10px 0;background:#1E1E1E;border-radius:8px;border:1px solid #333}
+.d.on{background:#FF6A00;color:#000;font-weight:900;border-color:#FF6A00}
+.btn{flex:1;background:#1A1A1A;border:1px solid #333;border-radius:12px;padding:14px}
+.btn b{color:#FF6A00}
+.auto{margin:12px;background:#FF6A00;color:#000;text-align:center;padding:15px;border-radius:25px;font-weight:900;font-size:16px}
+.stakeRow{display:flex;justify-content:space-between;background:#151515;margin:12px;padding:12px;border-radius:12px;align-items:center}
+.chip{padding:8px 14px;background:#1A1A1A;border:1px solid #333;border-radius:20px}
+.chip.on{border-color:#FF6A00;color:#FF6A00}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#fff;color:#000;padding:10px 18px;border-radius:20px;font-weight:900;display:none}
+.toast.on{display:block}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div class="top">
+<b>KQbinary • <span class="live">● LIVE R_10</span></b>
+<div style="background:#222;padding:6px 12px;border-radius:20px">$<span id="bal">9908.80</span> • <span class="live">● LIVE</span></div>
+</div>
+
+<div class="card">
+<div style="display:flex;justify-content:space-between">
+<span id="vol" style="color:#FF6A00;font-weight:900">Volatility 10: 9449.22</span>
+<span>Last Digit: <b id="last">5</b></span>
+</div>
+<canvas id="c" width="340" height="130"></canvas>
+<div class="row" id="bars"></div>
+<div class="row" id="digs"></div>
+<div style="height:4px;background:#222;border-radius:10px;margin-top:10px"><div id="fill" style="height:100%;background:#FF6A00;width:50%"></div></div>
+</div>
+
+<div style="display:flex;gap:10px;margin:12px">
+<div class="btn" onclick="doTrade('over')"><div style="display:flex;justify-content:space-between"><b id="oL">Over 5</b><span>$<span id="oP">19.80</span></span></div><small>98% Payout</small></div>
+<div class="btn" onclick="doTrade('under')"><div style="display:flex;justify-content:space-between"><b id="uL">Under 5</b><span>$<span id="uP">15.83</span></span></div><small>58.3% Payout</small></div>
+</div>
+
 <div class="auto" id="autoBtn" onclick="toggleAuto()">AUTO OFF</div>
-<div style="display:flex;justify-content:space-between;background:#151515;margin:10px;padding:12px;border-radius:12px"><button onclick="stake=Math.max(1,stake-1);render()">-</button><span>STAKE $<span id="stk">10</span></span><button onclick="stake++;render()">+</button></div>
-<div style="display:flex;gap:6px;padding:0 10px"><div class="chip" onclick="stake=1;render()"> $1</div><div class="chip" onclick="stake=5;render()"> $5</div><div class="chip on" onclick="stake=10;render()"> $10</div><div class="chip" onclick="stake=25;render()"> $25</div><div class="chip" onclick="stake=50;render()"> $50</div></div>
-<div id="toast" style="position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#fff;color:#000;padding:10px 18px;border-radius:20px;font-weight:900;display:none"></div>
+
+<div class="stakeRow">
+<button onclick="stake=Math.max(1,stake-1);render()" style="width:40px;height:40px;background:#222;border:0;color:#fff;border-radius:10px">-</button>
+<div style="text-align:center">STAKE<br><b>$<span id="stk">10</span></b></div>
+<button onclick="stake++;render()" style="width:40px;height:40px;background:#222;border:0;color:#fff;border-radius:10px">+</button>
+</div>
+
+<div style="display:flex;gap:6px;padding:0 12px;overflow:auto">
+<div class="chip" onclick="stake=1;render();selChip(this)">$1</div>
+<div class="chip" onclick="stake=5;render();selChip(this)">$5</div>
+<div class="chip on" onclick="stake=10;render();selChip(this)">$10</div>
+<div class="chip" onclick="stake=25;render();selChip(this)">$25</div>
+<div class="chip" onclick="stake=50;render();selChip(this)">$50</div>
+</div>
+
 <script>
-let bal=9908.8,stake=10,sel=5,last=5,auto=false,data=[];for(let i=0;i<80;i++)data.push(9440+Math.random()*5);
-let c=document.getElementById('cv'),x=c.getContext('2d');
-function draw(){x.clearRect(0,0,340,120);x.beginPath();x.strokeStyle='#fff';x.lineWidth=2;for(let i=0;i<data.length;i++){let px=i*4.25,py=60-(data[i]-9445)*6;if(i==0)x.moveTo(px,py);else x.lineTo(px,py);}x.stroke();}
-function toast(m){let t=document.getElementById('toast');t.innerText=m;t.style.display='block';setTimeout(()=>t.style.display='none',2000);}
-function render(){document.getElementById('bal').innerText=bal.toFixed(2);document.getElementById('stk').innerText=stake;document.getElementById('ld').innerText=last;document.getElementById('vol').innerText='Volatility 10: '+data[data.length-1].toFixed(2);document.getElementById('oL').innerText='Over '+sel;document.getElementById('uL').innerText='Under '+sel;document.getElementById('oP').innerText=(stake*1.98).toFixed(2);document.getElementById('uP').innerText=(stake*1.583).toFixed(2);let b='';for(let i=0;i<10;i++)b+=`<div style="flex:1;height:${10+Math.random()*18}px;background:${i==last?'#FF6A00':'#333'};border-radius:4px"></div>`;document.getElementById('bars').innerHTML=b;let d='';for(let i=0;i<10;i++)d+=`<div class="d ${i==sel?'on':''}" onclick="sel=${i};render()" style="flex:1">${i}</div>`;document.getElementById('digs').innerHTML=`<div style="display:flex;gap:4px;width:100%">${d}</div>`;}
-function trade(t){let win=t=='over'?last>sel:last<sel;if(win){let p=t=='over'?stake*0.98:stake*0.583;bal+=p;toast('WIN '+t+' '+last+' +$'+p.toFixed(2));}else{bal-=stake;toast('LOSS '+t+' '+last+' -$'+stake);}render();}
-function toggleAuto(){auto=!auto;document.getElementById('autoBtn').innerText=auto?'■ STOP':'AUTO OFF';if(auto){(function loop(){if(!auto)return;trade('over');setTimeout(loop,1200);})();}}
-setInterval(()=>{let f=9445+Math.sin(Date.now()/600)*5+Math.random();data.push(f);if(data.length>80)data.shift();last=Math.floor(Math.random()*10);draw();render();},500);
-render();draw();
-</script></body></html>
+let bal=9908.80, stake=10, sel=5, last=5, auto=false, data=[], timer=null;
+for(let i=0;i<80;i++) data.push(9440 + Math.sin(i/8)*4 + Math.random()*2);
+let cv=document.getElementById('c'), ctx=cv.getContext('2d');
+
+function draw(){
+ ctx.clearRect(0,0,340,130);
+ ctx.beginPath(); ctx.strokeStyle='#fff'; ctx.lineWidth=2;
+ for(let i=0;i<data.length;i++){
+   let x=i*4.25, y=65-(data[i]-9445)*7;
+   if(i==0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+ }
+ ctx.stroke();
+}
+
+function toast(m){
+ let t=document.getElementById('toast');
+ t.innerText=m; t.classList.add('on');
+ setTimeout(()=>t.classList.remove('on'),2000);
+}
+
+function render(){
+ document.getElementById('bal').innerText=bal.toFixed(2);
+ document.getElementById('stk').innerText=stake;
+ document.getElementById('last').innerText=last;
+ document.getElementById('vol').innerText='Volatility 10: '+data[data.length-1].toFixed(2);
+ document.getElementById('oL').innerText='Over '+sel;
+ document.getElementById('uL').innerText='Under '+sel;
+ document.getElementById('oP').innerText=(stake*1.98).toFixed(2);
+ document.getElementById('uP').innerText=(stake*1.583).toFixed(2);
+ document.getElementById('fill').style.width=(last*10+10)+'%';
+ 
+ let b=''; for(let i=0;i<10;i++) b+=`<div class="bar" style="flex:1;height:${10+Math.random()*18}px;background:${i==last?'#FF6A00':'#333'}"></div>`;
+ document.getElementById('bars').innerHTML=b;
+ 
+ let d=''; for(let i=0;i<10;i++) d+=`<div class="d ${i==sel?'on':''}" onclick="sel=${i};render()">${i}</div>`;
+ document.getElementById('digs').innerHTML=d;
+}
+
+function doTrade(type){
+ let win = type=='over' ? last>sel : last<sel;
+ if(bal<stake){toast('Low balance'); return;}
+ if(win){
+   let pay = type=='over' ? stake*0.98 : stake*0.583;
+   bal+=pay; toast('WIN '+type+' '+last+' +$'+pay.toFixed(2));
+ }else{
+   bal-=stake; toast('LOSS '+type+' '+last+' -$'+stake);
+ }
+ render();
+}
+
+function toggleAuto(){
+ auto=!auto;
+ document.getElementById('autoBtn').innerText = auto ? '■ STOP - RUNNING' : 'AUTO OFF';
+ document.getElementById('autoBtn').style.background = auto ? '#fff' : '#FF6A00';
+ if(auto){ toast('AUTO STARTED'); (function loop(){ if(!auto) return; doTrade('over'); timer=setTimeout(loop,1200); })(); }
+ else{ clearTimeout(timer); toast('AUTO STOPPED'); }
+}
+
+function selChip(el){
+ document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+ el.classList.add('on');
+}
+
+setInterval(()=>{
+ let f = 9445 + Math.sin(Date.now()/700)*5 + (Math.random()-0.5)*2;
+ data.push(f); if(data.length>80) data.shift();
+ last = Math.floor(Math.random()*10);
+ draw(); render();
+},500);
+
+render(); draw();
+</script>
+</body>
+</html>

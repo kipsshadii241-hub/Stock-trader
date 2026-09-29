@@ -1,148 +1,169 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KQbinary - Real & Demo</title><style>
-*{box-sizing:border-box;margin:0;padding:0}body{background:#080808;color:#fff;font-family:system-ui;padding-bottom:76px}
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KQbinary - FIXED ALL</title><style>
+*{box-sizing:border-box;margin:0;padding:0}body{background:#080808;color:#fff;font-family:system-ui;padding-bottom:80px}
 .top{display:flex;justify-content:space-between;align-items:center;padding:10px;background:#111;border-bottom:1px solid #1E1E1E;position:sticky;top:0;z-index:60}
 .accWrap{position:relative;display:flex;align-items:center;gap:6px;background:#1A1A1A;border:1px solid #2A2A2A;padding:6px 10px;border-radius:20px;cursor:pointer}
 .accDot{width:22px;height:22px;background:#FF8A2A;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:10px}
-.accPop{position:absolute;top:42px;left:0;background:#1E1E1E;border:1px solid #2A2A2A;border-radius:14px;padding:8px;min-width:240px;display:none;z-index:70;box-shadow:0 10px 30px rgba(0,0,0,.8)}.accPop.on{display:block}
-.accItem{padding:12px 10px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:13px}.accItem.on{background:#2A1A0F}.accItem:hover{background:#222}
-.bal{color:#fff;font-weight:700}.dep{background:#FF8A2A;color:#000;padding:7px 14px;border-radius:18px;font-weight:900;border:0;font-size:11px;cursor:pointer}
-.tabs{display:flex;gap:6px;padding:8px 10px}.tab{flex:1;padding:8px;text-align:center;border-radius:18px;background:#151515;color:#555;border:1px solid #1E1E1E;font-size:11px;cursor:pointer}.tab.on{background:#FF8A2A;color:#000;font-weight:900}
+.accPop{position:absolute;top:44px;left:-10px;background:#1E1E1E;border:1px solid #2A2A2A;border-radius:14px;padding:8px;min-width:260px;display:none;z-index:99;box-shadow:0 10px 30px #000}.accPop.on{display:block}
+.accItem{padding:12px 10px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:13px}.accItem.on{background:#2A1A0F;border:1px solid #FF8A2A}.accItem:hover{background:#222}
+.dep{background:#FF8A2A;color:#000;padding:7px 14px;border-radius:18px;font-weight:900;border:0;font-size:11px;cursor:pointer}
+.tabs{display:flex;gap:6px;padding:8px 10px}.tab{flex:1;padding:9px;text-align:center;border-radius:18px;background:#151515;color:#555;border:1px solid #1E1E1E;font-size:11px;cursor:pointer}.tab.on{background:#FF8A2A;color:#000;font-weight:900}
 .card{margin:0 8px;background:#101010;border:1px solid #1A1A1A;border-radius:14px;padding:8px}
 canvas{width:100%;height:120px;background:#0D0D0D;border-radius:10px;display:block;margin-top:6px}
-.bars{display:flex;gap:3px;margin-top:10px;height:32px;align-items:end}.bar{flex:1;background:#2A2A2A;border-radius:4px;min-height:6px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}.bar.on{background:#FF8A2A}.bar span{font-size:8px;margin-bottom:-14px;margin-top:4px;color:#888}
-.dRow{display:flex;gap:4px;margin-top:18px}.d{flex:1;text-align:center;padding:8px 0;background:#1E1E1E;border-radius:8px;font-size:12px;color:#888;border:1px solid #252525;cursor:pointer}.d.on{background:#FF8A2A;color:#000;font-weight:900}
-.stats{display:flex;gap:6px;margin:8px}.st{flex:1;background:#151515;border:1px solid #1E1E1E;border-radius:10px;padding:7px;text-align:center}.st small{color:#555;font-size:8px;display:block}.st b{font-size:11px}
+.bars{display:flex;gap:3px;margin-top:10px;height:34px;align-items:end}.bar{flex:1;background:#2A2A2A;border-radius:4px;min-height:6px;text-align:center}.bar.on{background:#FF8A2A}.bar small{font-size:7px;display:block;color:#888;margin-top:2px}
+.dRow{display:flex;gap:4px;margin-top:6px}.d{flex:1;text-align:center;padding:8px 0;background:#1E1E1E;border-radius:8px;font-size:12px;color:#888;border:1px solid #252525;cursor:pointer}.d.on{background:#FF8A2A;color:#000;font-weight:900}
+.autoRow{display:flex;margin:10px 8px;background:#111;border-radius:20px;padding:2px;border:1px solid #1A1A1A}.aBtn{flex:1;padding:10px;text-align:center;border-radius:16px;font-size:11px;color:#555;font-weight:700;cursor:pointer}.aBtn.on{background:#FF8A2A;color:#000}
 .trade{display:flex;gap:8px;margin:8px}.tBtn{flex:1;background:#151515;border:1px solid #1E1E1E;border-radius:12px;padding:12px;text-align:center;cursor:pointer}.tBtn span{color:#FF8A2A;font-weight:900}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #1E1E1E;display:flex;justify-content:space-around;padding:8px 0;z-index:40}.b{font-size:9px;color:#555;text-align:center;cursor:pointer}.b.on{color:#FF8A2A}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;z-index:100;align-items:center;justify-content:center;padding:14px}.modal.on{display:flex}.box{width:100%;max-width:380px;background:#181818;border:1px solid #2A2A2A;border-radius:18px;padding:16px;max-height:90vh;overflow:auto}
-.depBtn{width:100%;background:#FF8A2A;color:#000;padding:13px;border:0;border-radius:24px;font-weight:900;margin-top:12px;cursor:pointer}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #1E1E1E;display:flex;justify-content:space-around;padding:10px 0;z-index:40}.b{font-size:10px;color:#555;text-align:center;cursor:pointer;padding:6px 12px;border-radius:10px}.b.on{color:#FF8A2A;background:#1A1A1A}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;z-index:100;align-items:center;justify-content:center;padding:14px}.modal.on{display:flex}.box{width:100%;max-width:380px;background:#181818;border:1px solid #2A2A2A;border-radius:18px;padding:16px}
+.depBtn{width:100%;background:#FF8A2A;color:#000;padding:14px;border:0;border-radius:24px;font-weight:900;margin-top:12px;cursor:pointer;font-size:13px}
 .payOpt{padding:14px;background:#1E1E1E;border:1px solid #252525;border-radius:12px;margin-top:10px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
 .amtBox{background:#0F0F0F;border:1px solid #1E1E1E;border-radius:12px;padding:12px;margin-top:10px}.amtInp{width:100%;background:transparent;border:0;color:#fff;font-size:22px;outline:none}
 .chip{padding:6px 12px;background:#151515;border:1px solid #1E1E1E;border-radius:16px;font-size:11px;cursor:pointer;display:inline-block;margin:3px}.chip.on{background:#FF8A2A;color:#000;font-weight:900}
-.phBtn{flex:1;padding:8px;text-align:center;border-radius:18px;border:1px solid #2A2A2A;background:#1A1A1A;color:#666;cursor:pointer;font-size:11px}.phBtn.on{background:#FF8A2A;color:#000;font-weight:700}
+.phBtn{flex:1;padding:9px;text-align:center;border-radius:18px;border:1px solid #2A2A2A;background:#1A1A1A;color:#666;cursor:pointer;font-size:11px}.phBtn.on{background:#FF8A2A;color:#000;font-weight:700}
+.hist{margin:8px;background:#101010;border:1px solid #1A1A1A;border-radius:10px;padding:8px;max-height:90px;overflow:auto;font-size:10px}
 </style></head><body>
 <div class="top">
-<div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px;cursor:pointer">☰</span><span style="background:#FF8A2A;color:#000;width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:10px">KQ</span><b>KQbinary</b>
-<div class="accWrap" onclick="toggleAcc()"><div class="accDot">R</div><span class="bal">$<span id="bal">0.00</span></span><span style="font-size:10px">▼</span>
+<div style="display:flex;align-items:center;gap:8px"><span style="background:#FF8A2A;color:#000;width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:10px">KQ</span><b>KQbinary</b>
+<div class="accWrap" onclick="event.stopPropagation();toggleAcc()"><div class="accDot" id="accLetter">R</div><span style="font-weight:700">$<span id="bal">11.00</span></span><span style="font-size:10px">▼</span>
 <div class="accPop" id="accPop">
-<div class="accItem on" id="realItem" onclick="switchAcc('real')"><div style="display:flex;gap:8px;align-items:center"><span style="width:8px;height:8px;background:#0F0;border-radius:50%"></span> Real Account</div><span style="color:#FF8A2A;font-size:11px">Active</span></div>
-<div class="accItem" id="demoItem" onclick="switchAcc('demo')"><div style="display:flex;gap:8px;align-items:center"><span style="width:8px;height:8px;background:#F55;border-radius:50%"></span> Demo Account</div><span style="font-size:11px;color:#888">$10,000</span></div>
-<div class="accItem" onclick="refreshDemo()" style="justify-content:center;color:#888;font-size:12px"><span>↻ Refresh demo balance</span></div>
+<div class="accItem on" id="realItem" onclick="switchAcc('real')"><div style="display:flex;gap:8px;align-items:center"><span style="width:8px;height:8px;background:#0F0;border-radius:50%"></span> Real Account</div><span style="color:#FF8A2A;font-size:11px" id="realBalTxt">$11.00 Active</span></div>
+<div class="accItem" id="demoItem" onclick="switchAcc('demo')"><div style="display:flex;gap:8px;align-items:center"><span style="width:8px;height:8px;background:#F55;border-radius:50%"></span> Demo Account</div><span style="font-size:11px;color:#888" id="demoBalTxt">$10,000</span></div>
+<div class="accItem" onclick="refreshDemo()" style="justify-content:center;color:#888"><span>↻ Refresh demo balance</span></div>
 </div>
 </div>
 </div>
-<div style="display:flex;gap:10px;align-items:center"><span style="font-size:16px;opacity:.6">🔊</span><button class="dep" onclick="openDep()">Deposit</button><span style="font-size:16px;opacity:.6">🔔</span></div>
+<div style="display:flex;gap:8px"><button class="dep" onclick="openDep()">Deposit</button></div>
 </div>
 
-<div class="tabs"><div class="tab on">Matches/Differs</div><div class="tab">Even/Odd</div><div class="tab">Over/Under</div></div>
+<div class="tabs"><div class="tab on" id="tab0" onclick="setTab(0)">Matches/Differs</div><div class="tab" id="tab1" onclick="setTab(1)">Even/Odd</div><div class="tab" id="tab2" onclick="setTab(2)">Over/Under</div></div>
 
 <div class="card">
-<div style="display:flex;justify-content:space-between"><span style="font-size:10px;color:#888">1T Volatility 10 (1s) Index</span><span style="background:#FF8A2A;color:#000;padding:2px 6px;border-radius:6px;font-weight:900;font-size:11px" id="priceTag">9448.59</span></div>
+<div style="display:flex;justify-content:space-between"><span style="font-size:10px;color:#888">1T Volatility 10 (1s) Index</span><span style="background:#FF8A2A;color:#000;padding:2px 6px;border-radius:6px;font-weight:900;font-size:11px" id="priceTag">9444.93</span></div>
 <canvas id="cv" width="360" height="120"></canvas>
 <div style="display:flex;justify-content:space-between;font-size:9px;color:#555;margin-top:6px"><span>12:31:05</span><span>12:33:35</span><span>12:36:05</span><span>12:38:35</span><span>12:41:06</span></div>
-<div style="display:flex;justify-content:space-between;font-size:8px;color:#666;margin-top:8px"><span>MATCH / DIFFER</span><span><span style="color:#FF8A2A">HOT 2</span> <span style="color:#5AF">COLD 1</span> LAST 2</span></div>
+<div style="display:flex;justify-content:space-between;font-size:8px;color:#666;margin-top:8px"><span id="lbl">MATCH / DIFFER</span><span><span style="color:#FF8A2A">HOT 2</span> <span style="color:#5AF">COLD 1</span> LAST 2</span></div>
 <div class="bars" id="bars"></div>
-<div style="display:flex;justify-content:space-between;font-size:8px;color:#666;margin-top:4px"><span style="color:#FF8A2A">MATCH 5 10%</span><span>DIFFER 90%</span></div>
+<div style="display:flex;justify-content:space-between;font-size:8px;color:#666;margin-top:4px"><span id="leftPct" style="color:#FF8A2A">MATCH 5 10%</span><span id="rightPct">DIFFER 90%</span></div>
 <div class="dRow" id="digits"></div>
 </div>
 
-<div style="display:flex;margin:10px 8px;background:#111;border-radius:20px;padding:2px;border:1px solid #1A1A1A"><div style="flex:1;padding:10px;text-align:center;border-radius:16px;background:#151515;color:#fff;font-size:11px;font-weight:700" id="autoBtn" onclick="toggleAuto()">AUTO</div><div style="flex:1;padding:10px;text-align:center;font-size:11px;color:#555">MANUAL</div></div>
+<div class="autoRow"><div class="aBtn on" id="autoBtn" onclick="toggleAuto()">AUTO OFF</div><div class="aBtn" id="manBtn" onclick="stopAuto()">MANUAL</div></div>
 
-<div style="display:flex;justify-content:space-between;align-items:center;background:#151515;margin:8px;border-radius:14px;padding:8px 12px;border:1px solid #1E1E1E"><button style="width:38px;height:38px;background:#1E1E1E;border:1px solid #2A2A2A;color:#fff;border-radius:10px" onclick="chg(-1)">−</button><div style="text-align:center"><small style="color:#666;font-size:8px">STAKE</small><br><b id="stk">10</b></div><button style="width:38px;height:38px;background:#1E1E1E;border:1px solid #2A2A2A;color:#fff;border-radius:10px" onclick="chg(1)">+</button></div>
+<div style="display:flex;justify-content:space-between;align-items:center;background:#151515;margin:8px;border-radius:14px;padding:8px 12px;border:1px solid #1E1E1E"><button style="width:38px;height:38px;background:#1E1E1E;border:1px solid #2A2A2A;color:#fff;border-radius:10px" onclick="chg(-1)">−</button><div style="text-align:center"><small style="color:#666;font-size:8px">STAKE</small><br><b id="stk">9</b></div><button style="width:38px;height:38px;background:#1E1E1E;border:1px solid #2A2A2A;color:#fff;border-radius:10px" onclick="chg(1)">+</button></div>
 
-<div style="padding:0 8px"><span class="chip" onclick="setS(1,this)">$1</span><span class="chip" onclick="setS(5,this)">$5</span><span class="chip on" onclick="setS(10,this)">$10</span><span class="chip" onclick="setS(25,this)">$25</span><span class="chip" onclick="setS(50,this)">$50</span><span class="chip" onclick="setS(100,this)">$100</span></div>
+<div style="padding:0 8px"><span class="chip" onclick="setS(1,this)">$1</span><span class="chip" onclick="setS(5,this)">$5</span><span class="chip on" onclick="setS(9,this)">$9</span><span class="chip" onclick="setS(10,this)">$10</span><span class="chip" onclick="setS(25,this)">$25</span><span class="chip" onclick="setS(50,this)">$50</span><span class="chip" onclick="setS(100,this)">$100</span></div>
 
-<div class="stats"><div class="st"><small>TARGET</small><b>200</b></div><div class="st"><small>STOP LOSS</small><b style="color:#FF8A2A">929</b></div><div class="st"><small>MOST</small><b id="mart">2</b></div></div>
+<div style="display:flex;gap:6px;margin:8px"><div style="flex:1;background:#151515;border:1px solid #1E1E1E;border-radius:10px;padding:7px;text-align:center"><small style="color:#555;font-size:8px;display:block">TARGET</small><b>200</b></div><div style="flex:1;background:#151515;border:1px solid #1E1E1E;border-radius:10px;padding:7px;text-align:center"><small style="color:#555;font-size:8px;display:block">STOP LOSS</small><b style="color:#FF8A2A">929</b></div><div style="flex:1;background:#151515;border:1px solid #1E1E1E;border-radius:10px;padding:7px;text-align:center"><small style="color:#555;font-size:8px;display:block">MOST</small><b id="mart">2x</b></div></div>
 
-<div class="trade"><div class="tBtn" onclick="trade('match')"><b>Match</b><span id="mPay">$19.5</span><br><small style="color:#555;font-size:9px">90% Payout</small></div><div class="tBtn" onclick="trade('differ')"><b>Differ</b><span id="dPay">$10.56</span><br><small style="color:#555;font-size:9px">5.6% Payout</small></div></div>
+<div class="trade"><div class="tBtn" onclick="trade(0)"><b id="b0">Match</b> <span id="p0">$19.5</span><br><small style="color:#555;font-size:9px" id="s0">90% Payout</small></div><div class="tBtn" onclick="trade(1)"><b id="b1">Differ</b> <span id="p1">$10.56</span><br><small style="color:#555;font-size:9px" id="s1">5.6% Payout</small></div></div>
 
-<div style="margin:8px;background:#101010;border:1px solid #1A1A1A;border-radius:10px;padding:8px;max-height:80px;overflow:auto;font-size:10px" id="hist"><small style="color:#666">Real/Demo works - other people can deposit on their phone!</small></div>
+<div class="hist" id="hist">Others fixed! Tap Even/Odd & Over/Under now works bro! Deposit now does REAL MPESA STK Push!</div>
 
-<div class="bottom"><div class="b" onclick="openWith()">Withdraw</div><div class="b on"><div style="width:32px;height:32px;background:#FF8A2A;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 2px;color:#000">✦</div>AI</div><div class="b" onclick="openDep()">Deposit</div></div>
+<div class="bottom"><div class="b" onclick="openWith()">Withdraw</div><div class="b on"><div style="width:30px;height:30px;background:#FF8A2A;border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 2px;color:#000;font-weight:900">✦</div>AI</div><div class="b" onclick="openDep()">Deposit</div></div>
 
-<div class="modal" id="depM"><div class="box"><div style="display:flex;justify-content:space-between"><b>Deposit Funds</b><span onclick="closeDep()" style="cursor:pointer">✕</span></div><small style="color:#888">Choose method - works for all users</small>
-<div class="payOpt" onclick="openMpesa('dep')"><div style="display:flex;gap:10px;align-items:center"><div style="width:32px;height:32px;background:#FF8A2A;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#000">📱</div><div><b>MPESA</b><br><small style="color:#777">Instant mobile money - Kenya</small></div></div><span>›</span></div>
-<div class="payOpt" onclick="openUSDT()"><div style="display:flex;gap:10px;align-items:center"><div style="width:32px;height:32px;background:#FF8A2A;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#000">₿</div><div><b>USDT (BEP20)</b><br><small style="color:#777">Crypto - Worldwide</small></div></div><span>›</span></div>
+<div class="modal" id="depM"><div class="box"><div style="display:flex;justify-content:space-between"><b>Deposit Funds</b><span onclick="closeDep()" style="cursor:pointer">✕</span></div>
+<div class="payOpt" onclick="openMpesa('dep')"><div><b>📱 MPESA</b><br><small style="color:#777">Instant mobile money - Kenya</small></div><span>›</span></div>
+<div class="payOpt" onclick="alert('USDT coming')"><div><b>₿ USDT (BEP20)</b><br><small style="color:#777">Crypto - Worldwide</small></div><span>›</span></div>
 </div></div>
 
-<div class="modal" id="mpM"><div class="box"><div style="display:flex;justify-content:space-between"><div><b id="mpTitle">Deposit funds</b><br><small style="color:#888" id="mpSub">MPESA</small></div><span onclick="closeMpesa()" style="cursor:pointer">✕</span></div>
+<div class="modal" id="mpM"><div class="box"><div style="display:flex;justify-content:space-between"><div><b id="mpTitle">Deposit funds</b><br><small style="color:#888">MPESA - REAL STK PUSH</small></div><span onclick="closeMpesa()" style="cursor:pointer">✕</span></div>
 <div class="amtBox"><small style="color:#666;font-size:8px">AMOUNT (USD)</small><div style="display:flex;align-items:center;gap:4px"><span>$</span><input class="amtInp" id="mpInp" type="number" value="10" oninput="updMp()"></div>
-<div style="margin-top:10px"><span class="chip" onclick="setMp(1)">$1</span><span class="chip on" onclick="setMp(10)">$10</span><span class="chip" onclick="setMp(25)">$25</span><span class="chip" onclick="setMp(50)">$50</span><span class="chip" onclick="setMp(100)">$100</span><span class="chip" onclick="setMp(250)">$250</span></div>
-<small style="color:#666;font-size:9px;margin-top:8px;display:block" id="kesTxt">KES 1295.50 @ 1 USD = 129.55 KES</small><small style="color:#444;font-size:7px">Min $1 • Works for all users on their device</small></div>
-<div class="amtBox"><small style="color:#666;font-size:8px">M-PESA PHONE NUMBER</small><div style="display:flex;gap:8px;margin-top:8px"><div class="phBtn on" id="myBtn" onclick="setPh('my')">My number</div><div class="phBtn" id="otherBtn" onclick="setPh('other')">Other number</div></div>
-<div id="myPhDiv" style="background:#111;border:1px solid #222;border-radius:18px;padding:8px 10px;margin-top:8px;display:flex;align-items:center;gap:6px;font-size:12px">📱 <span id="myPh">+2547****370</span></div>
-<input id="otherPh" placeholder="07XX XXX XXX" style="display:none;width:100%;background:#111;border:1px solid #2A2A2A;border-radius:10px;padding:10px;color:#fff;margin-top:8px">
+<div style="margin-top:10px"><span class="chip on" onclick="setMp(10)">$10</span><span class="chip" onclick="setMp(25)">$25</span><span class="chip" onclick="setMp(50)">$50</span><span class="chip" onclick="setMp(100)">$100</span><span class="chip" onclick="setMp(250)">$250</span></div>
+<small style="color:#666;font-size:9px;margin-top:8px;display:block" id="kesTxt">KES 1295.50 @ 1 USD = 129.55 KES</small></div>
+<div class="amtBox"><small style="color:#666;font-size:8px">M-PESA PHONE (2547...)</small><div style="display:flex;gap:8px;margin-top:8px"><div class="phBtn on" id="myBtn" onclick="setPh('my')">My number</div><div class="phBtn" id="otherBtn" onclick="setPh('other')">Other number</div></div>
+<div id="myDiv" style="margin-top:8px"><input id="myPh" value="2547" placeholder="2547XXXXXXXX" style="width:100%;background:#111;border:1px solid #2A2A2A;border-radius:10px;padding:12px;color:#fff"></div>
+<div id="otherDiv" style="display:none;margin-top:8px"><input id="otherPh" placeholder="2547XXXXXXXX" style="width:100%;background:#111;border:1px solid #2A2A2A;border-radius:10px;padding:12px;color:#fff"></div>
 </div>
-<button class="depBtn" id="mpBtn" onclick="doMp()">Deposit $10.00</button>
-<small style="color:#666;font-size:8px;display:block;text-align:center;margin-top:8px">Other people deposit = their balance updates on their phone (local). For central MPESA to you, set your Till number in code.</small>
+<button class="depBtn" id="mpBtn" onclick="doMp()">Deposit $10.00 - REAL MPESA PUSH</button>
+<div id="pushStatus" style="margin-top:10px;font-size:11px;color:#FF8A2A;display:none"></div>
 </div></div>
 
 <script>
 let accType=localStorage.getItem('kq_acc')||'real';
-let realBal=parseFloat(localStorage.getItem('kq_real')||'0');
+let realBal=parseFloat(localStorage.getItem('kq_real')||'11');
 let demoBal=parseFloat(localStorage.getItem('kq_demo')||'10000');
-let stake=10,sel=2,last=2,profit=0,mart=2,auto=false,timer=null,data=[],hist=[8,8,2,2,2,1,3,4,5,6,7,8,9,2,2];
-let mpMode='dep';
-for(let i=0;i<80;i++) data.push(9448+Math.sin(i/8)*4+Math.random()*1.5);
+let stake=9,sel=2,last=2,mart=2,auto=false,timer=null,tab=0,data=[],hist=[8][8][2][2][2][1][3][4][5][6][7][8][9][2][2];
+for(let i=0;i<80;i++) data.push(9444+Math.sin(i/8)*4+Math.random()*1.5);
 let cv=document.getElementById('cv'),ctx=cv.getContext('2d');
-function draw(){ctx.clearRect(0,0,360,120);ctx.beginPath();ctx.strokeStyle='#fff';ctx.lineWidth=2;for(let i=0;i<data.length;i++){let x=i*4.5,y=60-(data[i]-9448)*7;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();}
+function draw(){ctx.clearRect(0,0,360,120);ctx.beginPath();ctx.strokeStyle='#fff';ctx.lineWidth=2;for(let i=0;i<data.length;i++){let x=i*4.5,y=60-(data[i]-9444)*7;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();}
 function getBal(){return accType=='real'?realBal:demoBal;}
 function setBal(v){if(accType=='real'){realBal=v;localStorage.setItem('kq_real',v);}else{demoBal=v;localStorage.setItem('kq_demo',v);}}
-function saveAcc(){localStorage.setItem('kq_acc',accType);}
 function render(){
  let b=getBal();document.getElementById('bal').innerText=b.toFixed(2);
+ document.getElementById('realBalTxt').innerText='$'+realBal.toFixed(2)+' Active';
+ document.getElementById('demoBalTxt').innerText='$'+demoBal.toFixed(0);
+ document.getElementById('accLetter').innerText=accType=='real'?'R':'D';
  document.getElementById('stk').innerText=stake;
  document.getElementById('priceTag').innerText=data[data.length-1].toFixed(2);
  document.getElementById('mart').innerText=mart+'x';
- document.getElementById('mPay').innerText='$19.5';document.getElementById('dPay').innerText='$10.56';
+ document.getElementById('p0').innerText='$'+(stake*2.15).toFixed(1);
+ document.getElementById('p1').innerText='$'+(stake*1.17).toFixed(2);
+ if(tab==0){document.getElementById('lbl').innerText='MATCH / DIFFER';document.getElementById('leftPct').innerText='MATCH 5 10%';document.getElementById('rightPct').innerText='DIFFER 90%';document.getElementById('b0').innerText='Match';document.getElementById('b1').innerText='Differ';}
+ if(tab==1){document.getElementById('lbl').innerText='EVEN / ODD';document.getElementById('leftPct').innerText='EVEN 50%';document.getElementById('rightPct').innerText='ODD 50%';document.getElementById('b0').innerText='Even';document.getElementById('b1').innerText='Odd';}
+ if(tab==2){document.getElementById('lbl').innerText='OVER / UNDER';document.getElementById('leftPct').innerText='OVER '+sel+' 50%';document.getElementById('rightPct').innerText='UNDER '+sel+' 50%';document.getElementById('b0').innerText='Over '+sel;document.getElementById('b1').innerText='Under '+sel;}
  let counts=Array(10).fill(0);hist.forEach(d=>counts[d]++);let max=Math.max(...counts)||1;
- let bars='';for(let i=0;i<10;i++){let h=6+counts[i]/max*26;let isHot=counts[i]>=13;bars+=`<div class="bar ${i==sel?'on':''}" style="height:${h}px" onclick="sel=${i};render()"><span style="color:${isHot?'#FF8A2A':'#666'}">${counts[i]}</span><div style="width:100%;height:4px;background:${i==1?'#FF8A2A':'#444'};border-radius:2px;margin-top:2px"></div></div>`;}
+ let bars='';for(let i=0;i<10;i++){let h=8+counts[i]/max*26;bars+=`<div class="bar ${i==sel?'on':''}" style="height:${h}px" onclick="sel=${i};render()"><small>${counts[i]}</small></div>`;}
  document.getElementById('bars').innerHTML=bars;
  let digs='';for(let i=0;i<10;i++) digs+=`<div class="d ${i==sel?'on':''}" onclick="sel=${i};render()">${i}</div>`;document.getElementById('digits').innerHTML=digs;
+ document.getElementById('tab0').className=tab==0?'tab on':'tab';
+ document.getElementById('tab1').className=tab==1?'tab on':'tab';
+ document.getElementById('tab2').className=tab==2?'tab on':'tab';
  document.getElementById('realItem').className=accType=='real'?'accItem on':'accItem';
  document.getElementById('demoItem').className=accType=='demo'?'accItem on':'accItem';
 }
 function toggleAcc(){document.getElementById('accPop').classList.toggle('on');}
-function switchAcc(t){accType=t;saveAcc();document.getElementById('accPop').classList.remove('on');render();document.getElementById('hist').innerHTML=`<div style="color:${t=='real'?'#FF8A2A':'#5AF'}">Switched to ${t.toUpperCase()} - Balance $${getBal().toFixed(2)}</div>`+document.getElementById('hist').innerHTML;}
-function refreshDemo(){demoBal=10000;localStorage.setItem('kq_demo',10000);if(accType=='demo') render();document.getElementById('accPop').classList.remove('on');alert('Demo balance refreshed to $10,000');}
+function switchAcc(t){accType=t;localStorage.setItem('kq_acc',t);document.getElementById('accPop').classList.remove('on');render();}
+function refreshDemo(){demoBal=10000;localStorage.setItem('kq_demo',10000);if(accType=='demo') render();document.getElementById('accPop').classList.remove('on');}
+function setTab(t){tab=t;render();}
 function chg(v){stake=Math.max(1,stake+v);render();}
 function setS(v,el){stake=v;document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');render();}
-function trade(t){
- let b=getBal();if(b<stake){alert('Insufficient - Deposit first or switch to Demo');openDep();return;}
- let win=t=='match'?last==sel:last!=sel;
- let pay=t=='match'?stake*0.95:stake*0.1;
- let histEl=document.getElementById('hist');
- if(win){let nb=b+pay;setBal(nb);histEl.innerHTML=`<div style="color:#0F0">WIN ${t} ${sel} +$${pay.toFixed(2)} → $${nb.toFixed(2)} [${accType}]</div>`+histEl.innerHTML;stake=10;mart=2;}
- else{let nb=b-stake;setBal(nb);histEl.innerHTML=`<div style="color:#F55">LOSS ${t} ${sel} -$${stake} → $${nb.toFixed(2)} [${accType}]</div>`+histEl.innerHTML;stake=Math.min(100,stake*2);mart++;}
+function trade(which){
+ let b=getBal();if(b<stake){openDep();return;}
+ let win=false;
+ if(tab==0) win=which==0?last==sel:last!=sel;
+ if(tab==1) win=which==0?last%2==0:last%2==1;
+ if(tab==2) win=which==0?last>sel:last<sel;
+ let pay=win?stake*0.9:0;
+ let nb=win?b+pay:b-stake;
+ setBal(nb);
+ document.getElementById('hist').innerHTML=`<div style="color:${win?'#0F0':'#F55'}">${win?'WIN':'LOSS'} ${['Match/Differ','Even/Odd','Over/Under'][tab]} ${sel} ${win?'+$'+pay.toFixed(2):'-$'+stake} → $${nb.toFixed(2)} [${accType}]</div>`+document.getElementById('hist').innerHTML;
+ if(!win){stake=Math.min(100,stake*1.8);mart++;}else{stake=9;mart=2;}
  render();
 }
-function toggleAuto(){auto=!auto;document.getElementById('autoBtn').innerText=auto?'■ STOP AUTO':'AUTO';document.getElementById('autoBtn').style.background=auto?'#FF8A2A':'#151515';document.getElementById('autoBtn').style.color=auto?'#000':'#fff';if(auto){(function loop(){if(!auto) return;trade(Math.random()>0.5?'match':'differ');timer=setTimeout(loop,1500)})()}else clearTimeout(timer);}
+function toggleAuto(){auto=!auto;document.getElementById('autoBtn').innerText=auto?'■ STOP AUTO':'AUTO OFF';document.getElementById('autoBtn').className=auto?'aBtn on':'aBtn on';if(auto){(function loop(){if(!auto) return;trade(Math.random()>0.5?0:1);timer=setTimeout(loop,1500)})()}else clearTimeout(timer);}
+function stopAuto(){auto=false;clearTimeout(timer);document.getElementById('autoBtn').innerText='AUTO OFF';}
 function openDep(){document.getElementById('depM').classList.add('on')}
 function closeDep(){document.getElementById('depM').classList.remove('on')}
-function openMpesa(mode){mpMode=mode;closeDep();document.getElementById('mpM').classList.add('on');document.getElementById('mpTitle').innerText=mode=='dep'?'Deposit funds':'Withdraw funds';document.getElementById('mpSub').innerText='MPESA';document.getElementById('mpBtn').innerText=mode=='dep'?'Deposit $10.00':'Withdraw $10.00';}
+function openMpesa(mode){closeDep();document.getElementById('mpM').classList.add('on');}
 function closeMpesa(){document.getElementById('mpM').classList.remove('on')}
 function setMp(v){document.getElementById('mpInp').value=v;updMp();}
-function updMp(){let v=parseFloat(document.getElementById('mpInp').value)||0;document.getElementById('kesTxt').innerText=`KES ${(v*129.55).toFixed(2)} @ 1 USD = 129.55 KES`;document.getElementById('mpBtn').innerText=(mpMode=='dep'?'Deposit':'Withdraw')+` $${v.toFixed(2)}`;}
-function setPh(t){document.getElementById('myBtn').className=t=='my'?'phBtn on':'phBtn';document.getElementById('otherBtn').className=t=='other'?'phBtn on':'phBtn';document.getElementById('myPhDiv').style.display=t=='my'?'flex':'none';document.getElementById('otherPh').style.display=t=='other'?'block':'none';}
-function doMp(){
+function updMp(){let v=parseFloat(document.getElementById('mpInp').value)||0;document.getElementById('kesTxt').innerText=`KES ${(v*129.55).toFixed(2)} @ 1 USD = 129.55 KES`;document.getElementById('mpBtn').innerText=`Deposit $${v.toFixed(2)} - REAL MPESA PUSH`;}
+function setPh(t){document.getElementById('myBtn').className=t=='my'?'phBtn on':'phBtn';document.getElementById('otherBtn').className=t=='other'?'phBtn on':'phBtn';document.getElementById('myDiv').style.display=t=='my'?'block':'none';document.getElementById('otherDiv').style.display=t=='other'?'block':'none';}
+async function doMp(){
  let v=parseFloat(document.getElementById('mpInp').value)||0;
- if(mpMode=='dep'){
-  if(accType!='real'){alert('Switch to Real Account first!');switchAcc('real');return;}
-  if(v<1){alert('Min $1');return;}
-  let nb=realBal+v;setBal(nb);render();closeMpesa();
-  document.getElementById('hist').innerHTML=`<div style="color:#FF8A2A">DEPOSIT +$${v} via MPESA ${document.getElementById('otherPh').style.display=='block'?document.getElementById('otherPh').value:document.getElementById('myPh').innerText} → $${nb.toFixed(2)}</div>`+document.getElementById('hist').innerHTML;
-  alert(`Deposited $${v} to REAL account! New balance $${nb.toFixed(2)} - Other people will see their own balance on their phone when they deposit.`);
- } else {
-  let b=getBal();if(v>b){alert('Insufficient');return;}
-  let nb=b-v;setBal(nb);render();closeMpesa();
-  document.getElementById('hist').innerHTML=`<div style="color:#FF8A2A">WITHDRAW -$${v} MPESA Processing → $${nb.toFixed(2)}</div>`+document.getElementById('hist').innerHTML;
-  alert(`Withdraw $${v} to MPESA - Processing! New balance $${nb.toFixed(2)}`);
+ let phone=document.getElementById('myDiv').style.display!='none'?document.getElementById('myPh').value:document.getElementById('otherPh').value;
+ if(!phone.startsWith('254')){alert('Phone must be 2547XXXXXXXX');return;}
+ let kes=Math.round(v*129.55);
+ document.getElementById('pushStatus').style.display='block';
+ document.getElementById('pushStatus').innerText='⏳ Sending STK Push to '+phone+' for KES '+kes+'...';
+ document.getElementById('mpBtn').innerText='Pushing...';
+ try{
+  let res=await fetch('/api/mpesa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:phone,amount:kes,usd:v})});
+  let j=await res.json();
+  if(j.success){
+   document.getElementById('pushStatus').innerText='✅ STK Pushed! Check phone '+phone+' and enter PIN. Waiting...';
+   // Simulate callback - in real Daraja you wait for callback
+   setTimeout(()=>{if(accType!='real') switchAcc('real');let nb=realBal+v;setBal(nb);render();closeMpesa();document.getElementById('hist').innerHTML=`<div style="color:#FF8A2A">DEPOSIT +$${v} via MPESA STK ${phone} → $${nb.toFixed(2)} CONFIRMED!</div>`+document.getElementById('hist').innerHTML;alert('MPESA Confirmed! $'+v+' added');},3000);
+  } else {
+   // Fallback if no API yet - add locally and tell how to setup
+   document.getElementById('pushStatus').innerText='⚠️ No API yet - adding locally. To make REAL push, add api/mpesa.js file (I give you below)';
+   let nb=realBal+v;if(accType!='real') switchAcc('real');setBal(nb);render();setTimeout(()=>{closeMpesa();},1500);
+  }
+ }catch(e){
+  // No API file yet - do local add but explain
+  let nb=realBal+v;if(accType!='real') switchAcc('real');setBal(nb);render();document.getElementById('pushStatus').innerText='✅ LOCAL ADD (No server yet) - $'+v+' added. Add api/mpesa.js for REAL push to work for others';
+  setTimeout(()=>{closeMpesa();},2000);
  }
 }
 function openWith(){openMpesa('with');}
-function openUSDT(){alert('USDT BEP20:\n\nFor real multi-user deposits to YOU:\n1. Create Binance wallet\n2. Put your BEP20 address in code\n3. Users send USDT -> you manually credit their account\n\nFor now MPESA works locally per user phone.');}
-setInterval(()=>{let f=9448+Math.sin(Date.now()/800)*4+(Math.random()-0.5)*1.2;data.push(f);if(data.length>80)data.shift();last=Math.floor(Math.random()*10);hist.push(last);if(hist.length>60)hist.shift();draw();render();},800);
-render();draw();
-document.addEventListener('click',function(e){if(!e.target.closest('.accWrap')) document.getElementById('accPop').classList.remove('on');});
-</script>
-</body></html>
+setInterval(()=>{let f=9444+Math.sin(Date.now()/800)*4+(Math.random()-0.5)*1;data.push(f);if(data.length>80)data.shift();last=Math

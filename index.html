@@ -1,54 +1,24 @@
-<!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KQbinary - Deriv Live</title>
-<style>body{margin:0;background:#0E0E0E;color:#fff;font-family:system-ui;padding-bottom:20px}.top{padding:12px;background:#141414;display:flex;justify-content:space-between;align-items:center}.bal{background:#2A1515;border:1px solid #FF4444;padding:6px 12px;border-radius:20px}.tab{flex:1;padding:10px;text-align:center;border-radius:20px;background:#1A1A1A;color:#666;border:1px solid #333;margin:0 3px}.on{background:#2A1815!important;border-color:#FF6444!important;color:#FF6444!important}.card{margin:10px;background:#161616;border:1px solid #222;border-radius:12px;padding:10px}.d{flex:1;padding:10px 0;text-align:center;border-radius:8px;background:#1E1E1E;border:1px solid #333;cursor:pointer}.d.sel{background:#2A1815;color:#FF6444;border-color:#FF6444}.chip{flex:1;background:#1A1A1A;border:1px solid #333;padding:10px;border-radius:10px;color:#fff}.tbtn{flex:1;background:#1A1A1A;border:1px solid #333;border-radius:14px;padding:14px;color:#fff;text-align:left}</style>
-</head><body>
-<div class="top"><b>KQbinary • LIVE R_10</b><div class="bal">$<span id="bal">9938.80</span> • <span id="status" style="color:#0f0;font-size:10px">● CONNECTING</span></div></div>
-<div style="display:flex;padding:10px"><div class="tab">Matches</div><div class="tab">Even/Odd</div><div class="tab on">Over/Under</div></div>
-<div class="card">
-<div style="display:flex;justify-content:space-between"><small id="price" style="color:#FF6444">Volatility 10: Loading...</small><small>Last Digit: <b id="lastD" style="color:#fff">-</b></small></div>
-<canvas id="ch" width="320" height="110" style="width:100%;margin-top:6px"></canvas>
-<div id="bars" style="display:flex;gap:3px;height:24px;margin-top:8px"></div>
-<div id="digs" style="display:flex;gap:4px;margin-top:8px"></div>
-<div style="height:4px;background:#333;border-radius:10px;margin-top:8px"><div id="pbar" style="width:58%;height:100%;background:#FF6444"></div></div>
-</div>
-<div style="display:flex;gap:8px;padding:10px">
-<button class="tbtn" onclick="trade('over')"><b style="color:#FF6444">Over <span class="sv">5</span></b><span style="float:right">$<span id="overPay">19.80</span></span><br><small style="color:#666">98% Payout</small></button>
-<button class="tbtn" onclick="trade('under')"><b style="color:#FF6B6B">Under <span class="sv">5</span></b><span style="float:right">$<span id="underPay">15.83</span></span><br><small style="color:#666">58.3% Payout</small></button>
-</div>
-<div id="autoBtn" onclick="toggleAuto()" style="margin:10px;background:#FF6444;color:#000;padding:12px;border-radius:20px;text-align:center;font-weight:900;cursor:pointer">AUTO OFF</div>
-<div style="margin:10px;background:#161616;border-radius:12px;padding:12px;display:flex;justify-content:space-between;align-items:center"><button onclick="cs(-1)" style="width:44px;height:44px;background:#222;border:0;color:#fff;border-radius:10px;font-size:20px">-</button><div style="text-align:center"><small style="color:#888">STAKE</small><br><b>$<span id="stk">10</span></b></div><button onclick="cs(1)" style="width:44px;height:44px;background:#222;border:0;color:#fff;border-radius:10px;font-size:20px">+</button></div>
-<div style="display:flex;gap:6px;padding:0 10px"><button onclick="ss(1)" class="chip">$1</button><button onclick="ss(5)" class="chip">$5</button><button onclick="ss(10)" class="chip" style="border-color:#FF6444;color:#FF6444">$10</button><button onclick="ss(25)" class="chip">$25</button><button onclick="ss(50)" class="chip">$50</button></div>
-<div id="log" style="margin:10px;font-size:11px;color:#888;height:60px;overflow:auto"></div>
 <script>
-let bal=Number(localStorage.getItem('kq_bal')||9938.80),sel=5,stake=10,data=[],lastPrice=0,lastDigit=0,auto=false;
-let cv=document.getElementById('ch'),ctx=cv.getContext('2d');
-function $(id){return document.getElementById(id)}
-function draw(){ctx.clearRect(0,0,320,110);ctx.beginPath();ctx.strokeStyle='#fff';ctx.lineWidth=2;for(let i=0;i<data.length;i++){let x=i*6.5,y=55-(data[i]-9450)/2;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();}
-function render(){let h='';for(let i=0;i<10;i++){h+=`<div class="d ${i==sel?'sel':''}" onclick="setSel(${i})">${i}</div>`;}$('digs').innerHTML=h;
-let b='';for(let j=0;j<10;j++)b+=`<div style="flex:1;height:${8+Math.random()*16}px;background:${j==sel?'#FF6444':'#333'};border-radius:3px"></div>`;$('bars').innerHTML=b;
-$('bal').innerText=bal.toFixed(2);document.querySelectorAll('.sv').forEach(e=>e.innerText=sel);$('overPay').innerText=(stake*1.98).toFixed(2);$('underPay').innerText=(stake*1.583).toFixed(2);}
-function setSel(i){sel=i;render();}
-function cs(v){stake=Math.max(1,stake+v);$('stk').innerText=stake;render();}
-function ss(v){stake=v;$('stk').innerText=v;render();}
-function log(t){$('log').innerHTML='<div>'+new Date().toLocaleTimeString()+' - '+t+'</div>'+$('log').innerHTML;}
-
-// DERIV API LIVE
-let ws=new WebSocket('wss://ws.derivws.com/websockets/v3?app_id=1089');
-ws.onopen=()=>{ws.send(JSON.stringify({ticks:'R_10',subscribe:1}));$('status').innerText='● LIVE';$('status').style.color='#0f0';log('Connected to Deriv R_10');}
-ws.onmessage=(msg)=>{let d=JSON.parse(msg.data);if(d.tick){lastPrice=d.tick.quote;let s=lastPrice.toString();lastDigit=parseInt(s[s.length-1]);$('price').innerText='Volatility 10: '+lastPrice;$('lastD').innerText=lastDigit;data.push(lastPrice);if(data.length>50)data.shift();draw();}}
-ws.onerror=()=>{$('status').innerText='● OFFLINE (Fake)';$('status').style.color='red';setInterval(()=>{let fake=9450+Math.sin(Date.now()/500)+Math.random()*2;data.push(fake);if(data.length>50)data.shift();draw();lastDigit=Math.floor(Math.random()*10);$('lastD').innerText=lastDigit;},800);}
-
-function trade(type){
-if(bal<stake){alert('Low Demo Balance');return;}
-let entryDigit=lastDigit;bal-=stake;localStorage.setItem('kq_bal',bal);render();log('Trade '+type+' '+sel+' Stake $'+stake+' Entry Digit '+entryDigit);
-setTimeout(()=>{
-let resultDigit=lastDigit;let win=(type=='over'?resultDigit>sel:resultDigit<sel);
-if(win){let profit=type=='over'?stake*0.98:stake*0.583;bal+=stake+profit;localStorage.setItem('kq_bal',bal);log('WIN! Digit '+resultDigit+' +$'+profit.toFixed(2));alert('WIN! Last Digit: '+resultDigit+'\nProfit: $'+profit.toFixed(2));}
-else{log('LOSS! Digit '+resultDigit);alert('LOSS! Last Digit: '+resultDigit);}
-render();
-},1200);
+const ws = new WebSocket('wss://ws.derivws.com/websockets/v3?app_id=1089');
+let lastPrice=0;
+ws.onopen = ()=>{ ws.send(JSON.stringify({ticks:"R_10"})); document.querySelector('.top-price').innerText="$39.95 • CONNECTED"; }
+ws.onmessage = (msg)=>{
+  const data=JSON.parse(msg.data);
+  if(data.tick){
+    lastPrice=data.tick.quote;
+    const digit = String(lastPrice).slice(-1);
+    document.body.innerHTML = document.body.innerHTML.replace(/Last Digit: -/,'Last Digit: '+digit);
+    // update your 0-9 highlight
+    document.querySelectorAll('.digit').forEach(d=>d.classList.remove('active'));
+    let el=document.getElementById('d'+digit);
+    if(el) el.classList.add('active');
+  }
 }
-function toggleAuto(){auto=!auto;$('autoBtn').innerText=auto?'AUTO ON - Trading':'AUTO OFF';$('autoBtn').style.background=auto?'#00ff88':'#FF6444';if(auto)autoLoop();}
-function autoLoop(){if(!auto)return;let t=Math.random()>0.5?'over':'under';trade(t);setTimeout(autoLoop,3000);}
-render();draw();
-</script></body></html>
+async function deposit(){
+  const phone=prompt("Phone 2547...","254708374149");
+  const amount=prompt("Amount","10");
+  const r=await fetch("/api/mpesa",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({phone,amount})});
+  const j=await r.json();
+  alert(JSON.stringify(j));
+}
+</script>

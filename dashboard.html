@@ -1,114 +1,67 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KQbinary ALL</title><style>
+
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KQbinary CLEAN</title><style>
 *{box-sizing:border-box}body{margin:0;background:#0A0A0A;color:#fff;font-family:system-ui;padding-bottom:90px}
-.top{display:flex;justify-content:space-between;padding:10px;background:#111;position:sticky;top:0;z-index:10}.live{color:#0F0}.bal{background:#222;padding:5px 12px;border-radius:20px;border:1px solid #333;font-size:13px}.dep{background:#FF6A00;color:#000;padding:7px 14px;border-radius:18px;font-weight:900;border:0}
+.top{display:flex;justify-content:space-between;padding:10px;background:#111;position:sticky;top:0;z-index:10}.bal{background:#222;padding:5px 12px;border-radius:20px;border:1px solid #333;font-size:13px}.dep{background:#FF6A00;color:#000;padding:7px 14px;border-radius:18px;font-weight:900;border:0}
 .tabs{display:flex;gap:5px;padding:10px}.tab{flex:1;padding:9px;text-align:center;border-radius:18px;background:#151515;color:#666;border:1px solid #222;font-size:11px}.tab.on{color:#FF6A00;border-color:#FF6A00;background:#2A1A0F}
-.card{margin:0 10px;background:#111;border:1px solid #222;border-radius:14px;padding:10px}canvas{width:100%;height:120px;background:#0E0E0E;border-radius:10px;margin-top:8px}.row{display:flex;gap:3px;margin-top:8px}.bar{flex:1;border-radius:4px}.digs{display:flex;gap:3px;margin-top:8px;flex-wrap:wrap}.d{flex:1;min-width:30px;text-align:center;padding:7px 0;background:#1A1A1A;border:1px solid #333;border-radius:8px;font-size:12px}.d.on{background:#FF6A00;color:#000;font-weight:900}.d2{flex:1;text-align:center;padding:6px 0;background:#222;border:1px solid #333;border-radius:8px;font-size:11px}.d2.on{background:#FF6A00;color:#000}
+.card{margin:0 10px;background:#111;border:1px solid #222;border-radius:14px;padding:10px}canvas{width:100%;height:130px;background:#0E0E0E;border-radius:10px;margin-top:8px}.row{display:flex;gap:3px;margin-top:8px}.bar{flex:1;border-radius:4px}.digs{display:flex;gap:3px;margin-top:8px}.d{flex:1;text-align:center;padding:7px 0;background:#1A1A1A;border:1px solid #333;border-radius:8px;font-size:12px}.d.on{background:#FF6A00;color:#000;font-weight:900}
 .autoRow{display:flex;margin:10px;background:#151515;border-radius:22px;padding:3px}.aBtn{flex:1;padding:10px;text-align:center;border-radius:18px;font-weight:800}.aBtn.on{background:#FF6A00;color:#000}
 .stakeRow{display:flex;justify-content:space-between;align-items:center;background:#151515;margin:10px;padding:10px;border-radius:12px}.chips{display:flex;gap:6px;padding:0 10px;overflow:auto}.chip{padding:7px 12px;background:#151515;border:1px solid #333;border-radius:18px;font-size:12px;flex-shrink:0}.chip.on{border-color:#FF6A00;color:#FF6A00}
-.stats{display:flex;gap:8px;margin:10px}.st{flex:1;background:#151515;border:1px solid #222;border-radius:10px;padding:8px;text-align:center}.st small{color:#777;font-size:10px}
-.trade{display:flex;gap:10px;margin:10px}.tBtn{flex:1;background:#171717;border:1px solid #333;border-radius:12px;padding:12px;text-align:left}.tBtn small{color:#FF6A00;font-size:10px}
+.trade{display:flex;gap:10px;margin:10px}.tBtn{flex:1;background:#171717;border:1px solid #333;border-radius:12px;padding:14px;text-align:center}.tBtn b{display:block;font-size:14px}.tBtn small{color:#777}
+.history{margin:10px;background:#111;border:1px solid #222;border-radius:12px;padding:8px;max-height:110px;overflow:auto;font-size:11px}.hWin{color:#0F0}.hLoss{color:#F44}
 .bottom{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #222;display:flex;justify-content:space-around;padding:8px 0}.b{font-size:10px;color:#666;text-align:center}.b.on{color:#FF6A00}.ai{width:48px;height:48px;background:#FF6A00;border-radius:16px;display:flex;align-items:center;justify-content:center;margin-top:-16px;color:#000;font-size:22px}
-.toast{position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#fff;color:#000;padding:10px 16px;border-radius:20px;font-weight:900;display:none;z-index:99}.toast.on{display:block}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:flex-end;z-index:50}.modal.on{display:flex}.box{width:100%;background:#181818;border-radius:22px 22px 0 0;padding:16px}
 .menu{position:fixed;left:0;top:0;bottom:0;width:260px;background:#111;transform:translateX(-100%);transition:.25s;z-index:60}.menu.on{transform:translateX(0)}.mi{padding:14px;border-bottom:1px solid #1A1A1A}
 </style></head><body>
-<div class="toast" id="toast"></div>
-<div class="top"><div><span onclick="toggleMenu()" style="font-size:20px">☰</span> <span style="color:#FF6A00">KQ</span>binary <span class="bal" onclick="bal+=100;save();render();toast('+$100 Demo')">$<span id="bal">0.00</span> ▼</span></div><button class="dep" onclick="openDep()">Deposit</button></div>
-
-<div class="tabs">
-<div class="tab" id="t0" onclick="setTab(0)">Matches/Differs</div>
-<div class="tab on" id="t1" onclick="setTab(1)">Even/Odd</div>
-<div class="tab" id="t2" onclick="setTab(2)">Over/Under</div>
-</div>
-
-<div class="card">
-<div style="display:flex;justify-content:space-between"><div><small style="background:#222;padding:2px 6px;border-radius:5px">1T</small> <small id="marketName">Volatility 10 (1s) Index</small><br><small style="color:#888" id="subP">9450.21 • 0.21</small></div><div style="text-align:right"><small style="background:#222;padding:2px 6px;border-radius:10px">50%</small><br><b id="priceTag" style="background:#FF6A00;color:#000;padding:3px 8px;border-radius:6px;margin-top:4px;display:inline-block">9450.46</b></div></div>
-<canvas id="cv" width="340" height="120"></canvas>
-<div class="row" id="bars"></div>
-<div class="digs" id="digsTop"></div>
-<div id="extra"></div>
-</div>
-
+<div class="top"><div><span onclick="toggleMenu()" style="font-size:20px">☰</span> <span style="color:#FF6A00">KQ</span>binary <span class="bal" onclick="bal+=100;save();render()">$<span id="bal">0.00</span> ▼</span></div><button class="dep" onclick="openDep()">Deposit</button></div>
+<div class="tabs"><div class="tab" id="t0" onclick="setTab(0)">Matches/Differs</div><div class="tab on" id="t1" onclick="setTab(1)">Even/Odd</div><div class="tab" id="t2" onclick="setTab(2)">Over/Under</div></div>
+<div class="card"><div style="display:flex;justify-content:space-between"><div><small style="background:#222;padding:2px 6px;border-radius:5px">1T</small> <small id="mName">Volatility 10 (1s) - Even/Odd</small><br><small style="color:#888" id="subP">9450.21 • LIVE</small></div><b id="priceTag" style="background:#FF6A00;color:#000;padding:3px 8px;border-radius:6px">9450.46</b></div><canvas id="cv" width="340" height="130"></canvas><div class="row" id="bars"></div><div class="digs" id="digs"></div><div id="extra"></div></div>
 <div class="autoRow"><div class="aBtn on" id="aAuto" onclick="setAuto(true)">AUTO</div><div class="aBtn" id="aMan" onclick="setAuto(false)">MANUAL</div></div>
 <div class="stakeRow"><button onclick="chg(-1)" style="width:36px;height:36px;background:#222;border:0;color:#fff;border-radius:10px">-</button><div style="text-align:center"><small style="color:#888">STAKE</small><br><b id="stk">10</b></div><button onclick="chg(1)" style="width:36px;height:36px;background:#222;border:0;color:#fff;border-radius:10px">+</button></div>
 <div class="chips"><div class="chip" onclick="setS(1,this)">$1</div><div class="chip" onclick="setS(5,this)">$5</div><div class="chip on" onclick="setS(10,this)">$10</div><div class="chip" onclick="setS(25,this)">$25</div><div class="chip" onclick="setS(50,this)">$50</div><div class="chip" onclick="setS(100,this)">$100</div></div>
-<div class="stats"><div class="st"><small>TARGET</small><br><b id="tgt">200</b></div><div class="st"><small>STOP LOSS</small><br><b id="sl" style="color:#FF6A00">928</b></div><div class="st"><small>MART</small><br><b id="mart">2</b></div></div>
 <div class="trade" id="tradeRow"></div>
+<div class="history" id="hist"><small style="color:#777">Trade History - no popups on chart</small></div>
 <div class="bottom"><div class="b">💬<br>Live Chat</div><div class="b on"><div class="ai">🐾</div>AI</div><div class="b">🕒<br>Positions</div></div>
-
 <div class="menu" id="menu"><div style="padding:16px;display:flex;justify-content:space-between"><b>KQbinary</b><span onclick="toggleMenu()">✕</span></div><div class="mi" onclick="openDep()">Deposit</div><div class="mi">Withdraw</div><div class="mi">History</div><div class="mi">Support</div></div>
-<div class="modal" id="depM"><div class="box"><b>Deposit Funds</b><span style="float:right" onclick="closeDep()">✕</span><div onclick="openMpesa()" style="margin-top:12px;background:#222;padding:14px;border-radius:12px">📱 MPESA - Instant</div><div style="margin-top:8px;background:#222;padding:14px;border-radius:12px">₿ USDT (BEP20)</div></div></div>
+<div class="modal" id="depM"><div class="box"><b>Deposit</b><span style="float:right" onclick="closeDep()">✕</span><div onclick="openMpesa()" style="margin-top:12px;background:#222;padding:14px;border-radius:12px">📱 MPESA</div><div style="margin-top:8px;background:#222;padding:14px;border-radius:12px">₿ USDT</div></div></div>
 <div class="modal" id="mpM"><div class="box"><b>MPESA Deposit</b><span style="float:right" onclick="closeMp()">✕</span><div style="background:#111;padding:12px;border-radius:12px;margin-top:10px"><small>AMOUNT</small><div style="font-size:26px">$<span id="dAmt">10</span></div><div style="display:flex;gap:6px;margin-top:6px"><button class="chip" onclick="setDAmt(10)">$10</button><button class="chip" onclick="setDAmt(25)">$25</button><button class="chip" onclick="setDAmt(50)">$50</button><button class="chip" onclick="setDAmt(100)">$100</button></div></div><button onclick="doDep()" style="width:100%;background:#FF6A00;color:#000;padding:14px;border:0;border-radius:20px;margin-top:12px;font-weight:900">Deposit</button></div></div>
-
 <script>
-let bal=parseFloat(localStorage.getItem('kq_bal')||'90.95'),stake=10,tab=1,sel=7,last=7,auto=true,profit=0,data=[],timer=null;
+let bal=parseFloat(localStorage.getItem('kq_bal')||'225.11'),stake=10,tab=1,sel=2,last=2,auto=false,data=[],timer=null,profit=0;
 for(let i=0;i<80;i++) data.push(9450+Math.sin(i/8)*3+Math.random());
 let cv=document.getElementById('cv'),ctx=cv.getContext('2d');
-function draw(){ctx.clearRect(0,0,340,120);ctx.beginPath();ctx.strokeStyle='#fff';ctx.lineWidth=1.6;for(let i=0;i<data.length;i++){let x=i*4.25,y=60-(data[i]-9450)*8;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();}
+function draw(){ctx.clearRect(0,0,340,130);ctx.beginPath();ctx.strokeStyle='#fff';ctx.lineWidth=1.6;for(let i=0;i<data.length;i++){let x=i*4.25,y=65-(data[i]-9450)*8;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();}
 function save(){localStorage.setItem('kq_bal',bal);}
-function toast(m){let t=document.getElementById('toast');t.innerText=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200);}
 function render(){
  document.getElementById('bal').innerText=bal.toFixed(2);
  document.getElementById('stk').innerText=stake;
- let p=data[data.length-1];document.getElementById('priceTag').innerText=p.toFixed(2);document.getElementById('subP').innerText=p.toFixed(2)+' • 0.21 (-0.19%)';
+ let p=data[data.length-1];document.getElementById('priceTag').innerText=p.toFixed(2);document.getElementById('subP').innerText=p.toFixed(2)+' • LIVE • Last '+last;
  let bars='';for(let i=0;i<10;i++)bars+=`<div class="bar" style="height:${10+Math.random()*20}px;background:${i==last?'#FF6A00':'#2A2A2A'}"></div>`;document.getElementById('bars').innerHTML=bars;
- let top='',extra=''; 
- if(tab==1){ // Even/Odd
-   document.getElementById('marketName').innerText='Volatility 10 (1s) Index - Even/Odd';
-   for(let i=0;i<10;i++) top+=`<div class="d ${i==last?'on':''}">${i}<br><small style="font-size:8px">${10+Math.floor(Math.random()*8)}%</small></div>`;
-   document.getElementById('digsTop').innerHTML=top;
-   extra=''; document.getElementById('extra').innerHTML='';
-   document.getElementById('tradeRow').innerHTML=`<button class="tBtn" onclick="trade('even')"><b>Even</b><br><small>$${(stake*1.952).toFixed(2)} - 95.2% Payout</small></button><button class="tBtn" onclick="trade('odd')"><b>Odd</b><br><small>$${(stake*1.952).toFixed(2)} - 95.2%</small></button>`;
- }else if(tab==0){ // Matches/Differs
-   document.getElementById('marketName').innerText='Matches / Differs';
-   for(let i=0;i<10;i++) top+=`<div class="d ${i==sel?'on':''}" onclick="sel=${i};render()">${i}<br><small>${i==sel?'MATCH':''}</small></div>`;
-   document.getElementById('digsTop').innerHTML=top;
-   let d2='';for(let i=0;i<10;i++) d2+=`<div class="d2 ${i==sel?'on':''}" onclick="sel=${i};render()">${i}</div>`;
-   document.getElementById('extra').innerHTML=`<div style="display:flex;justify-content:space-between;font-size:9px;color:#777;margin-top:6px"><span>MATCH ${Math.floor(Math.random()*15)}%</span><span>DIFFER ${85+Math.floor(Math.random()*10)}%</span></div><div class="row">${d2}</div><small style="color:#777;font-size:9px">DIGIT - Selected ${sel}</small>`;
-   document.getElementById('tradeRow').innerHTML=`<button class="tBtn" onclick="trade('match')"><b>Match</b><br><small>$${(stake*1.95).toFixed(2)} - 90%</small></button><button class="tBtn" onclick="trade('differ')"><b>Differ</b><br><small>$${(stake*1.056).toFixed(2)} - 10%</small></button>`;
- }else{ // Over/Under
-   document.getElementById('marketName').innerText='Over / Under - Barrier '+sel;
-   for(let i=0;i<10;i++) top+=`<div class="d ${i==last?'on':''}" style="${i==sel?'border-color:#FF6A00':''}">${i}</div>`;
-   document.getElementById('digsTop').innerHTML=top;
-   let d2='';for(let i=0;i<10;i++) d2+=`<div class="d2 ${i==sel?'on':''}" onclick="sel=${i};render()">${i}</div>`;
-   document.getElementById('extra').innerHTML=`<div style="display:flex;justify-content:space-between;font-size:9px;color:#777;margin-top:6px"><span>UNDER ${sel*10}%</span><span>OVER ${(9-sel)*10}%</span></div><div class="row">${d2}</div><small style="color:#777">DIGIT Barrier ${sel}</small>`;
-   document.getElementById('tradeRow').innerHTML=`<button class="tBtn" onclick="trade('over')"><b>Over ${sel}</b><br><small>$${(stake*1.98).toFixed(2)} - 98%</small></button><button class="tBtn" onclick="trade('under')"><b>Under ${sel}</b><br><small>$${(stake*1.583).toFixed(2)} - 58.3%</small></button>`;
- }
- document.getElementById('tgt').innerText=Math.max(0,200+profit).toFixed(0);
- document.getElementById('sl').innerText=Math.max(0,928+profit).toFixed(0);
+ let top='';for(let i=0;i<10;i++) top+=`<div class="d ${i==last?'on':''}">${i}</div>`;document.getElementById('digs').innerHTML=top;
+ if(tab==1){document.getElementById('mName').innerText='Volatility 10 (1s) - Even/Odd';document.getElementById('extra').innerHTML='';document.getElementById('tradeRow').innerHTML=`<button class="tBtn" onclick="trade('even')"><b>Even</b><small>$${(stake*1.952).toFixed(2)}</small></button><button class="tBtn" onclick="trade('odd')"><b>Odd</b><small>$${(stake*1.952).toFixed(2)}</small></button>`;}
+ else if(tab==0){document.getElementById('mName').innerText='Matches / Differs - Digit '+sel;let d2='';for(let i=0;i<10;i++) d2+=`<div class="d ${i==sel?'on':''}" onclick="sel=${i};render()" style="flex:1;text-align:center;padding:6px 0;background:#222;border:1px solid #333;border-radius:8px;font-size:11px">${i}</div>`;document.getElementById('extra').innerHTML=`<div style="display:flex;gap:3px;margin-top:8px">${d2}</div>`;document.getElementById('tradeRow').innerHTML=`<button class="tBtn" onclick="trade('match')"><b>Match ${sel}</b><small>$${(stake*1.95).toFixed(2)}</small></button><button class="tBtn" onclick="trade('differ')"><b>Differ ${sel}</b><small>$${(stake*1.056).toFixed(2)}</small></button>`;}
+ else{document.getElementById('mName').innerText='Over / Under - Barrier '+sel;let d2='';for(let i=0;i<10;i++) d2+=`<div class="d ${i==sel?'on':''}" onclick="sel=${i};render()" style="flex:1;text-align:center;padding:6px 0;background:#222;border:1px solid #333;border-radius:8px;font-size:11px">${i}</div>`;document.getElementById('extra').innerHTML=`<div style="display:flex;gap:3px;margin-top:8px">${d2}</div>`;document.getElementById('tradeRow').innerHTML=`<button class="tBtn" onclick="trade('over')"><b>Over ${sel}</b><small>$${(stake*1.98).toFixed(2)}</small></button><button class="tBtn" onclick="trade('under')"><b>Under ${sel}</b><small>$${(stake*1.583).toFixed(2)}</small></button>`;}
 }
-function setTab(t){tab=t;document.querySelectorAll('.tab').forEach((e,i)=>e.className=i==t?'tab on':'tab');render();if(auto){clearTimeout(timer);autoTrade();}}
+function setTab(t){tab=t;document.querySelectorAll('.tab').forEach((e,i)=>e.className=i==t?'tab on':'tab');render();}
 function chg(v){stake=Math.max(1,stake+v);render();}
 function setS(v,el){stake=v;document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');render();}
-function setAuto(v){auto=v;document.getElementById('aAuto').className=v?'aBtn on':'aBtn';document.getElementById('aMan').className=!v?'aBtn on':'aBtn';if(v){toast('AUTO ON - Tab '+(tab+1));autoTrade();}else{clearTimeout(timer);toast('MANUAL - Stopped');}}
+function setAuto(v){auto=v;document.getElementById('aAuto').className=v?'aBtn on':'aBtn';document.getElementById('aMan').className=!v?'aBtn on':'aBtn';if(v) autoTrade();else clearTimeout(timer);}
 function trade(type){
- if(bal<stake){toast('Low balance - Tap balance to add $100');return;}
+ if(bal<stake) return;
  let win=false;
- if(type=='even') win=last%2==0;
- if(type=='odd') win=last%2==1;
- if(type=='match') win=last==sel;
- if(type=='differ') win=last!=sel;
- if(type=='over') win=last>sel;
- if(type=='under') win=last<sel;
- let pay=0;
- if(type=='even'||type=='odd') pay=stake*0.952;
- else if(type=='match') pay=stake*0.95;
- else if(type=='differ') pay=stake*0.056;
- else if(type=='over') pay=stake*0.98;
- else pay=stake*0.583;
- if(win){bal+=pay;profit+=pay;toast('WIN '+type+' '+last+' +$'+pay.toFixed(2));stake=10;document.getElementById('mart').innerText='2';}
- else{bal-=stake;profit-=stake;toast('LOSS '+type+' '+last+' -$'+stake);stake=Math.min(100,stake*2);document.getElementById('mart').innerText=Math.floor(stake/10);}
+ if(type=='even') win=last%2==0; if(type=='odd') win=last%2==1;
+ if(type=='match') win=last==sel; if(type=='differ') win=last!=sel;
+ if(type=='over') win=last>sel; if(type=='under') win=last<sel;
+ let pay=type=='over'?stake*0.98:type=='under'?stake*0.583:type=='differ'?stake*0.056:stake*0.952;
+ let hist=document.getElementById('hist');
+ if(win){bal+=pay;profit+=pay;hist.innerHTML=`<div class="hWin">WIN ${type} ${last} +$${pay.toFixed(2)} • Bal $${bal.toFixed(2)}</div>`+hist.innerHTML;stake=10;}
+ else{bal-=stake;profit-=stake;hist.innerHTML=`<div class="hLoss">LOSS ${type} ${last} -$${stake} • Bal $${bal.toFixed(2)}</div>`+hist.innerHTML;stake=Math.min(100,stake*2);}
  save();render();
- if(profit>=200){setAuto(false);toast('TARGET 200 REACHED! $'+profit.toFixed(2));return;}
- if(profit<=-200){setAuto(false);toast('STOP LOSS!');return;}
 }
-function autoTrade(){if(!auto)return;clearTimeout(timer);timer=setTimeout(()=>{if(tab==1) trade(Math.random()>0.5?'even':'odd');else if(tab==0) trade(Math.random()>0.5?'match':'differ');else trade(Math.random()>0.5?'over':'under');if(auto) autoTrade();},1400);}
+function autoTrade(){if(!auto) return;clearTimeout(timer);timer=setTimeout(()=>{if(tab==1) trade(Math.random()>0.5?'even':'odd');else if(tab==0) trade(Math.random()>0.5?'match':'differ');else trade(Math.random()>0.5?'over':'under');if(auto) autoTrade();},1400);}
 function toggleMenu(){document.getElementById('menu').classList.toggle('on')}
 function openDep(){document.getElementById('depM').classList.add('on')}function closeDep(){document.getElementById('depM').classList.remove('on')}
 function openMpesa(){closeDep();document.getElementById('mpM').classList.add('on')}function closeMp(){document.getElementById('mpM').classList.remove('on')}
-function setDAmt(v){document.getElementById('dAmt').innerText=v;}
-function doDep(){let a=parseInt(document.getElementById('dAmt').innerText)||0;bal+=a;save();render();closeMp();toast('MPESA Deposited $'+a);}
+function setDAmt(v){document.getElementById('dAmt').innerText=v;}function doDep(){let a=parseInt(document.getElementById('dAmt').innerText)||0;bal+=a;save();render();closeMp();}
 setInterval(()=>{let f=9450+Math.sin(Date.now()/700)*4+(Math.random()-0.5)*2;data.push(f);if(data.length>80)data.shift();last=Math.floor(Math.random()*10);draw();render();},700);
-render();draw();autoTrade();
+render();draw();
 </script>
 </body></html>

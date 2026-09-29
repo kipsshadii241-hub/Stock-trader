@@ -1,1 +1,18 @@
-function trade(){
+function trade(type){
+if(bal<stake){alert('Low balance - Add demo');return;}
+bal-=stake;
+document.getElementById('bal').innerText=bal.toFixed(2);
+localStorage.setItem('rb',bal);
+var lastDigit=Math.floor(Math.random()*10);
+document.querySelectorAll('#digits div').forEach(e=>e.style.border='1px solid #333');
+setTimeout(function(){
+var win=false;
+if(type=='over') win=lastDigit>sel;
+if(type=='under') win=lastDigit<sel;
+if(win){var profit=type=='over'?stake*0.98:stake*0.583;bal+=stake+profit;alert('WIN! Digit: '+lastDigit+' Profit: $'+profit.toFixed(2));}
+else{alert('LOSS! Digit: '+lastDigit);}
+document.getElementById('bal').innerText=bal.toFixed(2);
+localStorage.setItem('rb',bal);
+},800);
+}
+function setU(v){stake=v;document.getElementById('stk').innerText=v;}

@@ -1,24 +1,10 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard</title></head>
-<body style="margin:0;background:#0F0F0F;color:#fff;font-family:system-ui;padding:20px">
+<body style="margin:0;background:#0F0F0F;color:#fff;font-family:system-ui;padding:16px">
 <div style="max-width:390px;margin:auto">
-<h2>Welcome, <span id="name" style="color:#FF6444">Kipkoech</span> 👋</h2>
-<p id="email" style="color:#888"></p>
-<div style="background:#1C1C1E;border-radius:16px;padding:20px;margin-top:20px">
-<p style="color:#888;font-size:13px">BALANCE</p>
-<h1 style="margin:0">$0.00</h1>
-<p style="color:#22C55E">+0.00% today</p>
-</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px">
-<div style="background:#1C1C1E;padding:16px;border-radius:12px;text-align:center">📈<br>Trade</div>
-<div style="background:#1C1C1E;padding:16px;border-radius:12px;text-align:center">💰<br>Deposit</div>
-<div style="background:#1C1C1E;padding:16px;border-radius:12px;text-align:center">📊<br>Market</div>
-<div style="background:#1C1C1E;padding:16px;border-radius:12px;text-align:center">👤<br>Profile</div>
-</div>
-<button onclick="location.href='index.html'" style="width:100%;background:#333;color:#fff;border:0;padding:14px;border-radius:12px;margin-top:30px">Logout</button>
-</div>
-<script>
-document.getElementById('name').innerText=localStorage.getItem('traderName')||'Kipkoech';
-document.getElementById('email').innerText=localStorage.getItem('traderEmail')||'you@gmail.com';
-</script>
-</body></html>
+
+<!-- HEADER -->
+<div id="homeHead">
+<h2 style="margin:0">Welcome, <span id="name" style="color:#FF6444">Kipkoech</span> 👋</h2>
+<p id="email" style="color:#888;margin-top:6px;font-size:14px"></p>
+<div style="background:#1C1C1E;border-radius:16px;padding:

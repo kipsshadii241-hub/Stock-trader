@@ -7,6 +7,8 @@
 body{background:#0e0e14;color:white;font-family:Inter,sans-serif}
 canvas{width:100%;display:block}
 .stake-active{background:#2a1a18!important;border:1px solid #ff6b00!important;color:#ff6b00!important}
+.live-dot{width:7px;height:7px;background:#00ff88;border-radius:50%;display:inline-block;animation:pulse 1s infinite}
+@keyframes pulse{0%{opacity:1}50%{opacity:0.3}100%{opacity:1}}
 </style>
 </head>
 <body class="pb-24">
@@ -30,12 +32,15 @@ canvas{width:100%;display:block}
 </div>
 
 <div class="bg-[#14141e] m-3 rounded-2xl p-3 border border-zinc-800">
-<div class="flex justify-between text-[11px]"><span>Volatility 10 (1s) Index</span><span id="priceRight" class="font-bold">9449.39</span></div>
+<div class="flex justify-between text-[11px] items-center">
+<span class="flex items-center gap-2"><span id="liveDot" class="live-dot"></span><span id="feedStatus">Connecting Volatility 10 (1s)...</span></span>
+<span id="priceRight" class="font-bold text-[#ff6b00]">9449.39</span>
+</div>
 <canvas id="chart" width="900" height="360" class="mt-2"></canvas>
 </div>
 
 <div class="bg-[#14141e] mx-3 rounded-2xl p-3 border border-zinc-800">
-<div class="flex justify-between text-[9px]"><span class="text-zinc-500">EVEN / ODD</span><span id="hotCold">HOT 0 COLD 4 LAST 0</span></div>
+<div class="flex justify-between text-[9px]"><span class="text-zinc-500">EVEN / ODD</span><span id="hotCold">HOT - COLD - LAST -</span></div>
 <div id="bars" class="flex gap-1 mt-3 h-14 items-end"></div>
 <div id="digitsRow" class="flex gap-1 mt-3"></div>
 <div class="flex items-center gap-2 mt-3">
@@ -59,7 +64,7 @@ canvas{width:100%;display:block}
 <div class="grid grid-cols-6 gap-1.5 mt-3 text-[11px]" id="stakeBtns">
 <button onclick="setStake(1)" data-v="1" class="bg-zinc-800 py-2.5 rounded-full">$1</button>
 <button onclick="setStake(5)" data-v="5" class="bg-zinc-800 py-2.5 rounded-full">$5</button>
-<button onclick="setStake(10)" data-v="10" class="stake-active py-2.5 rounded-full">$10</button>
+<button onclick="setStake(10)" data-v="10" class="stake-active py-2.5 rounded-full font-bold">$10</button>
 <button onclick="setStake(25)" data-v="25" class="bg-zinc-800 py-2.5 rounded-full">$25</button>
 <button onclick="setStake(50)" data-v="50" class="bg-zinc-800 py-2.5 rounded-full">$50</button>
 <button onclick="setStake(100)" data-v="100" class="bg-zinc-800 py-2.5 rounded-full">$100</button>
@@ -77,10 +82,10 @@ canvas{width:100%;display:block}
 </div>
 
 <button id="stopBtn" onclick="stopAuto()" class="mx-3 mt-3 w-[calc(100%-24px)] bg-[#ff6b00] text-black py-3.5 rounded-xl font-black hidden">■ STOP BOT</button>
-<p id="log" class="text-center text-[11px] text-zinc-500 mt-3">Ready</p>
+<p id="log" class="text-center text-[11px] text-zinc-500 mt-3">Connecting to Deriv...</p>
 
 <script>
-let prices=[], lastDigit=0, stake=10, curStake=10, balance=0, startBal=0, auto=false, interval=null, counts=Array(10).fill(0), total=0;
+let prices=[], lastDigit=0, stake=10, curStake=10, balance=0, startBal=0, auto=false, interval=null, counts=Array(10).fill(0), total=0, wsConnected=false;
 const canvas=document.getElementById('chart'), ctx=canvas.getContext('2d');
 
 function drawChart(){
@@ -101,7 +106,7 @@ function render(){
  bars.innerHTML=''; row.innerHTML='';
  let maxC=Math.max(...counts,1);
  let hot=counts.indexOf(Math.max(...counts)), cold=counts.indexOf(Math.min(...counts));
- document.getElementById('hotCold').innerHTML=`<span class="text-[#ff6b00]">HOT ${hot}</span> <span class="text-[#6ea8ff] ml-2">COLD ${cold}</span> <span class="ml-2 text-zinc-400">LAST ${lastDigit}</span>`;
+ document.getElementById('hotCold').innerHTML=`<span class="text-[#ff6b00]">HOT ${total?hot:'-'}</span> <span class="text-[#6ea8ff] ml-2">COLD ${total?cold:'-'}</span> <span class="ml-2 text-zinc-400">LAST ${lastDigit}</span>`;
  for(let i=0;i<10;i++){
   let h=Math.max(20,(counts[i]/maxC*100));
   let barColor=i==hot?'bg-[#ff6b00]':(i==cold?'bg-[#3a5a8a]':'bg-zinc-700');
@@ -111,59 +116,52 @@ function render(){
  }
  let evenCount=counts.filter((_,i)=>i%2==0).reduce((a,b)=>a+b,0);
  let evenPct=total?Math.round(evenCount/total*100):51;
- let oddPct=100-evenPct;
  document.getElementById('evenBar').style.width=evenPct+'%';
  document.getElementById('evenPct').innerText=`EVEN ${evenPct}%`;
- document.getElementById('oddPct').innerText=`ODD ${oddPct}%`;
+ document.getElementById('oddPct').innerText=`ODD ${100-evenPct}%`;
 }
 
-function addTick(q){
+function addTick(q, isReal=false){
  prices.push(q); if(prices.length>90) prices.shift();
  lastDigit=parseInt(Math.abs(q*100).toString().slice(-1));
+ if(isNaN(lastDigit)) lastDigit = parseInt(q.toString().slice(-1));
  counts[lastDigit]++; total++;
  document.getElementById('priceRight').innerText=q.toFixed(2);
+ if(isReal) document.getElementById('feedStatus').innerText='LIVE Volatility 10 (1s) - Real Deriv';
  drawChart(); render();
 }
 
-function setStake(v){
- stake=v; curStake=v;
- document.getElementById('stakeVal').innerText=v;
- document.getElementById('evenPay').innerText='$'+(v*1.952).toFixed(2);
- document.getElementById('oddPay').innerText='$'+(v*1.952).toFixed(2);
- // fix button colors
- document.querySelectorAll('#stakeBtns button').forEach(b=>{
-   if(parseInt(b.dataset.v)==v) b.className='stake-active py-2.5 rounded-full font-bold';
-   else b.className='bg-zinc-800 py-2.5 rounded-full';
- });
-}
-function changeStake(d){
- let newVal=Math.max(1,Math.min(100,stake+d));
- setStake(newVal);
-}
-function placeTrade(type){
- let win=(type=='even'&&lastDigit%2==0)||(type=='odd'&&lastDigit%2==1);
- let profit=win?curStake*0.952:-curStake; balance+=profit;
- document.getElementById('balance').innerText='$'+balance.toFixed(2);
- document.getElementById('log').innerHTML=`${type.toUpperCase()} Last ${lastDigit} <span style="color:${win?'#00ff88':'#ff5555'}">${win?'WIN':'LOSS'}</span>`;
- if(!win) {curStake*=2; document.getElementById('stakeVal').innerText=curStake; document.getElementById('evenPay').innerText='$'+(curStake*1.952).toFixed(2); document.getElementById('oddPay').innerText='$'+(curStake*1.952).toFixed(2);}
- else {curStake=stake; setStake(stake);}
-}
-function startAuto(){ if(auto) return; auto=true; startBal=balance; document.getElementById('stopBtn').classList.remove('hidden'); document.getElementById('autoBtn').classList.add('hidden'); interval=setInterval(()=>placeTrade('even'),1100); document.getElementById('log').innerText='AUTO EVEN running x2 martingale'; }
+function setStake(v){ stake=v; curStake=v; document.getElementById('stakeVal').innerText=v; document.getElementById('evenPay').innerText='$'+(v*1.952).toFixed(2); document.getElementById('oddPay').innerText='$'+(v*1.952).toFixed(2); document.querySelectorAll('#stakeBtns button').forEach(b=>{ if(parseInt(b.dataset.v)==v) b.className='stake-active py-2.5 rounded-full font-bold'; else b.className='bg-zinc-800 py-2.5 rounded-full'; }); }
+function changeStake(d){ setStake(Math.max(1,Math.min(100,stake+d))); }
+function placeTrade(type){ let win=(type=='even'&&lastDigit%2==0)||(type=='odd'&&lastDigit%2==1); let profit=win?curStake*0.952:-curStake; balance+=profit; document.getElementById('balance').innerText='$'+balance.toFixed(2); document.getElementById('log').innerHTML=`${type.toUpperCase()} Last ${lastDigit} <span style="color:${win?'#00ff88':'#ff5555'}">${win?'WIN':'LOSS'}</span>`; if(!win) {curStake*=2; document.getElementById('stakeVal').innerText=curStake; document.getElementById('evenPay').innerText='$'+(curStake*1.952).toFixed(2); document.getElementById('oddPay').innerText='$'+(curStake*1.952).toFixed(2);} else {curStake=stake; setStake(stake);} }
+function startAuto(){ if(auto) return; auto=true; startBal=balance; document.getElementById('stopBtn').classList.remove('hidden'); document.getElementById('autoBtn').classList.add('hidden'); interval=setInterval(()=>placeTrade('even'),1100); document.getElementById('log').innerText='AUTO EVEN running x2'; }
 function stopAuto(){ auto=false; clearInterval(interval); document.getElementById('stopBtn').classList.add('hidden'); document.getElementById('autoBtn').classList.remove('hidden'); }
+function doDeposit(){ let p=prompt('M-Pesa 254...','254708374149'); let a=prompt('Amount','100'); if(!p||!a) return; alert('Deposit KES '+a+'\nTill 708374149\nBuy Goods\nSend screenshot to admin'); }
 
-// FIX DEPOSIT - NO MORE JSON ERROR
-function doDeposit(){
- let phone=prompt('Enter M-Pesa number (254...)','254708374149');
- if(!phone) return;
- let amt=prompt('Amount KES','100');
- if(!amt) return;
- alert('To deposit KES '+amt+':\n\n1. Go M-Pesa → Lipa Na M-Pesa → Buy Goods\n2. Till: 708374149\n3. Amount: '+amt+'\n4. Then send screenshot to admin\n\nBalance will be updated manually to $'+(amt/130).toFixed(2)+'.\n\n(We are fixing automatic STK - coming in 1 hour)');
- // No fetch - so no JSON error!
+// --- REAL DERIV VOLATILITY FEED ---
+let ws;
+function connectDeriv(){
+ try{
+  ws=new WebSocket('wss://ws.derivws.com/websockets/v3?app_id=1089');
+  ws.onopen=()=>{ ws.send(JSON.stringify({ticks:'R_10', subscribe:1})); document.getElementById('feedStatus').innerText='Connected - Subscribing R_10...'; document.getElementById('log').innerText='LIVE Deriv Volatility 10 connected'; wsConnected=true; };
+  ws.onmessage=(msg)=>{
+   try{
+    let data=JSON.parse(msg.data);
+    if(data.tick && data.tick.quote){ let q=parseFloat(data.tick.quote); addTick(q,true); }
+   }catch(e){}
+  };
+  ws.onerror=()=>{ document.getElementById('feedStatus').innerText='Deriv blocked - Using simulation (still works)'; };
+  ws.onclose=()=>{ setTimeout(connectDeriv,3000); };
+ }catch(e){ document.getElementById('feedStatus').innerText='Simulation mode'; }
 }
+connectDeriv();
 
+// FALLBACK SIMULATION if Deriv doesn't connect in 4 sec - so chart ALWAYS moves
 let base=9449.39;
-setInterval(()=>{ base+=(Math.random()-0.5)*0.7; addTick(base); },200);
-render(); addTick(base);
+let simInterval=setInterval(()=>{ if(!wsConnected || prices.length==0){ base+=(Math.random()-0.5)*0.7; addTick(base,false); } },200);
+setTimeout(()=>{ if(prices.length==0){ document.getElementById('feedStatus').innerText='Simulation Volatility 10 (Deriv blocked on this network)'; } },4000);
+
+render();
 </script>
 </body>
 </html>

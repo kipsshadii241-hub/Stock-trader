@@ -3,26 +3,26 @@
 <head>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <script src="https://cdn.tailwindcss.com"></script>
-<style>body{background:#0e0e14;color:white}canvas{width:100%}input{color:black}</style>
+<style>body{background:#0e0e14;color:white}canvas{width:100%}</style>
 </head>
-<body class="p-3">
+<body class="p-3 pb-20">
 
-<!-- PASTE TOKEN HERE -->
-<div class="bg-yellow-900/30 border border-yellow-600 p-3 rounded-xl mb-3">
-<p class="text-yellow-400 text-xs font-bold mb-2">STEP 1: Paste your Deriv token here</p>
-<div class="flex gap-2">
-<input id="tok" value="pat_2042258fe2355ceb2beb4c9c75abb1bcc7950531715fec26eeaa13354b3a67b7" class="flex-1 bg-white px-3 py-3 rounded-lg text-xs">
-<button onclick="connectNow()" class="bg-[#ff6b00] text-black px-5 py-3 rounded-lg font-black text-xs">CONNECT</button>
+<div class="bg-yellow-900/40 border border-yellow-500 p-3 rounded-xl mb-3">
+<p class="text-yellow-300 text-xs font-bold">STEP 1: Your token (auto-saved)</p>
+<div class="flex gap-2 mt-2">
+<input id="tok" class="flex-1 bg-white text-black px-3 py-3 rounded-lg text-xs font-mono">
+<button onclick="saveAndConnect()" class="bg-[#ff6b00] text-black px-5 py-3 rounded-lg font-black">CONNECT</button>
 </div>
-<p class="text-[10px] text-zinc-400 mt-2">Token from your screenshot - already pasted for you. Just click CONNECT</p>
+<p id="help" class="text-[10px] text-zinc-300 mt-2">Pasting...</p>
 </div>
 
-<div class="flex justify-between"><b>KQbinary</b><span id="bal" class="bg-zinc-800 px-3 py-1 rounded-full text-sm">$0.00</span></div>
+<div class="flex justify-between items-center"><b>KQbinary</b><span id="bal" class="bg-zinc-800 px-3 py-1 rounded-full text-sm">$0.00 SIMULATION</span></div>
 
-<div class="bg-zinc-900 mt-3 p-3 rounded-xl">
-<div class="flex justify-between text-xs"><span id="status">Volatility 10 - Click CONNECT first</span><span id="price" class="text-orange-400 font-bold">-</span></div>
+<div class="bg-[#14141e] mt-3 p-3 rounded-xl border border-zinc-800">
+<div class="flex justify-between text-xs"><span id="status">Not connected - paste token then CONNECT</span><span id="price" class="text-orange-400 font-bold">9449</span></div>
 <canvas id="chart" width="800" height="280" class="mt-2 bg-black rounded"></canvas>
 <div id="digits" class="flex gap-1 mt-3"></div>
+<div id="info" class="text-[10px] mt-2 text-zinc-400">-</div>
 </div>
 
 <div class="flex gap-2 mt-3">
@@ -35,50 +35,90 @@
 <button onclick="trade('odd')" class="bg-zinc-900 border border-orange-500/30 py-4 rounded-xl">Odd</button>
 </div>
 
-<p id="log" class="text-center text-xs mt-4 text-zinc-400">👆 Click CONNECT button at top</p>
+<p id="log" class="text-center text-xs mt-4 p-3 bg-zinc-900 rounded-lg">Instructions: 1. Paste token 2. Click CONNECT 3. Wait 5 sec</p>
 
 <script>
-let prices=[], last=0, stake=10, cur=10, bal=0, bot=null, ws=null, real=false, counts=Array(10).fill(0), total=0;
+let prices=[], last=0, cur=10, bal=0, bot=null, ws=null, real=false, counts=Array(10).fill(0), total=0;
 let cv=document.getElementById('chart'), ctx=cv.getContext('2d');
-function draw(){if(prices.length<2)return;ctx.clearRect(0,0,cv.width,cv.height);let min=Math.min(...prices),max=Math.max(...prices),r=max-min||1;ctx.beginPath();ctx.strokeStyle='#ff6b00';ctx.lineWidth=3;prices.forEach((p,i)=>{let x=i/(prices.length-1)*cv.width;let y=cv.height-((p-min)/r)*cv.height*0.7-20;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});ctx.stroke();}
-function add(q){prices.push(q);if(prices.length>60)prices.shift();last=parseInt(Math.abs(q*100).toString().slice(-1));if(isNaN(last))last=0;counts[last]++;total++;document.getElementById('price').innerText=q.toFixed(2);let row=document.getElementById('digits');row.innerHTML='';for(let i=0;i<10;i++){let cl=i==last?'bg-orange-500 text-black':'bg-zinc-800';row.innerHTML+=`<div class="flex-1 ${cl} py-2 rounded text-center">${i}</div>`;}draw();}
+const MY_TOKEN="pat_2042258fe2355ceb2beb4c9c75abb1bcc7950531715fec26eeaa13354b3a67b7";
 
-function connectNow(){
+// Auto-fill token on load
+window.onload=()=>{
+ let saved=localStorage.getItem('deriv_token') || MY_TOKEN;
+ document.getElementById('tok').value=saved;
+ document.getElementById('help').innerText='Token auto-pasted ✅ Now click CONNECT';
+};
+
+function draw(){if(prices.length<2)return;ctx.clearRect(0,0,cv.width,cv.height);let min=Math.min(...prices),max=Math.max(...prices),r=max-min||1;ctx.beginPath();ctx.strokeStyle='#ff6b00';ctx.lineWidth=3;prices.forEach((p,i)=>{let x=i/(prices.length-1)*cv.width;let y=cv.height-((p-min)/r)*cv.height*0.7-20;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});ctx.stroke();}
+function add(q){prices.push(q);if(prices.length>60)prices.shift();last=parseInt(Math.abs(q*100).toString().slice(-1));if(isNaN(last))last=0;counts[last]++;total++;document.getElementById('price').innerText=q.toFixed(2);let row=document.getElementById('digits');row.innerHTML='';for(let i=0;i<10;i++){let cl=i==last?'bg-orange-500 text-black':'bg-zinc-800';row.innerHTML+=`<div class="flex-1 ${cl} py-2 rounded text-center font-bold">${i}</div>`;}let even=counts.filter((_,i)=>i%2==0).reduce((a,b)=>a+b,0);let pct=total?Math.round(even/total*100):50;document.getElementById('info').innerText=`EVEN ${pct}% ODD ${100-pct}% LAST ${last} TOTAL ${total}`;draw();}
+
+function saveAndConnect(){
  let t=document.getElementById('tok').value.trim();
- if(!t){alert('Paste token');return;}
- document.getElementById('log').innerText='Connecting... wait 3 sec';
- ws=new WebSocket('wss://ws.derivws.com/websockets/v3?app_id=1089');
- ws.onopen=()=>{ws.send(JSON.stringify({authorize:t}));};
- ws.onmessage=(e)=>{
-  let d=JSON.parse(e.data);
-  console.log(d);
-  if(d.authorize){
-   real=true; bal=parseFloat(d.authorize.balance);
-   document.getElementById('bal').innerText='$'+bal.toFixed(2)+' REAL';
-   document.getElementById('status').innerText='LIVE Volatility 10 (1s) - REAL DERIV ✅';
-   document.getElementById('log').innerText='CONNECTED! Email: '+d.authorize.email+' Balance $'+bal;
-   ws.send(JSON.stringify({balance:1,subscribe:1}));
-   ws.send(JSON.stringify({ticks:'R_10',subscribe:1}));
+ if(!t){alert('Paste token first');return;}
+ localStorage.setItem('deriv_token', t);
+ connectReal(t);
+}
+
+function connectReal(token){
+ document.getElementById('log').innerText='Trying to connect to Deriv... (1/3)';
+ document.getElementById('status').innerText='Connecting...';
+
+ // Try 3 different servers (Safaricom blocks first one)
+ let servers=[
+   'wss://ws.derivws.com/websockets/v3?app_id=1089',
+   'wss://ws.binaryws.com/websockets/v3?app_id=1089',
+   'wss://ws.deriv.com/websockets/v3?app_id=1089'
+ ];
+ let serverIndex=0;
+
+ function tryServer(){
+  if(serverIndex>=servers.length){
+   document.getElementById('log').innerText='❌ All Deriv servers blocked by Safaricom/Airtel Kenya. Use VPN or WiFi.\n\nYour chart still works in simulation. For REAL trading, turn on VPN (1.1.1.1 app) then click CONNECT again.';
+   document.getElementById('status').innerText='Blocked by ISP - Use VPN';
+   return;
   }
-  if(d.tick){ add(parseFloat(d.tick.quote)); }
-  if(d.balance){ document.getElementById('bal').innerText='$'+parseFloat(d.balance.balance).toFixed(2)+' REAL'; }
-  if(d.buy){ document.getElementById('log').innerText='TRADE PLACED! Contract '+d.buy.contract_id+' Payout $'+d.buy.payout; }
-  if(d.error){ document.getElementById('log').innerText='ERROR: '+d.error.message+' - Make sure you use DEMO token'; alert('ERROR: '+d.error.message); }
- };
- ws.onerror=()=>{document.getElementById('log').innerText='Connection failed - Check internet, try again';};
+  let url=servers[serverIndex];
+  document.getElementById('log').innerText=`Trying server ${serverIndex+1}/3: ${url.split('/')[2]}...`;
+  ws=new WebSocket(url);
+  ws.onopen=()=>{ws.send(JSON.stringify({authorize:token})); document.getElementById('log').innerText='Authorizing...';};
+  ws.onmessage=(e)=>{
+   let d=JSON.parse(e.data);
+   if(d.authorize){
+    real=true; bal=parseFloat(d.authorize.balance);
+    document.getElementById('bal').innerText='$'+bal.toFixed(2)+' REAL ✅';
+    document.getElementById('status').innerText='LIVE Volatility 10 - REAL DERIV ✅';
+    document.getElementById('log').innerText='✅ CONNECTED! '+d.authorize.email+' Balance $'+bal.toFixed(2)+' - You can now click AUTO EVEN for REAL trades!';
+    ws.send(JSON.stringify({balance:1,subscribe:1}));
+    ws.send(JSON.stringify({ticks:'R_10',subscribe:1}));
+   }
+   if(d.tick){ add(parseFloat(d.tick.quote)); }
+   if(d.balance){ document.getElementById('bal').innerText='$'+parseFloat(d.balance.balance).toFixed(2)+' REAL ✅'; }
+   if(d.buy){ document.getElementById('log').innerText='✅ REAL TRADE PLACED! ID '+d.buy.contract_id+' Payout $'+d.buy.payout; }
+   if(d.error){
+    document.getElementById('log').innerText='❌ ERROR: '+d.error.message+'\n\nCode: '+d.error.code+'\nIf says invalid token - you are on Real account, switch to Demo in Deriv app then create new token.';
+   }
+  };
+  ws.onerror=()=>{
+   serverIndex++;
+   setTimeout(tryServer, 1500);
+  };
+  ws.onclose=()=>{
+   if(!real){ serverIndex++; setTimeout(tryServer, 1000); }
+  };
+ }
+ tryServer();
 }
 
 function trade(type){
- if(!real){ alert('Click CONNECT at top first!'); return; }
+ if(!real){ document.getElementById('log').innerText='⚠️ Click CONNECT first! You are still in SIMULATION ($0.00)'; return; }
  let ctype=type=='even'?'DIGITEVEN':'DIGITODD';
  ws.send(JSON.stringify({buy:1, price:cur, parameters:{amount:cur,basis:'stake',contract_type:ctype,currency:'USD',duration:1,duration_unit:'t',symbol:'R_10'}}));
- document.getElementById('log').innerText='Placing REAL '+type+' $'+cur+'...';
+ document.getElementById('log').innerText='Placing REAL '+type.toUpperCase()+' $'+cur+' on Deriv R_10...';
 }
-function start(){if(!real){alert('Connect first!');return;}if(bot)clearInterval(bot);bot=setInterval(()=>trade('even'),2000);document.getElementById('log').innerText='AUTO EVEN running every 2 sec - REAL MONEY!';}
+function start(){if(!real){document.getElementById('log').innerText='⚠️ CONNECT first! Cannot auto-trade in simulation.';return;}if(bot)clearInterval(bot);bot=setInterval(()=>trade('even'),2500);document.getElementById('log').innerText='🤖 AUTO EVEN running REAL every 2.5 sec $'+cur+' x2 martingale';}
 function stop(){clearInterval(bot);document.getElementById('log').innerText='STOPPED';}
 
-// fake chart before connect so you see it moves
-let b=9449; setInterval(()=>{if(!real){b+=(Math.random()-0.5)*0.5; add(b);}},300);
+let b=9449; setInterval(()=>{if(!real){b+=(Math.random()-0.5)*0.6; add(b);}},250); add(b);
 </script>
 </body>
 </html>

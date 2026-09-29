@@ -1,44 +1,225 @@
 <!DOCTYPE html>
-<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><script src="https://cdn.tailwindcss.com"></script></head>
-<body style="background:#111;color:white;padding:10px">
-<h1>KQbinary - FIXED ✅</h1>
-<h1 id="price" style="font-size:40px;color:orange">Connecting...</h1>
-<h2 id="digit" style="font-size:30px">Last Digit: -</h2>
-<div id="box" style="display:flex;gap:5px;margin:10px 0"></div>
-<button onclick="doDep()" style="background:orange;color:black;padding:15px 30px;border-radius:20px;font-weight:bold;width:100%">DEPOSIT TEST</button>
-<p id="log" style="margin-top:20px;color:gray">Log: starting...</p>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{background:#0b0b0f;color:white;font-family:Inter,sans-serif}
+canvas{width:100%}
+.digit-active{background:#ff6b00!important;color:black!important}
+.last-digit{border:2px solid white;box-shadow:0 0 10px white}
+</style>
+</head>
+<body class="p-2 pb-20">
+
+<!-- TOP BAR -->
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-[#ff6b00] rounded flex items-center justify-center font-black text-black">KQ</div>
+<div class="flex items-center gap-1 bg-zinc-900 px-3 py-1.5 rounded-full border border-zinc-800">
+<span class="font-bold text-sm">KQBinary</span>
+<span id="balance" class="text-sm ml-2">$10096.72</span>
+<span class="text-[10px] ml-1">▼</span>
+</div>
+</div>
+<button onclick="doDeposit()" class="bg-[#ff6b00] text-black px-5 py-1.5 rounded-full font-bold text-sm">Deposit</button>
+</div>
+
+<!-- TABS -->
+<div class="flex gap-2 mt-3 text-[12px]">
+<button class="bg-[#ff6b00] text-black px-4 py-1.5 rounded-full font-bold">Matches/Differs</button>
+<button class="bg-zinc-900 px-4 py-1.5 rounded-full text-zinc-400">Even/Odd</button>
+<button class="bg-zinc-900 px-4 py-1.5 rounded-full text-zinc-400">Over/Under</button>
+</div>
+
+<!-- CHART BOX -->
+<div class="bg-[#14141a] rounded-xl mt-3 p-3 border border-zinc-800">
+<div class="flex justify-between text-[11px]">
+<span class="text-zinc-400">Volatility 10 (1s) Index</span>
+<span id="priceNow" class="bg-[#ff6b00] text-black px-2 py-0.5 rounded font-bold">9447.93</span>
+</div>
+<canvas id="chart" height="160"></canvas>
+<div class="flex justify-between text-[9px] text-zinc-500 mt-1">
+<span>07:22</span><span>09:52</span><span>12:23</span><span>14:12</span><span>17:24</span>
+</div>
+
+<!-- STATS -->
+<div class="grid grid-cols-3 gap-2 mt-3 text-[10px]">
+<div><div class="text-zinc-500">BATCH / DIFFER</div><div class="flex gap-1 mt-1"><div class="bg-zinc-800 px-2 py-1 rounded">0</div><div class="bg-zinc-800 px-2 py-1 rounded">1</div><div class="bg-zinc-800 px-2 py-1 rounded">2</div><div class="bg-[#ff6b00] text-black px-2 py-1 rounded font-bold">3</div></div></div>
+<div><div class="text-zinc-500">HOT COLD LAST</div><div class="flex gap-1 mt-1 text-[9px]"><span class="bg-zinc-800 px-2 py-1 rounded">6</span><span class="bg-zinc-800 px-2 py-1 rounded">7</span><span id="lastDigitBox" class="bg-[#ff3b30] px-2 py-1 rounded">9</span></div></div>
+<div class="text-right"><div class="text-zinc-500">50%</div><div id="liveP" class="text-[#ff6b00] font-bold text-[12px]">9449.18</div></div>
+</div>
+
+<!-- DIGIT % -->
+<div class="flex justify-between mt-3 text-[10px]">
+<div id="digitStats" class="flex gap-[6px]"></div>
+</div>
+<div class="flex gap-1 mt-2">
+<div id="digitsRow" class="flex gap-1 flex-1"></div>
+</div>
+
+<!-- DIGIT SELECTOR -->
+<div class="flex items-center gap-2 mt-3">
+<span class="text-[10px] text-zinc-500">DIGIT</span>
+<div id="digitSelect" class="flex gap-1 flex-1"></div>
+</div>
+</div>
+
+<!-- AUTO / MANUAL -->
+<div class="flex gap-2 mt-3">
+<button id="autoBtn" onclick="setMode('auto')" class="flex-1 bg-[#ff6b00] text-black py-2.5 rounded-xl font-bold text-sm">AUTO</button>
+<button id="manualBtn" onclick="setMode('manual')" class="flex-1 bg-[#14141a] py-2.5 rounded-xl font-bold text-sm border border-zinc-800">MANUAL</button>
+</div>
+
+<!-- STAKE BOX -->
+<div class="bg-[#14141a] rounded-xl mt-3 p-3 border border-zinc-800">
+<div class="flex justify-between items-center">
+<span class="text-[10px] text-zinc-500">STAKE</span>
+<div class="flex items-center gap-2">
+<button onclick="changeStake(-1)" class="w-7 h-7 bg-zinc-800 rounded-full">-</button>
+<span id="stakeVal" class="font-bold w-8 text-center">10</span>
+<button onclick="changeStake(1)" class="w-7 h-7 bg-zinc-800 rounded-full">+</button>
+</div>
+</div>
+<div class="flex gap-2 mt-3 text-[10px]">
+<button class="bg-zinc-800 px-3 py-1.5 rounded-full">$1</button>
+<button class="bg-zinc-800 px-3 py-1.5 rounded-full">$5</button>
+<button class="bg-[#ff6b00] text-black px-3 py-1.5 rounded-full font-bold">$10</button>
+<button class="bg-zinc-800 px-3 py-1.5 rounded-full">$25</button>
+<button class="bg-zinc-800 px-3 py-1.5 rounded-full">$50</button>
+<button class="bg-zinc-800 px-3 py-1.5 rounded-full">$100</button>
+</div>
+<div class="grid grid-cols-3 gap-2 mt-3 text-[10px]">
+<div class="bg-zinc-900 p-2 rounded-lg text-center"><div class="text-zinc-500">TARGET</div><div id="targetVal" class="font-bold text-sm">200</div></div>
+<div class="bg-zinc-900 p-2 rounded-lg text-center"><div class="text-zinc-500">STOP LOSS</div><div class="font-bold text-sm">200</div></div>
+<div class="bg-zinc-900 p-2 rounded-lg text-center"><div class="text-zinc-500">MART</div><div class="font-bold text-sm">2</div></div>
+</div>
+</div>
+
+<!-- MATCH / DIFFER -->
+<div class="flex gap-2 mt-3">
+<button id="matchBtn" onclick="placeTrade('match')" class="flex-1 bg-[#1a1a22] py-3 rounded-xl border border-zinc-800">
+<div class="text-[12px] font-bold">Match</div><div class="text-[11px] text-zinc-400"><span id="matchPayout">$19.50</span> • 90%</div>
+</button>
+<button id="differBtn" onclick="placeTrade('differ')" class="flex-1 bg-[#1a1a22] py-3 rounded-xl border border-zinc-800">
+<div class="text-[12px] font-bold">Differ</div><div class="text-[11px] text-zinc-400"><span id="differPayout">$10.56</span> • 10%</div>
+</button>
+</div>
+
+<button id="stopBtn" onclick="stopAuto()" class="w-full mt-3 bg-[#ff6b00] text-black py-3 rounded-xl font-bold hidden">■ STOP</button>
+
+<p id="log" class="text-center text-[11px] text-zinc-500 mt-3">Connecting to Deriv Volatility 10 (1s)...</p>
+
 <script>
-let sel=5;
-function showDigits(last){
- document.getElementById('box').innerHTML='';
+let prices=[]; let lastDigit=0; let selectedDigit=3; let stake=10; let balance=10096.72;
+let mode='auto'; let autoRunning=false; let autoInterval=null;
+let digitCounts=Array(10).fill(0); let totalTicks=0;
+
+const canvas=document.getElementById('chart'); const ctx=canvas.getContext('2d');
+function resize(){ canvas.width=canvas.offsetWidth*2; canvas.height=160*2; } resize();
+
+function drawChart(){
+ if(prices.length<2) return;
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ ctx.beginPath(); ctx.strokeStyle='#ff6b00'; ctx.lineWidth=3;
+ let min=Math.min(...prices), max=Math.max(...prices), range=max-min||1;
+ prices.forEach((p,i)=>{
+  let x=(i/(prices.length-1))*canvas.width;
+  let y=canvas.height - ((p-min)/range)*canvas.height*0.8 - canvas.height*0.1;
+  if(i==0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+ });
+ ctx.stroke();
+ // glow last point
+ let lastX=canvas.width, lastY=canvas.height - ((prices[prices.length-1]-min)/range)*canvas.height*0.8 - canvas.height*0.1;
+ ctx.fillStyle='#ff6b00'; ctx.beginPath(); ctx.arc(lastX,lastY,6,0,Math.PI*2); ctx.fill();
+}
+
+function renderDigits(){
+ let row=document.getElementById('digitsRow'); let sel=document.getElementById('digitSelect'); let stats=document.getElementById('digitStats');
+ row.innerHTML=''; sel.innerHTML=''; stats.innerHTML='';
  for(let i=0;i<10;i++){
-  document.getElementById('box').innerHTML+=`<div onclick="sel=${i}" style="width:35px;height:35px;background:${i==sel?'orange':'#333'};color:${i==sel?'black':'white'};display:flex;align-items:center;justify-content:center;border-radius:8px;border:${i==last?'3px solid white':''}">${i}</div>`;
+  let pct=totalTicks?((digitCounts[i]/totalTicks*100).toFixed(0))+'%':'0%';
+  stats.innerHTML+=`<span>${pct}</span>`;
+  let active= i==lastDigit? 'bg-[#ff3b30] text-white' : 'bg-zinc-800 text-zinc-400';
+  row.innerHTML+=`<div class="flex-1 ${active} py-1.5 rounded text-center text-[11px] font-bold">${i}</div>`;
+  let selActive = i==selectedDigit? 'bg-[#ff6b00] text-black ring-2 ring-white' : 'bg-zinc-800';
+  sel.innerHTML+=`<div onclick="selectedDigit=${i};renderDigits();updatePayout()" class="flex-1 ${selActive} py-1.5 rounded text-center text-[11px] font-bold cursor-pointer">${i}</div>`;
  }
 }
-showDigits(-1);
+
+function updatePayout(){
+ document.getElementById('differPayout').innerText='$'+(stake*1.056).toFixed(2);
+ document.getElementById('matchPayout').innerText='$'+(stake*1.95).toFixed(2);
+}
+
+function changeStake(d){ stake=Math.max(1,Math.min(100,stake+d)); document.getElementById('stakeVal').innerText=stake; updatePayout(); }
+
+function setMode(m){
+ mode=m;
+ document.getElementById('autoBtn').className=m=='auto'?'flex-1 bg-[#ff6b00] text-black py-2.5 rounded-xl font-bold text-sm':'flex-1 bg-[#14141a] py-2.5 rounded-xl font-bold text-sm border border-zinc-800';
+ document.getElementById('manualBtn').className=m=='manual'?'flex-1 bg-[#ff6b00] text-black py-2.5 rounded-xl font-bold text-sm':'flex-1 bg-[#14141a] py-2.5 rounded-xl font-bold text-sm border border-zinc-800';
+ if(m=='auto' &&!autoRunning) startAuto();
+ if(m=='manual') stopAuto();
+}
+
+function placeTrade(type){
+ // SIMULATION like your video
+ let win = (type=='differ' && lastDigit!=selectedDigit) || (type=='match' && lastDigit==selectedDigit);
+ let profit = win? (type=='match'? stake*0.95 : stake*0.056) : -stake;
+ balance+=profit;
+ document.getElementById('balance').innerText='$'+balance.toFixed(2);
+ document.getElementById('log').innerHTML=`${type.toUpperCase()} ${selectedDigit} | Last ${lastDigit} | <span style="color:${win?'#00ff88':'#ff3b30'}">${win?'WIN +$'+profit.toFixed(2):'LOSS -$'+stake}</span>`;
+ // flash
+ let btn=type=='match'?document.getElementById('matchBtn'):document.getElementById('differBtn');
+ btn.style.background=win?'#00ff8840':'#ff3b3040';
+ setTimeout(()=>btn.style.background='#1a1a22',400);
+}
+
+function startAuto(){
+ if(autoRunning) return; autoRunning=true;
+ document.getElementById('stopBtn').classList.remove('hidden');
+ document.getElementById('log').innerText='AUTO RUNNING - DIFFER '+selectedDigit+' stake $'+stake;
+ autoInterval=setInterval(()=>{ placeTrade('differ'); },1500);
+}
+
+function stopAuto(){
+ autoRunning=false; clearInterval(autoInterval);
+ document.getElementById('stopBtn').classList.add('hidden');
+ document.getElementById('log').innerText='Auto bot stopped - Balance $'+balance.toFixed(2);
+ setMode('manual');
+}
+
+renderDigits(); updatePayout();
+
+// LIVE DERIV FEED
 const ws=new WebSocket('wss://ws.derivws.com/websockets/v3?app_id=1089');
-ws.onopen=()=>{ ws.send(JSON.stringify({ticks:"R_10"})); document.getElementById('log').innerText='Connected to Deriv - waiting price...'; };
+ws.onopen=()=>{ ws.send(JSON.stringify({ticks:'R_10'})); document.getElementById('log').innerText='LIVE • Volatility 10 (1s) connected'; };
 ws.onmessage=(e)=>{
- const d=JSON.parse(e.data);
- if(d.tick){
-  const p=d.tick.quote;
-  const last=parseInt(p.toString().slice(-1));
-  document.getElementById('price').innerText='R_10: $'+p;
-  document.getElementById('digit').innerText='Last Digit: '+last+' | Selected: '+sel;
-  showDigits(last);
-  document.getElementById('log').innerText='LIVE moving! Price: '+p;
- }
-};
-ws.onerror=()=>{ document.getElementById('log').innerText='Error - reload page'; };
-async function doDep(){
- const phone=prompt('Phone 254...','254708374149');
- const amt=prompt('Amount','10');
- document.getElementById('log').innerText='Sending to /api/mpesa...';
  try{
-  const r=await fetch('/api/mpesa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone,amount:amt})});
-  const j=await r.json();
-  alert(JSON.stringify(j));
-  document.getElementById('log').innerText='MPESA: '+JSON.stringify(j);
+  let d=JSON.parse(e.data);
+  if(d.tick){
+   let q=parseFloat(d.tick.quote);
+   prices.push(q); if(prices.length>100) prices.shift();
+   lastDigit=parseInt(q.toString().slice(-1));
+   digitCounts[lastDigit]++; totalTicks++;
+   document.getElementById('priceNow').innerText=q.toFixed(2);
+   document.getElementById('liveP').innerText=q.toFixed(2);
+   document.getElementById('lastDigitBox').innerText=lastDigit;
+   drawChart(); renderDigits();
+  }
+ }catch(err){}
+};
+ws.onerror=()=>{ document.getElementById('log').innerText='WS error - reload page'; };
+
+async function doDeposit(){
+ let phone=prompt('M-PESA 2547...','254708374149'); let amt=prompt('Amount KES','100');
+ if(!phone||!amt) return;
+ document.getElementById('log').innerText='Sending STK to '+phone+'...';
+ try{
+  let r=await fetch('/api/mpesa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone,amount:amt})});
+  let j=await r.json(); alert(JSON.stringify(j)); document.getElementById('log').innerText='MPESA: '+JSON.stringify(j).slice(0,80);
  }catch(e){ alert(e.message); }
 }
-</script></body></html>
+</script>
+</body>
+</html>

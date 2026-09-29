@@ -1,142 +1,74 @@
-<!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>KQbinary PRO</title><style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}body{background:#080808;color:#fff;font-family:system-ui,-apple-system;overflow-x:hidden;padding-bottom:72px}
-.top{display:flex;justify-content:space-between;align-items:center;padding:10px 10px;background:#111;border-bottom:1px solid #1E1E1E;position:sticky;top:0;z-index:50}
-.left{display:flex;align-items:center;gap:8px}.ico{width:22px;height:22px;background:#1E1E1E;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px}
-.logo{font-weight:900;font-size:13px}.bal{color:#888;font-size:12px;margin-left:4px}.bal b{color:#fff}.dep{background:#FF8A2A;color:#000;padding:6px 12px;border-radius:16px;font-weight:900;border:0;font-size:11px}
-.tabs{display:flex;gap:6px;padding:8px 10px}.tab{flex:1;padding:7px;text-align:center;border-radius:18px;background:#151515;color:#555;border:1px solid #1E1E1E;font-size:11px}.tab.on{background:#1E1E1E;color:#fff;border-color:#2A2A2A}
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KQbinary FIXED</title><style>
+*{box-sizing:border-box;margin:0;padding:0}body{background:#080808;color:#fff;font-family:system-ui;padding-bottom:70px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:10px;background:#111;border-bottom:1px solid #1E1E1E;position:sticky;top:0;z-index:50}
+.bal{color:#888;font-size:12px}.dep{background:#FF8A2A;color:#000;padding:6px 12px;border-radius:16px;font-weight:900;border:0;font-size:11px}
+.tabs{display:flex;gap:6px;padding:8px 10px}.tab{flex:1;padding:7px;text-align:center;border-radius:18px;background:#151515;color:#555;border:1px solid #1E1E1E;font-size:11px}.tab.on{background:#1E1E1E;color:#fff}
 .card{margin:0 8px;background:#101010;border:1px solid #1A1A1A;border-radius:14px;padding:8px}
-.chartHead{display:flex;justify-content:space-between;font-size:10px;color:#888}.price{background:#FF8A2A;color:#000;padding:2px 6px;border-radius:6px;font-weight:900;font-size:11px}
-canvas{width:100%;height:110px;background:#0D0D0D;border-radius:10px;display:block;margin-top:6px}
-.timeRow{display:flex;justify-content:space-between;font-size:8px;color:#3A3A3A;margin-top:4px}
-.lblRow{display:flex;justify-content:space-between;font-size:7px;color:#555;margin-top:6px;letter-spacing:.3px}
-.bars{display:flex;gap:3px;margin-top:3px;height:16px;align-items:end}.bar{flex:1;background:#2A2A2A;border-radius:3px;min-height:4px}.bar.on{background:#FF8A2A}
-.dRow{display:flex;gap:3px;margin-top:4px}.d{flex:1;text-align:center;padding:5px 0;background:#1E1E1E;border-radius:6px;font-size:11px;color:#666;border:1px solid #252525}.d.on{background:#FF8A2A;color:#000;font-weight:900;border-color:#FF8A2A}
-.dRow2{display:flex;gap:3px;margin-top:8px;align-items:center}.d2{flex:1;text-align:center;padding:6px 0;background:#151515;border-radius:7px;border:1px solid #222;font-size:11px;color:#888}.d2.on{background:#FF8A2A;color:#000;font-weight:900}
-.autoRow{display:flex;margin:10px 8px;background:#111;border-radius:20px;padding:2px;border:1px solid #1A1A1A}.aBtn{flex:1;padding:8px;text-align:center;border-radius:16px;font-size:11px;color:#555;font-weight:700}.aBtn.on{background:#151515;color:#fff;border:1px solid #2A2A2A}
-.stakeRow{display:flex;justify-content:space-between;align-items:center;background:#151515;margin:8px;border-radius:14px;padding:6px 12px;border:1px solid #1E1E1E}.sBtn{width:32px;height:32px;background:#1E1E1E;border:1px solid #2A2A2A;color:#fff;border-radius:10px;font-size:16px}
-.chips{display:flex;gap:5px;padding:0 8px;overflow:auto;scrollbar-width:none}.chip{padding:5px 11px;background:#151515;border:1px solid #1E1E1E;border-radius:16px;font-size:11px;flex-shrink:0;color:#666}.chip.on{background:#2A1A0F;border-color:#FF8A2A;color:#FF8A2A}
-.stats{display:flex;gap:6px;margin:8px}.st{flex:1;background:#151515;border:1px solid #1E1E1E;border-radius:10px;padding:6px;text-align:center}.st small{color:#555;font-size:8px;display:block}.st b{font-size:11px}
-.trade{display:flex;gap:8px;margin:8px}.tBtn{flex:1;background:#151515;border:1px solid #1E1E1E;border-radius:12px;padding:10px;text-align:center}.tBtn b{font-size:12px;display:block}.tBtn span{color:#FF8A2A;font-weight:900;font-size:12px}.tBtn small{color:#555;font-size:9px}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #1E1E1E;display:flex;justify-content:space-around;padding:6px 0 8px;z-index:40}.b{font-size:9px;color:#555;text-align:center}.b.on{color:#fff}.ai{width:32px;height:32px;background:#FF8A2A;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 2px;color:#000;font-weight:900}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.78);display:none;z-index:100;align-items:center;justify-content:center;padding:14px}.modal.on{display:flex}
-.box{width:100%;max-width:360px;background:#181818;border:1px solid #2A2A2A;border-radius:18px;padding:14px;max-height:92vh;overflow:auto}
-.box2{width:100%;max-width:380px;background:#181818;border:1px solid #2A2A2A;border-radius:18px;padding:14px;max-height:92vh;overflow:auto}
-.insHead{display:flex;justify-content:space-between}.warn{width:28px;height:28px;background:#2A1F0F;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px}
-.line{display:flex;justify-content:space-between;padding:7px 0;font-size:12px;color:#888;border-bottom:1px solid #1E1E1E}.line:last-child{border:0}
-.depBtn{width:100%;background:#FF8A2A;color:#000;padding:12px;border:0;border-radius:24px;font-weight:900;margin-top:12px;font-size:13px}
-.cancelBtn{width:100%;background:#1A1A1A;color:#777;padding:10px;border:1px solid #2A2A2A;border-radius:24px;margin-top:8px;font-size:12px}
+canvas{width:100%;height:120px;background:#0D0D0D;border-radius:10px;display:block;margin-top:6px}
+.timeRow{display:flex;justify-content:space-between;font-size:8px;color:#555;margin-top:4px}
+.lblRow{display:flex;justify-content:space-between;font-size:7px;color:#666;margin-top:6px}
+.bars{display:flex;gap:3px;margin-top:4px;height:18px;align-items:end}.bar{flex:1;background:#2A2A2A;border-radius:3px;min-height:5px}.bar.on{background:#FF8A2A}
+.dRow{display:flex;gap:3px;margin-top:5px}.d{flex:1;text-align:center;padding:6px 0;background:#1E1E1E;border-radius:6px;font-size:11px;color:#888;border:1px solid #252525}.d.on{background:#FF8A2A;color:#000;font-weight:900}
+.dRow2{display:flex;gap:3px;margin-top:8px}.d2{flex:1;text-align:center;padding:7px 0;background:#151515;border-radius:7px;border:1px solid #222;font-size:11px;color:#888}.d2.on{background:#FF8A2A;color:#000;font-weight:900}
+.autoRow{display:flex;margin:10px 8px;background:#111;border-radius:20px;padding:2px;border:1px solid #1A1A1A}.aBtn{flex:1;padding:9px;text-align:center;border-radius:16px;font-size:11px;color:#555;font-weight:700}.aBtn.on{background:#151515;color:#fff}
+.stakeRow{display:flex;justify-content:space-between;align-items:center;background:#151515;margin:8px;border-radius:14px;padding:8px 12px;border:1px solid #1E1E1E}.sBtn{width:32px;height:32px;background:#1E1E1E;border:1px solid #2A2A2A;color:#fff;border-radius:10px}
+.chips{display:flex;gap:5px;padding:0 8px;overflow:auto}.chip{padding:6px 11px;background:#151515;border:1px solid #1E1E1E;border-radius:16px;font-size:11px;flex-shrink:0;color:#666}.chip.on{background:#2A1A0F;border-color:#FF8A2A;color:#FF8A2A}
+.stats{display:flex;gap:6px;margin:8px}.st{flex:1;background:#151515;border:1px solid #1E1E1E;border-radius:10px;padding:7px;text-align:center}.st small{color:#555;font-size:8px;display:block}.st b{font-size:11px}
+.trade{display:flex;gap:8px;margin:8px}.tBtn{flex:1;background:#151515;border:1px solid #1E1E1E;border-radius:12px;padding:12px;text-align:center}.tBtn b{font-size:12px}.tBtn span{color:#FF8A2A;font-weight:900}.tBtn small{color:#555;font-size:9px}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #1E1E1E;display:flex;justify-content:space-around;padding:8px 0;z-index:40}.b{font-size:9px;color:#555;text-align:center}.b.on{color:#fff}.ai{width:32px;height:32px;background:#FF8A2A;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 2px;color:#000}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;z-index:100;align-items:center;justify-content:center;padding:14px}.modal.on{display:flex}.box{width:100%;max-width:360px;background:#181818;border:1px solid #2A2A2A;border-radius:18px;padding:14px}
+.depBtn{width:100%;background:#FF8A2A;color:#000;padding:12px;border:0;border-radius:24px;font-weight:900;margin-top:12px}
+.line{display:flex;justify-content:space-between;padding:7px 0;font-size:12px;color:#888;border-bottom:1px solid #1E1E1E}
 .payOpt{padding:12px;background:#1E1E1E;border:1px solid #252525;border-radius:12px;margin-top:10px;display:flex;justify-content:space-between;align-items:center}
-.amtBox{background:#0F0F0F;border:1px solid #1E1E1E;border-radius:12px;padding:10px;margin-top:10px}
-.amtInp{width:100%;background:transparent;border:0;color:#fff;font-size:20px;outline:none}
-.phRow{display:flex;gap:8px;margin-top:8px}.phBtn{flex:1;padding:7px;text-align:center;border-radius:18px;border:1px solid #2A2A2A;font-size:11px;background:#1A1A1A;color:#666}.phBtn.on{background:#FF8A2A;color:#000;border-color:#FF8A2A;font-weight:700}
-.menu{position:fixed;left:0;top:0;bottom:0;width:280px;background:#111;transform:translateX(-100%);transition:.25s;z-index:110;border-right:1px solid #1E1E1E;padding:10px;overflow:auto}.menu.on{transform:translateX(0)}.mi{padding:11px 10px;border-radius:8px;display:flex;gap:10px;align-items:center;font-size:13px;color:#999;cursor:pointer}.mi:hover{background:#151515}
-.accPop{position:absolute;top:38px;left:0;background:#1E1E1E;border:1px solid #2A2A2A;border-radius:12px;padding:6px;min-width:170px;display:none;z-index:60}.accPop.on{display:block}.accI{padding:8px 10px;border-radius:8px;font-size:12px}.accI.on{background:#2A1A0F;color:#FF8A2A}
+.amtBox{background:#0F0F0F;border:1px solid #1E1E1E;border-radius:12px;padding:10px;margin-top:10px}.amtInp{width:100%;background:transparent;border:0;color:#fff;font-size:20px;outline:none}
 </style></head><body>
-<div class="top">
-<div class="left">
-<div class="ico" onclick="toggleMenu()">☰</div>
-<div style="position:relative"><div onclick="toggleAcc()" style="display:flex;align-items:center;gap:4px"><span class="logo"><span style="color:#FF8A2A">KQ</span>binary</span><span class="bal">$<span id="bal">0.00</span></span><span style="font-size:10px">▼</span></div>
-<div class="accPop" id="accPop"><div class="accI on">Real Account <span style="float:right;color:#0F0;font-size:10px">Active</span></div><div class="accI">Demo Account</div><div class="accI" style="color:#666">Refresh demo balance</div></div>
-</div>
-</div>
-<div style="display:flex;gap:10px;align-items:center"><span style="font-size:14px;opacity:.6">🔊</span><button class="dep" onclick="openDep()">Deposit</button><span style="font-size:14px;opacity:.6">🔔</span></div>
-</div>
-
+<div class="top"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">☰</span><b><span style="color:#FF8A2A">KQ</span>binary</b><span class="bal">$<span id="bal">0.00</span> ▼</span></div><button class="dep" onclick="openDep()">Deposit</button></div>
 <div class="tabs"><div class="tab on">Matches/Differs</div><div class="tab">Even/Odd</div><div class="tab">Over/Under</div></div>
-
 <div class="card">
-<div class="chartHead"><span><span style="background:#1E1E1E;padding:2px 4px;border-radius:4px">1T</span> Volatility 10 (1s) Index<br><span style="font-size:7px;color:#555">9450.27 • 0.18% • (-0.18%)</span></span><div style="text-align:right"><div class="price" id="priceTag">9450.63</div><div style="font-size:8px;margin-top:2px;color:#666">9448.57</div></div></div>
-<canvas id="cv" width="360" height="110"></canvas>
+<div style="display:flex;justify-content:space-between;font-size:10px;color:#888"><span>1T Volatility 10 (1s) Index</span><span style="background:#FF8A2A;color:#000;padding:2px 6px;border-radius:6px;font-weight:900" id="priceTag">9450.63</span></div>
+<canvas id="cv" width="360" height="120"></canvas>
 <div class="timeRow"><span>15:52</span><span>12:18:25</span><span>12:20:58</span><span>12:23:31</span><span>12:26:04</span></div>
 <div class="lblRow"><span>MATCH / DIFFER</span><span>HOT & COLD • LAST 3</span></div>
 <div class="bars" id="bars"></div>
-<div class="lblRow"><span id="mPct">MATCH 10%</span><span id="dPct">DIFFER 90%</span></div>
+<div class="lblRow"><span>MATCH 10%</span><span>DIFFER 90%</span></div>
 <div class="dRow" id="topD"></div>
 <div class="dRow2"><span style="font-size:7px;color:#555;width:24px">DIGIT</span><div style="display:flex;gap:3px;flex:1" id="botD"></div></div>
 </div>
-
-<div class="autoRow"><div class="aBtn on" id="aAuto" onclick="setAuto(true)">AUTO</div><div class="aBtn" id="aMan" onclick="setAuto(false)">MANUAL</div></div>
-
-<div class="stakeRow"><button class="sBtn" onclick="chg(-1)">−</button><div style="text-align:center"><small style="color:#666;font-size:8px">STAKE</small><br><b id="stk" style="font-size:13px">10</b></div><button class="sBtn" onclick="chg(1)">+</button></div>
-
+<div class="autoRow"><div class="aBtn on">AUTO</div><div class="aBtn">MANUAL</div></div>
+<div class="stakeRow"><button class="sBtn" onclick="chg(-1)">−</button><div style="text-align:center"><small style="color:#666;font-size:8px">STAKE</small><br><b id="stk">10</b></div><button class="sBtn" onclick="chg(1)">+</button></div>
 <div class="chips"><div class="chip" onclick="setS(1,this)">$1</div><div class="chip" onclick="setS(5,this)">$5</div><div class="chip on" onclick="setS(10,this)">$10</div><div class="chip" onclick="setS(25,this)">$25</div><div class="chip" onclick="setS(50,this)">$50</div><div class="chip" onclick="setS(100,this)">$100</div></div>
-
-<div class="stats"><div class="st"><small>TARGET</small><b id="tgt">200</b></div><div class="st"><small>STOP LOSS</small><b id="sl" style="color:#FF8A2A">929</b></div><div class="st"><small>MOST</small><b id="mart">2</b></div></div>
-
-<div class="trade"><div class="tBtn" onclick="trade('match')"><b>Match</b><span id="mPay">$19.5</span><br><small>90% Payout</small></div><div class="tBtn" onclick="trade('differ')"><b>Differ</b><span id="dPay">$10.56</span><br><small>5.60% Payout</small></div></div>
-
+<div class="stats"><div class="st"><small>TARGET</small><b>200</b></div><div class="st"><small>STOP LOSS</small><b style="color:#FF8A2A">929</b></div><div class="st"><small>MOST</small><b>2</b></div></div>
+<div class="trade"><div class="tBtn" onclick="trade()"><b>Match</b><span>$19.5</span><br><small>90% Payout</small></div><div class="tBtn" onclick="trade()"><b>Differ</b><span>$10.56</span><br><small>5.60% Payout</small></div></div>
 <div class="bottom"><div class="b">Live Chat</div><div class="b on"><div class="ai">✦</div>AI</div><div class="b">Positions</div></div>
-
-<div class="menu" id="menu"><div style="display:flex;justify-content:space-between;padding:12px 4px"><b><span style="color:#FF8A2A">KQ</span>binary Menu</b><span onclick="toggleMenu()">✕</span></div>
-<div class="mi" onclick="openDep();toggleMenu()">↓ Deposit</div><div class="mi" onclick="openWith();toggleMenu()">↑ Withdraw</div><div class="mi">◷ History</div><div class="mi">? How to Trade</div><div class="mi">👥 Refer & Earn</div><div class="mi">👤 Account</div><div class="mi">💬 Live Chat</div>
-<div style="margin-top:20px;padding:12px;background:#151515;border-radius:10px"><small style="color:#555">Support</small><br><small style="font-size:11px">support@kqbinary.com</small></div>
-<div class="mi" style="color:#F66;margin-top:8px">↗ Log Out</div></div>
-
-<div class="modal" id="insM"><div class="box">
-<div class="insHead"><div style="display:flex;gap:10px"><div class="warn">⚠</div><div><b style="font-size:14px">Insufficient balance</b><br><small style="color:#888;font-size:11px">You need more funds to place this trade</small></div></div><div onclick="closeIns()" style="background:#222;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer">✕</div></div>
-<div style="background:#111;border:1px solid #1E1E1E;border-radius:12px;padding:8px;margin-top:12px">
-<div class="line"><span>Current balance</span><b>$<span id="cBal">0.00</span></b></div>
-<div class="line"><span>Required</span><b style="color:#FFD060">$<span id="req">10.00</span></b></div>
-<div class="line"><span>Shortfall</span><b style="color:#FF6A6A">$<span id="short">10.00</span></b></div>
-</div>
-<button class="depBtn" onclick="closeIns();openDep()">Deposit funds →</button><button class="cancelBtn" onclick="closeIns()">Cancel</button>
-</div></div>
-
-<div class="modal" id="depM"><div class="box2"><div style="display:flex;justify-content:space-between"><div><b>Deposit Funds</b><br><small style="color:#666;font-size:11px">Choose payment method</small></div><div onclick="closeDep()" style="background:#222;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer">✕</div></div>
-<div class="payOpt" onclick="openMpesaDep()"><div style="display:flex;gap:10px;align-items:center"><div style="width:32px;height:32px;background:#FF8A2A;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#000">◫</div><div><b style="font-size:13px">MPESA</b><br><small style="color:#777;font-size:11px">Instant mobile money</small></div></div><span>›</span></div>
-<div class="payOpt" onclick="alert('USDT BEP20 coming soon')"><div style="display:flex;gap:10px;align-items:center"><div style="width:32px;height:32px;background:#FF8A2A;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#000">₿</div><div><b style="font-size:13px">USDT (BEP20)</b><br><small style="color:#777;font-size:11px">Cryptocurrency</small></div></div><span>›</span></div>
-</div></div>
-
-<div class="modal" id="mpDepM"><div class="box2"><div style="display:flex;justify-content:space-between"><div><b>Deposit funds</b><br><small style="color:#888;font-size:10px">MPESA</small></div><div onclick="closeMpesaDep()" style="background:#222;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer">✕</div></div>
-<div class="amtBox"><small style="color:#666;font-size:8px">AMOUNT (USD)</small><div style="display:flex;gap:4px;align-items:center"><span>$</span><input class="amtInp" id="depInp" value="0" type="number" oninput="updDep()"></div>
-<div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap"><div class="chip" onclick="setDep(1)">$1</div><div class="chip" onclick="setDep(10)">$10</div><div class="chip" onclick="setDep(25)">$25</div><div class="chip" onclick="setDep(50)">$50</div><div class="chip" onclick="setDep(100)">$100</div><div class="chip" onclick="setDep(250)">$250</div></div>
-<small style="color:#666;font-size:9px;margin-top:8px;display:block" id="kesDep">KES 0.00 @ 1 USD = 129.55 KES</small><small style="color:#444;font-size:7px">Min deposit $5.00 • Daily cap $1,500.00 • Remaining today $1,500.00</small></div>
-<div class="amtBox"><small style="color:#666;font-size:8px">M-PESA PHONE NUMBER</small><div class="phRow"><div class="phBtn on" id="myB" onclick="setPh('my')">My number</div><div class="phBtn" id="othB" onclick="setPh('other')">Other number</div></div>
-<div id="myPh" style="background:#111;border:1px solid #222;border-radius:18px;padding:8px 10px;margin-top:8px;display:flex;align-items:center;gap:6px;font-size:12px"><span style="color:#0F0">📱</span> +25471****370</div>
-<input id="othInp" placeholder="07XX XXX XXX" style="display:none;width:100%;background:#111;border:1px solid #2A2A2A;border-radius:10px;padding:10px;color:#fff;margin-top:8px">
-<small style="color:#555;font-size:8px;margin-top:6px;display:block">Your registered number. Tap 'Other number' to pay from a different one.</small></div>
-<button class="depBtn" id="depBtn" onclick="doDep()">Deposit $0.00</button></div></div>
-
-<div class="modal" id="withM"><div class="box2"><div style="display:flex;justify-content:space-between"><div><b>Withdraw Funds</b><br><small style="color:#888;font-size:10px">Choose payout method</small></div><div onclick="closeWith()" style="background:#222;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer">✕</div></div>
-<div class="payOpt" onclick="openMpesaWith()"><div style="display:flex;gap:10px;align-items:center"><div style="width:32px;height:32px;background:#FF8A2A;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#000">◫</div><div><b>MPESA</b><br><small style="color:#777">Instant mobile money</small></div></div><span>›</span></div>
-<div class="payOpt"><div style="display:flex;gap:10px;align-items:center"><div style="width:32px;height:32px;background:#FF8A2A;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#000">₿</div><div><b>USDT (BEP20)</b><br><small style="color:#777">Cryptocurrency</small></div></div><span>›</span></div>
-</div></div>
-
-<div class="modal" id="mpWithM"><div class="box2"><div style="display:flex;justify-content:space-between"><div><b>Withdraw via MPESA</b><br><small style="color:#888;font-size:9px">M-Pesa - Processing<br>Available balance $<span id="wBal">0.00</span></small></div><div onclick="closeMpesaWith()" style="background:#222;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer">✕</div></div>
-<div class="amtBox"><small style="color:#666;font-size:8px">AMOUNT (USD)</small><div style="display:flex;gap:4px;align-items:center"><span>$</span><input class="amtInp" id="withInp" value="0" type="number" oninput="updWith()"></div>
-<div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap"><div class="chip" onclick="setWith(1)">$1</div><div class="chip" onclick="setWith(10)">$10</div><div class="chip" onclick="setWith(25)">$25</div><div class="chip" onclick="setWith(50)">$50</div><div class="chip" onclick="setWith(100)">$100</div><div class="chip" onclick="setWith(250)">$250</div></div>
-<small style="color:#666;font-size:9px;margin-top:8px;display:block" id="kesWith">KES 0.00 @ 1 USD = 129.55 KES</small><small style="color:#444;font-size:7px">Min withdrawal $5.00 • Daily cap $3,500.00 • Remaining today $3,500.00</small></div>
-<div class="amtBox"><small style="color:#666;font-size:8px">M-PESA PHONE NUMBER</small><div class="phRow"><div class="phBtn on">My number</div><div class="phBtn">Other number</div></div><div style="background:#111;border:1px solid #222;border-radius:18px;padding:8px 10px;margin-top:8px;display:flex;align-items:center;gap:6px;font-size:12px"><span style="color:#0F0">📱</span> +25471****370</div></div>
-<button class="depBtn" id="withBtn" onclick="doWith()">Withdraw $0.00</button></div></div>
-
+<div class="modal" id="insM"><div class="box"><div style="display:flex;justify-content:space-between"><b>Insufficient balance</b><span onclick="closeIns()" style="cursor:pointer">✕</span></div><div style="background:#111;border-radius:12px;padding:10px;margin-top:10px"><div class="line"><span>Current</span><b>$<span id="cBal">0.00</span></b></div><div class="line"><span>Required</span><b style="color:#FFD060">$10.00</b></div><div class="line"><span>Shortfall</span><b style="color:#F66">$10.00</b></div></div><button class="depBtn" onclick="closeIns();openDep()">Deposit funds →</button></div></div>
+<div class="modal" id="depM"><div class="box"><div style="display:flex;justify-content:space-between"><b>Deposit Funds</b><span onclick="closeDep()">✕</span></div><div class="payOpt" onclick="openMpesa()"><div><b>MPESA</b><br><small style="color:#777">Instant mobile money</small></div><span>›</span></div><div class="payOpt"><div><b>USDT (BEP20)</b><br><small style="color:#777">Cryptocurrency</small></div><span>›</span></div></div></div>
+<div class="modal" id="mpM"><div class="box"><div style="display:flex;justify-content:space-between"><b>Deposit via MPESA</b><span onclick="closeMpesa()" style="float:right">✕</span></div><div class="amtBox"><small style="color:#666">AMOUNT (USD)</small><input class="amtInp" id="depInp" value="10" type="number"><div style="display:flex;gap:6px;margin-top:8px"><div class="chip" onclick="document.getElementById('depInp').value=10"> $10 </div><div class="chip" onclick="document.getElementById('depInp').value=50"> $50 </div><div class="chip" onclick="document.getElementById('depInp').value=100"> $100 </div></div><small style="color:#666;font-size:9px;margin-top:8px;display:block">KES @ 1 USD = 129.55 KES • Min $5</small></div><button class="depBtn" onclick="doDep()">Deposit Now</button></div></div>
 <script>
-let bal=parseFloat(localStorage.getItem('kq_bal')||'0'),stake=10,sel=3,last=2,auto=false,data=[],hist=[0][1][2][3][3][3][4][5][6][7][8][9][2][3][4][5];
-for(let i=0;i<80;i++) data.push(9445+Math.sin(i/9)*4+Math.random()*1.2);
+let bal=parseFloat(localStorage.getItem('kq_bal')||'0'),stake=10,sel=3,last=3,data=[],hist=[0,1,2,3,3,3,4,5,6,7,8,9,3,4,5,2,3];
+for(let i=0;i<80;i++) data.push(9445+Math.sin(i/8)*4+Math.random()*1.2);
 let cv=document.getElementById('cv'),ctx=cv.getContext('2d');
-function draw(){ctx.clearRect(0,0,360,110);ctx.beginPath();ctx.strokeStyle='#fff';ctx.lineWidth=1.6;for(let i=0;i<data.length;i++){let x=i*4.5,y=55-(data[i]-9445)*6;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();}
+function draw(){ctx.clearRect(0,0,360,120);ctx.beginPath();ctx.strokeStyle='#fff';ctx.lineWidth=2;for(let i=0;i<data.length;i++){let x=i*4.5,y=60-(data[i]-9445)*7;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();}
 function save(){localStorage.setItem('kq_bal',bal);}
 function render(){
  document.getElementById('bal').innerText=bal.toFixed(2);
  document.getElementById('cBal').innerText=bal.toFixed(2);
- document.getElementById('wBal').innerText=bal.toFixed(2);
  document.getElementById('stk').innerText=stake;
  document.getElementById('priceTag').innerText=data[data.length-1].toFixed(2);
- document.getElementById('mPay').innerText='$19.5';document.getElementById('dPay').innerText='$10.56';
- document.getElementById('req').innerText=stake.toFixed(2);
- document.getElementById('short').innerText=Math.max(0,stake-bal).toFixed(2);
  let counts=Array(10).fill(0);hist.forEach(d=>counts[d]++);let max=Math.max(...counts)||1;
- let b='';for(let i=0;i<10;i++) b+=`<div class="bar ${i==sel?'on':''}" style="height:${4+counts[i]/max*12}px"></div>`;document.getElementById('bars').innerHTML=b;
+ let b='';for(let i=0;i<10;i++) b+=`<div class="bar ${i==sel?'on':''}" style="height:${5+counts[i]/max*13}px"></div>`;document.getElementById('bars').innerHTML=b;
  let top='';for(let i=0;i<10;i++) top+=`<div class="d ${i==last?'on':''}">${i}</div>`;document.getElementById('topD').innerHTML=top;
  let bot='';for(let i=0;i<10;i++) bot+=`<div class="d2 ${i==sel?'on':''}" onclick="sel=${i};render()">${i}</div>`;document.getElementById('botD').innerHTML=bot;
 }
 function chg(v){stake=Math.max(1,stake+v);render();}
-function setS(v,el){stake=v;document.querySelectorAll('.chips.chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');render();}
-function trade(t){
- if(bal<stake){document.getElementById('insM').classList.add('on');return;}
- let win=t=='match'?last==sel:last!=sel;
- if(win){bal+=t=='match'?stake*0.9:stake*0.056;}else{bal-=stake;}
- save();render();
-}
-function setAuto(v){document.getElementById('aAuto').className=v?'aBtn on':'aBtn';document.getElementById('aMan').className=!v?'aBtn on':'aBtn';}
-fun
+function setS(v,el){stake=v;document.querySelectorAll('.chips.chip').forEach(c=>c.classList.remove('on'));if(el) el.classList.add('on');render();}
+function trade(){if(bal<stake){document.getElementById('insM').classList.add('on');return;}bal-=stake;save();render();}
+function closeIns(){document.getElementById('insM').classList.remove('on')}
+function openDep(){document.getElementById('depM').classList.add('on')}
+function closeDep(){document.getElementById('depM').classList.remove('on')}
+function openMpesa(){closeDep();document.getElementById('mpM').classList.add('on')}
+function closeMpesa(){document.getElementById('mpM').classList.remove('on')}
+function doDep(){let v=parseFloat(document.getElementById('depInp').value)||0;bal+=v;save();render();closeMpesa();alert('Deposited $'+v+' - Balance $'+bal.toFixed(2));}
+setInterval(()=>{let f=9445+Math.sin(Date.now()/800)*4+(Math.random()-0.5)*1;data.push(f);if(data.length>80)data.shift();last=Math.floor(Math.random()*10);hist.push(last);if(hist.length>60)hist.shift();draw();render();},700);
+render();draw();
+</script>
+</body></html>

@@ -1,0 +1,29 @@
+// REAL MPESA DARAJA STK PUSH - for Vercel
+export default async function handler(req,res){
+ if(req.method!=='POST') return res.status(405).json({success:false});
+ const {phone,amount,usd}=req.body;
+ // --- PUT YOUR DARAJA CREDENTIALS HERE ---
+ const CONSUMER_KEY = "YOUR_CONSUMER_KEY";
+ const CONSUMER_SECRET = "YOUR_CONSUMER_SECRET";
+ const SHORTCODE = "YOUR_SHORTCODE"; // e.g 174379 for sandbox
+ const PASSKEY = "YOUR_PASSKEY";
+ const CALLBACK_URL = "https://rader-nu.vercel.app/api/callback";
+ try{
+  // Get token
+  let auth = Buffer.from(`${CONSUMER_KEY}:${CONSUMER_SECRET}`).toString('base64');
+  let tokenRes = await fetch("https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials",{headers:{Authorization:`Basic ${auth}`}});
+  let tokenData = await tokenRes.json();
+  let token = tokenData.access_token;
+  // STK Push
+  let timestamp = new Date().toISOString().replace(/[-:T.]/g,"").slice(0,14);
+  let password = Buffer.from(`${SHORTCODE}${PASSKEY}${timestamp}`).toString('base64');
+  let stkRes = await fetch("https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",{
+   method:"POST", headers:{Authorization:`Bearer ${token}`,"Content-Type":"application/json"},
+   body:JSON.stringify({BusinessShortCode:SHORTCODE,Password:password,Timestamp:timestamp,TransactionType:"CustomerPayBillOnline",Amount:amount,PartyA:phone,PartyB:SHORTCODE,PhoneNumber:phone,CallBackURL:CALLBACK_URL,AccountReference:"KQbinary",TransactionDesc:`Deposit $${usd}`})
+  });
+  let stkData = await stkRes.json();
+  return res.json({success:true,data:stkData});
+ }catch(e){
+  return res.json({success:false,error:e.message,note:"Add Daraja credentials to make real push work"});
+ }
+}

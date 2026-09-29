@@ -2,91 +2,40 @@
 <html>
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Stock Trader KE - Live Demo</title>
+<title>TRADE THE NEXT SECOND</title>
 <style>
-body{margin:0;background:#0b0e11;color:#fff;font-family:Arial}
-.head{padding:14px;background:#151a21;display:flex;justify-content:space-between;font-weight:900}
-.box{margin:10px;background:#1e2329;border-radius:12px;padding:12px}
-.row{display:flex;justify-content:space-between}
-.btn{width:49%;padding:15px;border:0;border-radius:10px;font-weight:900;font-size:16px}
+body{margin:0;background:#0a0a0a;color:#fff;font-family:Inter,Arial}
+.top{padding:24px}
+.small{color:#ff6a2e;letter-spacing:4px;font-size:10px}
+h1{font-size:36px;line-height:1.1;margin:12px 0}
+h1 span{color:#ff6a2e}
+p{color:#888;font-size:14px;line-height:1.5}
+.btn-o{background:#ff6a2e;color:#000;border:0;padding:16px 32px;border-radius:30px;font-weight:900;width:100%;font-size:14px;letter-spacing:1px;margin-top:18px}
+.btn-b{background:transparent;color:#fff;border:1px solid #333;padding:14px 32px;border-radius:30px;font-weight:700;width:100%;margin-top:12px}
+.card{margin:16px;border:1px solid #222;border-radius:20px;padding:18px;background:#141414}
+.live-top{display:flex;justify-content:space-between;align-items:center}
+.live-dot{background:#1a0f0a;color:#ff6a2e;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:900}
+.vol-main{font-size:22px;font-weight:900;margin:10px 0 4px 0}
+.big{font-size:32px;font-weight:900;letter-spacing:1px}
+.row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #1e1e1e;font-size:14px}
+.row span:last-child{font-weight:700}
+.up{color:#0ecb81}.down{color:#f6465d}
+#tv{height:360px;border-radius:12px;overflow:hidden;margin-top:12px}
+.brow{display:flex;gap:10px;margin-top:14px}
+.bbtn{flex:1;padding:14px;border:0;border-radius:12px;font-weight:900}
 .buy{background:#0ecb81}.sell{background:#f6465d;color:#fff}
-canvas{width:100%;height:320px;background:#0b0e11;border-radius:10px}
-.price{font-size:28px;font-weight:900}
-.green{color:#0ecb81}.red{color:#f6465d}
-.wa{background:#25D366;color:#fff;text-align:center;padding:12px;border-radius:10px;display:block;text-decoration:none;font-weight:900;margin-top:10px}
 </style>
 </head>
 <body>
-<div class="head"><span>Stock-trader KE</span><span id="status" class="green">● LIVE</span></div>
-
-<div class="box">
-<div class="row"><span>Balance</span><span>BTC Price</span></div>
-<div class="row"><span class="price" id="bal">$1,000.00</span><span class="price" id="btcprice">$--</span></div>
-<div class="row"><span id="pnl">PnL: $0.00</span><span id="pos">No position</span></div>
+<div class="top">
+<div class="small">BINARY · SYNTHETIC INDICES</div>
+<h1>TRADE THE<br><span>NEXT SECOND.</span></h1>
+<p>Fixed-risk binary contracts on synthetic volatility indices. Rise, fall, digits and barriers — priced before you commit, settled in as little as one second.</p>
+<button class="btn-o" onclick="location.href='https://wa.me/254703683230?text=I%20want%20to%20CREATE%20ACCOUNT'">CREATE ACCOUNT</button>
+<button class="btn-b" onclick="alert('Login coming soon - Contact WhatsApp 0703 683230')">SIGN IN</button>
 </div>
 
-<div class="box"><canvas id="c"></canvas></div>
-
-<div class="box row">
-<button class="btn buy" onclick="trade(1)">BUY</button>
-<button class="btn sell" onclick="trade(-1)">SELL</button>
-</div>
-
-<div class="box">
-<button class="btn" style="width:100%;background:#2a2e39;color:#fff" onclick="closeTrade()">CLOSE TRADE</button>
-<a class="wa" href="https://wa.me/254703683230?text=Hi%20I%20made%20profit%20on%20demo,%20how%20to%20go%20real?">💬 Real Trading? WhatsApp 0703 683230</a>
-</div>
-
-<script>
-let prices=[], balance=1000, entry=0, dir=0, qty=0;
-let canvas=document.getElementById('c'), ctx=canvas.getContext('2d');
-canvas.width=canvas.offsetWidth*2; canvas.height=320*2;
-let lastPrice=83210;
-
-function draw(){
- ctx.clearRect(0,0,canvas.width,canvas.height);
- ctx.strokeStyle="#1e2329"; ctx.lineWidth=1;
- for(let i=0;i<5;i++){ctx.beginPath();ctx.moveTo(0,i*canvas.height/5);ctx.lineTo(canvas.width,i*canvas.height/5);ctx.stroke()}
- if(prices.length<2)return;
- let min=Math.min(...prices), max=Math.max(...prices), range=max-min||1;
- ctx.beginPath(); ctx.strokeStyle=dir==0?"#888":dir==1?"#0ecb81":"#f6465d"; ctx.lineWidth=3;
- prices.forEach((p,i)=>{
-  let x=i/prices.length*canvas.width, y=canvas.height - (p-min)/range*canvas.height*0.8 - canvas.height*0.1;
-  if(i==0)ctx.moveTo(x,y); else ctx.lineTo(x,y);
- });
- ctx.stroke();
- // entry line
- if(entry){let y=canvas.height - (entry-min)/range*canvas.height*0.8 - canvas.height*0.1; ctx.setLineDash([10,10]);ctx.strokeStyle="#fff";ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke();ctx.setLineDash([])}
-}
-function updateUI(){
- document.getElementById('btcprice').textContent="$"+lastPrice.toFixed(2);
- let pnl=0; if(dir!=0) pnl=(lastPrice-entry)*dir*qty;
- document.getElementById('pnl').textContent="PnL: $"+pnl.toFixed(2);
- document.getElementById('pnl').className=pnl>=0?"green":"red";
- document.getElementById('bal').textContent="$"+(balance+pnl).toFixed(2);
- document.getElementById('pos').textContent=dir==0?"No position":(dir==1?"LONG ":"SHORT ")+qty+" BTC";
- draw();
-}
-function trade(d){
- if(dir!=0){alert("Close current trade first");return;}
- dir=d; entry=lastPrice; qty=0.01; // 0.01 BTC
- updateUI();
-}
-function closeTrade(){
- if(dir==0)return;
- let pnl=(lastPrice-entry)*dir*qty; balance+=pnl; dir=0; entry=0; qty=0; updateUI();
-}
-// Live price from Binance
-let ws=new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
-ws.onmessage=(e)=>{let data=JSON.parse(e.data); lastPrice=parseFloat(data.p); prices.push(lastPrice); if(prices.length>100)prices.shift(); updateUI(); document.getElementById('status').textContent="● LIVE "+new Date().toLocaleTimeString()};
-ws.onerror=()=>{
- // fallback fake ticking if websocket blocked
- setInterval(()=>{lastPrice+= (Math.random()-0.5)*5; prices.push(lastPrice); if(prices.length>100)prices.shift(); updateUI()},800);
-};
-// initial fake data
-for(let i=0;i<50;i++)prices.push(83210+ (Math.random()-0.5)*100);
-updateUI();
-setInterval(draw,1000);
-</script>
-</body>
-</html>
+<div class="card">
+<div class="live-top"><span class="small" style="color:#ff6a2e">LIVE FEED</span><span class="live-dot">● LIVE</span></div>
+<div class="vol-main">VOLATILITY 100</div>
+<div class="big"><span id="v100">12,077.99</span> <small id="v

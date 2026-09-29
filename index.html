@@ -1,38 +1,28 @@
-// LIVE DERIV FEED + FALLBACK MOCK (so graph ALWAYS moves)
-let wsConnected=false;
-const ws=new WebSocket('wss://ws.derivws.com/websockets/v3?app_id=1089');
-ws.onopen=()=>{ ws.send(JSON.stringify({ticks:'R_10'})); document.getElementById('log').innerText='LIVE • Volatility 10 (1s) connected'; wsConnected=true; };
-ws.onmessage=(e)=>{
- try{
-  let d=JSON.parse(e.data);
-  if(d.tick){
-   let q=parseFloat(d.tick.quote);
-   addTick(q);
-  }
- }catch(err){}
-};
-ws.onerror=()=>{ document.getElementById('log').innerText='Deriv blocked - using simulated ticks (still works!)'; };
+<!DOCTYPE html>
+<html><head><meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>body{background:#0b0b0f;color:white}canvas{width:100%;display:block}</style>
+</head><body class="p-2">
 
-function addTick(q){
-   prices.push(q); if(prices.length>100) prices.shift();
-   lastDigit=parseInt(q.toString().slice(-1));
-   digitCounts[lastDigit]++; totalTicks++;
-   document.getElementById('priceNow').innerText=q.toFixed(2);
-   document.getElementById('liveP').innerText=q.toFixed(2);
-   document.getElementById('lastDigitBox').innerText=lastDigit;
-   drawChart(); renderDigits();
-}
+<div class="flex justify-between items-center"><div class="flex items-center gap-2"><div class="w-8 h-8 bg-[#ff6b00] rounded flex items-center justify-center font-black text-black">KQ</div><span id="balance">$10096.72</span></div><button onclick="doDeposit()" class="bg-[#ff6b00] text-black px-5 py-1.5 rounded-full font-bold">Deposit</button></div>
 
-// FALLBACK: if WS not connected in 3 sec, generate fake but realistic ticks so graph MOVES
-setTimeout(()=>{
- if(!wsConnected || prices.length==0){
-  document.getElementById('log').innerText='Using local Volatility 10 simulation - graph moving!';
-  let base=9447;
-  setInterval(()=>{
-   base+= (Math.random()-0.5)*2;
-   addTick(base);
-  },1000);
- }
-},3000);
+<div class="bg-[#14141a] rounded-xl mt-3 p-3"><div class="flex justify-between"><span>Volatility 10 (1s) Index</span><span id="priceNow" class="bg-[#ff6b00] text-black px-2 rounded font-bold">9447.93</span></div><canvas id="chart" width="700" height="320"></canvas><div id="digitStats" class="flex justify-between mt-2 text-[10px]"></div><div id="digitsRow" class="flex gap-1 mt-2"></div><div id="digitSelect" class="flex gap-1 mt-2"></div></div>
 
-async function doDeposit(){
+<div class="flex gap-2 mt-3"><button id="autoBtn" onclick="setMode('auto')" class="flex-1 bg-[#ff6b00] text-black py-3 rounded-xl font-bold">AUTO</button><button id="manualBtn" onclick="setMode('manual')" class="flex-1 bg-zinc-900 py-3 rounded-xl">MANUAL</button></div>
+
+<div class="flex gap-2 mt-3"><button onclick="placeTrade('match')" class="flex-1 bg-[#1a1a22] py-4 rounded-xl">Match <span id="matchPayout">$19.50</span></button><button onclick="placeTrade('differ')" class="flex-1 bg-[#1a1a22] py-4 rounded-xl">Differ <span id="differPayout">$10.56</span></button></div>
+
+<button id="stopBtn" onclick="stopAuto()" class="w-full mt-3 bg-[#ff6b00] text-black py-3 rounded-xl font-bold hidden">■ STOP</button><p id="log" class="text-center text-[11px] mt-3">Starting...</p>
+
+<script>
+let prices=[],lastDigit=9,selectedDigit=3,stake=10,balance=10096.72,autoRunning=false,autoInterval=null,digitCounts=Array(10).fill(0),totalTicks=0;
+const canvas=document.getElementById('chart'),ctx=canvas.getContext('2d');
+function drawChart(){if(prices.length<2)return;ctx.clearRect(0,0,canvas.width,canvas.height);let min=Math.min(...prices),max=Math.max(...prices),range=max-min||1;ctx.beginPath();ctx.strokeStyle='#ff6b00';ctx.lineWidth=3;prices.forEach((p,i)=>{let x=(i/(prices.length-1))*canvas.width;let y=canvas.height-((p-min)/range)*canvas.height*0.8-canvas.height*0.1;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});ctx.stroke();}
+function renderDigits(){let row=document.getElementById('digitsRow'),sel=document.getElementById('digitSelect'),stats=document.getElementById('digitStats');row.innerHTML='';sel.innerHTML='';stats.innerHTML='';for(let i=0;i<10;i++){let pct=totalTicks?Math.round(digitCounts[i]/totalTicks*100):0;stats.innerHTML+=`<span>${pct}%</span>`;let active=i==lastDigit?'bg-[#ff3b30]':'bg-zinc-800';row.innerHTML+=`<div class="flex-1 ${active} py-1.5 rounded text-center">${i}</div>`;let selActive=i==selectedDigit?'bg-[#ff6b00] text-black ring-2 ring-white':'bg-zinc-800';sel.innerHTML+=`<div onclick="selectedDigit=${i};renderDigits()" class="flex-1 ${selActive} py-2 rounded text-center font-bold">${i}</div>`;}}
+function placeTrade(t){let win=(t=='differ'&&lastDigit!=selectedDigit)||(t=='match'&&lastDigit==selectedDigit);let profit=win?(t=='match'?stake*0.95:stake*0.056):-stake;balance+=profit;document.getElementById('balance').innerText='$'+balance.toFixed(2);document.getElementById('log').innerText=t.toUpperCase()+' '+selectedDigit+' Last '+lastDigit+' '+(win?'WIN':'LOSS');}
+function setMode(m){if(m=='auto'){autoRunning=true;document.getElementById('stopBtn').classList.remove('hidden');autoInterval=setInterval(()=>placeTrade('differ'),1200);}else{autoRunning=false;clearInterval(autoInterval);document.getElementById('stopBtn').classList.add('hidden');}}
+function stopAuto(){setMode('manual');}
+function addTick(q){prices.push(q);if(prices.length>100)prices.shift();lastDigit=parseInt(Math.abs(q*100).toString().slice(-1));digitCounts[lastDigit]++;totalTicks++;document.getElementById('priceNow').innerText=q.toFixed(2);drawChart();renderDigits();}
+let base=9447.93;setInterval(()=>{base+=(Math.random()-0.5)*1.8;addTick(base);},800);renderDigits();
+function doDeposit(){let p=prompt('Phone 254...','254708374149'),a=prompt('Amount','100');fetch('/api/mpesa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:p,amount:a})}).then(r=>r.json()).then(j=>alert(JSON.stringify(j)));}
+</script></body></html>

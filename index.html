@@ -1,53 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>body{background:#0a0a0a;color:white}</style>
+</head>
+<body class="p-2">
+<!-- TOP -->
+<div class="flex justify-between items-center">
+<div class="flex gap-2 items-center"><div class="bg-orange-500 p-2 rounded font-bold">KQ</div><b>KQbinary</b><span id="livePrice" class="bg-zinc-800 px-3 py-1 rounded-full">R $104.00 ▼</span></div>
+<button onclick="doDeposit()" class="bg-orange-500 text-black px-4 py-2 rounded-full font-bold">Deposit</button>
+</div>
+
+<div class="flex gap-2 my-3">
+<button class="bg-orange-500 text-black px-4 py-2 rounded-full">Matches/Differs</button>
+<button class="bg-zinc-800 px-4 py-2 rounded-full">Even/Odd</button>
+<button class="bg-zinc-800 px-4 py-2 rounded-full">Over/Under</button>
+</div>
+
+<div class="bg-zinc-900 rounded-xl p-3">
+<div class="flex justify-between"><span class="text-zinc-400 text-sm">Volatility 10 (1s) Index</span><span id="priceNow" class="bg-orange-500 text-black px-2 rounded text-sm font-bold">9447.93</span></div>
+<canvas id="chart" height="180" class="w-full mt-2"></canvas>
+<div id="digits" class="flex gap-1 mt-3 flex-wrap"></div>
+</div>
+
+<div class="flex gap-2 mt-3">
+<button onclick="trade('match')" class="flex-1 bg-zinc-900 py-4 rounded-xl font-bold">Match <span class="text-orange-400">$19.00</span></button>
+<button onclick="trade('differ')" class="flex-1 bg-zinc-900 py-4 rounded-xl font-bold">Differ <span class="text-orange-400">$11.00</span></button>
+</div>
+
+<p id="status" class="mt-3 text-center text-sm text-zinc-400">Connecting to Deriv...</p>
+
 <script>
-let lastDigit = 5;
-const ws = new WebSocket('wss://ws.derivws.com/websockets/v3?app_id=1089');
-ws.onopen = () => {
-  ws.send(JSON.stringify({ticks:"R_10"}));
-  console.log("Connected to Volatility 10");
+let prices=[]; let lastDigit=0; let selectedDigit=5;
+const canvas=document.getElementById('chart'); const ctx=canvas.getContext('2d');
+canvas.width=canvas.offsetWidth*2; 
+
+function drawChart(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.strokeStyle='#ff7a00'; ctx.lineWidth=2; ctx.beginPath();
+  prices.forEach((p,i)=>{
+    const x=(i/prices.length)*canvas.width;
+    const y=canvas.height - ((p - Math.min(...prices))/ (Math.max(...prices)-Math.min(...prices) || 1) * canvas.height);
+    if(i==0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }); ctx.stroke();
+}
+
+function renderDigits(){
+  const d=document.getElementById('digits'); d.innerHTML='';
+  for(let i=0;i<10;i++){
+    d.innerHTML+=`<div onclick="selectedDigit=${i};renderDigits()" id="digit-${i}" class="w-9 h-9 flex items-center justify-center rounded ${i==selectedDigit?'bg-orange-500 text-black':'bg-zinc-800'} ${i==lastDigit?'ring-2 ring-white':''} font-bold">${i}</div>`;
+  }
+}
+renderDigits();
+
+// DERIV LIVE FEED - THIS MAKES IT MOVE!
+const ws=new WebSocket('wss://ws.derivws.com/websockets/v3?app_id=1089');
+ws.onopen=()=>{ ws.send(JSON.stringify({ticks:"R_10"})); document.getElementById('status').innerText='LIVE • Volatility 10 moving!'; };
+ws.onmessage=(e)=>{
+  const data=JSON.parse(e.data);
+  if(data.tick){
+    const q=data.tick.quote;
+    prices.push(q); if(prices.length>50) prices.shift();
+    lastDigit=parseInt(q.toString().slice(-1));
+    document.getElementById('livePrice').innerText='R $'+q;
+    document.getElementById('priceNow').innerText=q.toFixed(2);
+    drawChart(); renderDigits();
+  }
 };
+ws.onerror=()=>{ document.getElementById('status').innerText='Connection failed - reload page'; };
 
-ws.onmessage = (msg) => {
-  try {
-    const data = JSON.parse(msg.data);
-    if(data.tick){
-      const price = data.tick.quote.toString();
-      lastDigit = parseInt(price.slice(-1));
-      
-      // Update price display safely
-      const priceEl = document.querySelector('#price-display') || document.body;
-      if(document.querySelector('.price-text')){
-        document.querySelector('.price-text').innerText = "$" + price + " • LIVE";
-      }
-      if(document.querySelector('.digit-display')){
-        document.querySelector('.digit-display').innerText = "Last Digit: " + lastDigit;
-      }
-      
-      // Highlight digit 0-9
-      document.querySelectorAll('.digit-box').forEach(b => b.style.background = "");
-      const active = document.getElementById('digit-'+lastDigit);
-      if(active) active.style.background = "red";
-      
-      console.log("Price:",price,"Digit:",lastDigit);
-    }
-  } catch(e){ console.log(e); }
-};
+function trade(type){
+  alert(type.toUpperCase()+' on digit '+selectedDigit+' | Last was '+lastDigit+' | Stake $10 - You '+(type=='match' && selectedDigit==lastDigit ?'WIN $19':'LOSE'));
+}
 
-ws.onerror = () => { console.log("WS error, retrying..."); setTimeout(()=>location.reload(),3000); };
-
-async function deposit(){
-  const phone = prompt("M-PESA Phone (2547...)", "254708374149");
-  const amount = prompt("Amount in KES", "10");
-  if(!phone || !amount) return;
-  alert("Sending STK to "+phone+"... Wait for PIN popup");
+async function doDeposit(){
+  const phone=prompt("M-PESA phone 2547...","254708374149");
+  const amount=prompt("Amount KES","10");
+  if(!phone||!amount) return;
+  document.getElementById('status').innerText='Sending STK to '+phone+'...';
   try{
-    const r = await fetch("/api/mpesa",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({phone: phone, amount: amount})
-    });
-    const j = await r.json();
-    alert("M-PESA Response: "+JSON.stringify(j));
-    if(j.success) alert("✅ Check phone "+phone+" - Enter PIN 0000 for sandbox test");
-  }catch(e){ alert("Deposit failed: "+e.message); }
+    const r=await fetch('/api/mpesa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone,amount})});
+    const j=await r.json();
+    alert('M-PESA: '+JSON.stringify(j));
+    document.getElementById('status').innerText=j.success?'✅ PIN sent to phone! Enter 0000':'❌ Failed: '+JSON.stringify(j);
+  }catch(e){ alert('Deposit error: '+e.message); document.getElementById('status').innerText='Deposit failed - check api/mpesa.js'; }
 }
 </script>
+</body>
+</html>

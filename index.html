@@ -1,92 +1,111 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RADER</title></head>
-<body style="margin:0;background:#0E0E0E;color:#fff;font-family:Inter,system-ui">
-
-<!-- TOP -->
-<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#141414">
-<div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;background:#FF6444;border-radius:8px;display:grid;place-items:center;color:#000;font-weight:900;font-size:12px">R</div><b>RADER</b></div>
-<div style="display:flex;align-items:center;gap:10px">
-<div style="background:#1F1F1F;padding:6px 10px;border-radius:20px;display:flex;align-items:center;gap:6px;font-size:13px">R <span id="bal">$0.00</span> ▾</div>
-<div style="font-size:18px">🔊</div>
-<button onclick="dep()" style="background:#FF6444;color:#000;border:0;padding:8px 14px;border-radius:20px;font-weight:800;font-size:13px">Deposit</button>
-<div style="font-size:18px">🔔</div>
-</div>
+<body style="margin:0;background:#0E0E0E;color:#fff;font-family:system-ui">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:#141414">
+<div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;background:#FF6444;border-radius:8px;display:grid;place-items:center;color:#000;font-weight:900">R</div><b>RADER</b></div>
+<div style="background:#1F1F1F;padding:6px 12px;border-radius:20px;font-size:13px">R $<span id="bal">0.00</span></div>
+<button onclick="dep()" style="background:#FF6444;border:0;padding:8px 14px;border-radius:20px;font-weight:800">Deposit</button>
 </div>
 
-<!-- TABS -->
-<div style="display:flex;gap:10px;padding:10px 12px">
-<div onclick="setTab(0)" id="t0" style="padding:8px 16px;border-radius:20px;font-size:12px;background:#1A1A1A;color:#777">Matches/Differs</div>
-<div onclick="setTab(1)" id="t1" style="padding:8px 16px;border-radius:20px;font-size:12px;background:#2A1815;border:1px solid #FF6444;color:#FF6444">Even/Odd</div>
-<div onclick="setTab(2)" id="t2" style="padding:8px 16px;border-radius:20px;font-size:12px;background:#1A1A1A;color:#777">Over/Under</div>
+<div style="display:flex;gap:8px;padding:10px">
+<div onclick="setTab(0)" id="t0" style="padding:8px 14px;border-radius:20px;font-size:12px;background:#1A1A1A;color:#666">Matches/Differs</div>
+<div onclick="setTab(1)" id="t1" style="padding:8px 14px;border-radius:20px;font-size:12px;background:#2A1815;border:1px solid #FF6444;color:#FF6444">Even/Odd</div>
+<div onclick="setTab(2)" id="t2" style="padding:8px 14px;border-radius:20px;font-size:12px;background:#1A1A1A;color:#666">Over/Under</div>
 </div>
 
-<!-- CHART -->
-<div style="margin:0 12px;background:#161616;border-radius:14px;padding:10px;border:1px solid #222">
-<div style="display:flex;justify-content:space-between;align-items:start">
-<div style="display:flex;gap:8px;align-items:center"><div style="width:32px;height:32px;background:#1E1E1E;border-radius:6px;display:grid;place-items:center;font-size:10px;color:#FF6444">1T</div><div><div style="font-size:13px;font-weight:700">Volatility 10 (1s) Index <span style="font-size:10px;color:#777">▼</span></div><div style="font-size:11px;color:#888"><span id="pTop">9451.16</span> <span style="color:#FF6444">+0.02 (+0.02%)</span> <span style="color:#666">↗</span></div></div></div>
-<div style="background:#1E1E1E;padding:4px 8px;border-radius:6px;font-size:11px">50%</div>
-</div>
-<div style="display:flex;margin-top:10px">
-<div style="flex:1;position:relative;background:#0A0A0A;border-radius:8px;overflow:hidden"><canvas id="chart" style="width:100%;height:160px;display:block"></canvas><div id="live" style="position:absolute;right:4px;top:12px;background:#1A1A1A;border:1px solid #FF6444;color:#fff;padding:4px 8px;border-radius:6px;font-size:12px;font-weight:700">9451.16</div></div>
-<div style="width:60px;text-align:right;font-size:11px;color:#666;line-height:28px;padding-left:6px"><div id="r1">9450.46</div><div id="r2">9449.62</div><div id="r3">9448.79</div></div>
-</div>
-<div style="display:flex;justify-content:space-between;color:#555;font-size:10px;margin-top:6px"><span>10:38:30</span><span>10:41:00</span><span>10:43:30</span><span>10:46:00</span></div>
+<div style="margin:0 10px;background:#161616;border:1px solid #222;border-radius:12px;padding:10px">
+<div style="font-size:13px;font-weight:700">Volatility 10 (1s) Index <span style="font-size:11px;color:#888" id="pt">9451.16 +0.02 (+0.02%)</span></div>
+<div style="display:flex;margin-top:8px"><div style="flex:1;background:#0A0A0A;border-radius:8px;position:relative"><canvas id="ch" height="150" style="width:100%;display:block"></canvas><div id="lp" style="position:absolute;right:4px;top:10px;background:#222;border:1px solid #FF6444;padding:3px 7px;border-radius:6px;font-size:12px">9451.16</div></div><div style="width:55px;text-align:right;color:#555;font-size:11px;line-height:22px;padding-left:4px">9450.46<br>9449.62<br>9448.79</div></div>
+<div style="display:flex;justify-content:space-between;color:#444;font-size:9px;margin-top:6px"><span>10:38:30</span><span>10:41:00</span><span>10:43:30</span><span>10:46:00</span></div>
 </div>
 
-<!-- EVEN ODD ANALYTICS -->
-<div style="margin:12px;background:#161616;border-radius:12px;padding:10px;border:1px solid #222">
-<div style="display:flex;justify-content:space-between;font-size:10px;color:#777;letter-spacing:1px"><span id="lbl">EVEN / ODD</span><span>HOT <b id="hot" style="color:#FF6444">5</b> COLD <b id="cold" style="color:#FF6B8A">8</b> LAST <b id="last">6</b></span></div>
-<div style="display:flex;gap:4px;margin-top:6px;justify-content:space-between;font-size:9px;color:#666;text-align:center" id="counts"><span>10</span><span>10</span><span>9</span><span>11</span><span>11</span><span>10</span><span>10</span><span>9</span><span>11</span><span>11</span></div>
-<div style="display:flex;gap:4px;align-items:end;height:38px;margin-top:4px" id="bars"></div>
-<div style="display:flex;gap:4px;margin-top:6px" id="digs"></div>
-<div style="display:flex;justify-content:space-between;font-size:9px;color:#666;margin-top:4px"><span>EVEN 49%</span><span>ODD 51%</span></div>
+<div style="margin:10px;background:#161616;border:1px solid #222;border-radius:10px;padding:8px">
+<div style="display:flex;justify-content:space-between;font-size:10px;color:#777"><span>EVEN / ODD</span><span>HOT <b style="color:#FF6444">5</b> COLD <b style="color:#FF6B8A">8</b> LAST <b id="last">6</b></span></div>
+<div style="display:flex;justify-content:space-between;font-size:8px;color:#555;margin-top:4px"><span>10</span><span>10</span><span>9</span><span>11</span><span>11</span><span>10</span><span>10</span><span>9</span><span>11</span><span>11</span></div>
+<div style="display:flex;gap:3px;align-items:end;height:32px;margin-top:2px">
+<div id="b0" style="flex:1;height:18px;background:#2A2A2A;border-radius:3px"></div><div id="b1" style="flex:1;height:14px;background:#2A2A2A;border-radius:3px"></div><div id="b2" style="flex:1;height:22px;background:#2A2A2A;border-radius:3px"></div><div id="b3" style="flex:1;height:28px;background:#2A2A2A;border-radius:3px"></div><div id="b4" style="flex:1;height:20px;background:#2A2A2A;border-radius:3px"></div><div id="b5" style="flex:1;height:35px;background:#FF6444;border-radius:3px"></div><div id="b6" style="flex:1;height:12px;background:#2A2A2A;border-radius:3px"></div><div id="b7" style="flex:1;height:16px;background:#2A2A2A;border-radius:3px"></div><div id="b8" style="flex:1;height:10px;background:#FF6B8A;border-radius:3px"></div><div id="b9" style="flex:1;height:18px;background:#2A2A2A;border-radius:3px"></div>
+</div>
+<div style="display:flex;gap:3px;margin-top:6px">
+<div id="d0" style="flex:1;padding:6px 0;text-align:center;background:#1E1E1E;border-radius:5px;font-size:11px">0</div>
+<div id="d1" style="flex:1;padding:6px 0;text-align:center;background:#1E1E1E;border-radius:5px;font-size:11px">1</div>
+<div id="d2" style="flex:1;padding:6px 0;text-align:center;background:#1E1E1E;border-radius:5px;font-size:11px">2</div>
+<div id="d3" style="flex:1;padding:6px 0;text-align:center;background:#1E1E1E;border-radius:5px;font-size:11px">3</div>
+<div id="d4" style="flex:1;padding:6px 0;text-align:center;background:#1E1E1E;border-radius:5px;font-size:11px">4</div>
+<div id="d5" style="flex:1;padding:6px 0;text-align:center;background:#FF6444;color:#000;border-radius:5px;font-size:11px;font-weight:800">5</div>
+<div id="d6" style="flex:1;padding:6px 0;text-align:center;background:#222;color:#FF6444;border:1px solid #FF6444;border-radius:5px;font-size:11px;font-weight:800">6</div>
+<div id="d7" style="flex:1;padding:6px 0;text-align:center;background:#1E1E1E;border-radius:5px;font-size:11px">7</div>
+<div id="d8" style="flex:1;padding:6px 0;text-align:center;background:#1E1E1E;border-radius:5px;font-size:11px">8</div>
+<div id="d9" style="flex:1;padding:6px 0;text-align:center;background:#1E1E1E;border-radius:5px;font-size:11px">9</div>
+</div>
+<div style="display:flex;justify-content:space-between;font-size:9px;color:#555;margin-top:4px"><span>EVEN 49%</span><span>ODD 51%</span></div>
 </div>
 
-<!-- AUTO MANUAL -->
-<div style="display:flex;gap:8px;margin:0 12px;background:#161616;border-radius:20px;padding:4px;border:1px solid #222">
-<button id="a0" onclick="setAuto(0)" style="flex:1;background:#FF6444;color:#000;border:0;padding:10px;border-radius:16px;font-weight:800;font-size:13px">AUTO</button>
-<button id="a1" onclick="setAuto(1)" style="flex:1;background:transparent;color:#666;border:0;padding:10px;border-radius:16px;font-weight:700;font-size:13px">MANUAL</button>
+<div style="display:flex;gap:8px;margin:0 10px;background:#161616;border-radius:18px;padding:4px">
+<button id="au0" onclick="setAuto(0)" style="flex:1;background:#FF6444;color:#000;border:0;padding:10px;border-radius:14px;font-weight:800">AUTO</button>
+<button id="au1" onclick="setAuto(1)" style="flex:1;background:transparent;color:#666;border:0;padding:10px;border-radius:14px">MANUAL</button>
 </div>
 
-<!-- STAKE -->
-<div style="margin:12px;background:#161616;border:1px solid #222;border-radius:12px;padding:12px;display:flex;justify-content:space-between;align-items:center">
-<button onclick="cs(-1)" style="width:36px;height:36px;background:#1E1E1E;border:1px solid #333;color:#fff;border-radius:8px">−</button>
-<div style="text-align:center"><div style="font-size:10px;color:#777;letter-spacing:1px">STAKE</div><div style="font-size:18px;font-weight:800">$ <span id="stk">10</span></div></div>
-<button onclick="cs(1)" style="width:36px;height:36px;background:#1E1E1E;border:1px solid #333;color:#fff;border-radius:8px">+</button>
+<div style="margin:10px;background:#161616;border:1px solid #222;border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center">
+<button onclick="cs(-1)" style="width:36px;height:36px;background:#1E1E1E;border:0;color:#fff;border-radius:8px">-</button>
+<div style="text-align:center"><div style="font-size:10px;color:#888">STAKE</div><b>$ <span id="stk">10</span></b></div>
+<button onclick="cs(1)" style="width:36px;height:36px;background:#1E1E1E;border:0;color:#fff;border-radius:8px">+</button>
 </div>
 
-<div style="display:flex;gap:6px;padding:0 12px">
-<div onclick="ss(1)" class="pr" style="flex:1;background:#1A1A1A;border:1px solid #222;padding:8px;text-align:center;border-radius:8px;font-size:11px">$1</div>
-<div onclick="ss(5)" class="pr" style="flex:1;background:#1A1A1A;border:1px solid #222;padding:8px;text-align:center;border-radius:8px;font-size:11px">$5</div>
-<div onclick="ss(10)" id="pr10" style="flex:1;background:#2A1815;border:1px solid #FF6444;padding:8px;text-align:center;border-radius:8px;font-size:11px;color:#FF6444">$10</div>
-<div onclick="ss(25)" class="pr" style="flex:1;background:#1A1A1A;border:1px solid #222;padding:8px;text-align:center;border-radius:8px;font-size:11px">$25</div>
-<div onclick="ss(50)" class="pr" style="flex:1;background:#1A1A1A;border:1px solid #222;padding:8px;text-align:center;border-radius:8px;font-size:11px">$50</div>
-<div onclick="ss(100)" class="pr" style="flex:1;background:#1A1A1A;border:1px solid #222;padding:8px;text-align:center;border-radius:8px;font-size:11px">$100</div>
+<div style="display:flex;gap:5px;padding:0 10px">
+<button onclick="ss(1)" style="flex:1;background:#1A1A1A;border:1px solid #222;padding:8px;border-radius:7px;color:#fff;font-size:11px">$1</button>
+<button onclick="ss(5)" style="flex:1;background:#1A1A1A;border:1px solid #222;padding:8px;border-radius:7px;color:#fff;font-size:11px">$5</button>
+<button onclick="ss(10)" id="s10" style="flex:1;background:#2A1815;border:1px solid #FF6444;padding:8px;border-radius:7px;color:#FF6444;font-size:11px">$10</button>
+<button onclick="ss(25)" style="flex:1;background:#1A1A1A;border:1px solid #222;padding:8px;border-radius:7px;color:#fff;font-size:11px">$25</button>
+<button onclick="ss(50)" style="flex:1;background:#1A1A1A;border:1px solid #222;padding:8px;border-radius:7px;color:#fff;font-size:11px">$50</button>
+<button onclick="ss(100)" style="flex:1;background:#1A1A1A;border:1px solid #222;padding:8px;border-radius:7px;color:#fff;font-size:11px">$100</button>
 </div>
 
-<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:12px">
-<div style="background:#161616;border:1px solid #222;border-radius:10px;padding:10px"><div style="font-size:9px;color:#888">◎ TARGET</div><div style="margin-top:4px;font-size:13px"><span style="color:#666">$</span> <b>200</b></div></div>
-<div style="background:#161616;border:1px solid #222;border-radius:10px;padding:10px"><div style="font-size:9px;color:#888">◎ STOP LOSS</div><div style="margin-top:4px;font-size:13px"><span style="color:#666">$</span> <b>999</b></div></div>
-<div style="background:#161616;border:1px solid #222;border-radius:10px;padding:10px"><div style="font-size:9px;color:#888">✦ MULT</div><div style="margin-top:4px;font-size:13px"><span style="color:#666">x</span> <b>2</b></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:10px">
+<div style="background:#161616;border:1px solid #222;border-radius:8px;padding:8px;text-align:center;font-size:11px">◎ TARGET<br><b>$ 200</b></div>
+<div style="background:#161616;border:1px solid #222;border-radius:8px;padding:8px;text-align:center;font-size:11px">◎ STOP LOSS<br><b>$ 999</b></div>
+<div style="background:#161616;border:1px solid #222;border-radius:8px;padding:8px;text-align:center;font-size:11px">✦ MULT<br><b>x 2</b></div>
 </div>
 
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 90px">
-<button onclick="trade('Even')" style="background:#1D1515;border:1px solid #FF6444;border-radius:12px;padding:12px;text-align:left"><div style="display:flex;justify-content:space-between"><span style="color:#FF6444;font-weight:800;font-size:14px">Even</span><span id="pay1" style="color:#fff;font-weight:700;font-size:13px">$19.52</span></div><div style="display:flex;justify-content:space-between;margin-top:4px"><span style="font-size:10px;color:#888">95.20%</span><span style="font-size:10px;color:#666">Payout</span></div></button>
-<button onclick="trade('Odd')" style="background:#15151D;border:1px solid #333;border-radius:12px;padding:12px;text-align:left"><div style="display:flex;justify-content:space-between"><span style="color:#FF6B6B;font-weight:800;font-size:14px">Odd</span><span id="pay2" style="color:#fff;font-weight:700;font-size:13px">$19.52</span></div><div style="display:flex;justify-content:space-between;margin-top:4px"><span style="font-size:10px;color:#888">95.20%</span><span style="font-size:10px;color:#666">Payout</span></div></button>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 10px 90px">
+<button onclick="trade('Even')" style="background:#1D1515;border:1px solid #FF6444;border-radius:10px;padding:10px;text-align:left"><span style="color:#FF6444;font-weight:800">Even</span><span id="p1" style="float:right;color:#fff;font-weight:700">$19.52</span><br><span style="font-size:10px;color:#666">95.20% Payout</span></button>
+<button onclick="trade('Odd')" style="background:#15151D;border:1px solid #444;border-radius:10px;padding:10px;text-align:left"><span style="color:#FF6B6B;font-weight:800">Odd</span><span id="p2" style="float:right;color:#fff;font-weight:700">$19.52</span><br><span style="font-size:10px;color:#666">95.20% Payout</span></button>
 </div>
 
-<div style="position:fixed;bottom:0;left:0;right:0;background:#141414;border-top:1px solid #222;display:flex;justify-content:space-around;padding:10px 0 18px">
-<div style="text-align:center;color:#666;font-size:10px">💬<br>Live Chat</div>
-<div style="background:#FF8A5B;width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:20px">✨<br><span style="font-size:8px;color:#000;font-weight:800">AI</span></div>
-<div style="text-align:center;color:#666;font-size:10px">🕒<br>Positions</div>
+<div style="position:fixed;bottom:0;left:0;right:0;background:#141414;border-top:1px solid #222;display:flex;justify-content:space-around;padding:10px 0">
+<div style="color:#666;font-size:10px;text-align:center">💬<br>Live Chat</div><div style="background:#FF6444;width:42px;height:42px;border-radius:12px;display:grid;place-items:center">✨</div><div style="color:#666;font-size:10px;text-align:center">🕒<br>Positions</div>
 </div>
 
 <script>
-let bal=parseFloat(localStorage.getItem('bal')||0), stake=10, last=6, tab=1;
-let c=document.getElementById('chart'), x=c.getContext('2d'), data=[], price=9451.16;
-for(let i=0;i<70;i++) data.push(9450+Math.sin(i/5)*2 + (Math.random()-0.5));
-function resize(){c.width=c.offsetWidth*2; c.height=160*2; x.setTransform(2,0,0,2,0,0);}
-resize();
-function draw(){
- let W=c.offsetWidth, H=160; x.clearRect(0,0,W,H);
- x.strokeStyle='#1A
+var bal=Number(localStorage.getItem('bal')||0), stake=10, last=6;
+function upd(){document.getElementById('bal').innerText=bal.toFixed(2); document.getElementById('stk').innerText=stake; var p=(stake*1.952).toFixed(2); document.getElementById('p1').innerText='$'+p; document.getElementById('p2').innerText='$'+p; localStorage.setItem('bal',bal);}
+upd();
+var canvas=document.getElementById('ch'); var ctx=canvas.getContext('2d'); var price=9451.16; var data=[];
+for(var i=0;i<60;i++) data.push(9450+Math.sin(i/4)*1.5+Math.random());
+function drawChart(){
+ var W=canvas.offsetWidth, H=150; canvas.width=W; canvas.height=H;
+ ctx.clearRect(0,0,W,H);
+ ctx.beginPath(); ctx.strokeStyle='#FF6444'; ctx.lineWidth=1.5;
+ for(var i=0;i<data.length;i++){var x=(i/(data.length-1))*W; var y=H/2-(data[i]-9450)*15; if(i==0)ctx.moveTo(x,y); else ctx.lineTo(x,y);} ctx.stroke();
+}
+drawChart();
+setInterval(function(){
+ price+=(Math.random()-0.5)*0.3; data.push(price); if(data.length>60)data.shift();
+ document.getElementById('pt').innerText=price.toFixed(2)+' +0.02 (+0.02%)'; document.getElementById('lp').innerText=price.toFixed(2);
+ // move last digit
+ document.getElementById('d'+last).style.background='#1E1E1E'; document.getElementById('d'+last).style.color='#fff';
+ document.getElementById('b'+last).style.background='#2A2A2A';
+ last=Math.floor(Math.random()*10);
+ document.getElementById('d'+last).style.background='#FF6444'; document.getElementById('d'+last).style.color='#000';
+ document.getElementById('b'+last).style.background='#FF6444';
+ document.getElementById('last').innerText=last;
+ drawChart();
+},1000);
+
+function setTab(t){document.getElementById('t0').style.background=t==0?'#2A1815':'#1A1A1A'; document.getElementById('t0').style.color=t==0?'#FF6444':'#666'; document.getElementById('t1').style.background=t==1?'#2A1815':'#1A1A1A'; document.getElementById('t1').style.color=t==1?'#FF6444':'#666'; document.getElementById('t2').style.background=t==2?'#2A1815':'#1A1A1A'; document.getElementById('t2').style.color=t==2?'#FF6444':'#666';}
+function setAuto(n){document.getElementById('au0').style.background=n==0?'#FF6444':'transparent'; document.getElementById('au0').style.color=n==0?'#000':'#666'; document.getElementById('au1').style.background=n==1?'#FF6444':'transparent'; document.getElementById('au1').style.color=n==1?'#000':'#666';}
+function cs(v){stake=Math.max(1,Math.min(100,stake+v)); upd();}
+function ss(s){stake=s; upd();}
+function trade(type){if(bal<stake){dep();return;} var isEven=last%2==0; var win=(type=='Even'&&isEven)||(type=='Odd'&&!isEven); if(win){var pr=stake*0.95; bal+=pr; alert('WIN digit '+last+' +$'+pr.toFixed(2));} else{bal-=stake; alert('LOSS digit '+last+' -$'+stake);} upd();}
+function dep(){var a=prompt('M-Pesa KES amount'); if(!a)return; var k=parseFloat(a); bal+=k/129.5; upd(); alert('Added $'+(k/129.5).toFixed(2));}
+</script>
+</body></html>

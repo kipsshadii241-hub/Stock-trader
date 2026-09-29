@@ -1,1 +1,9 @@
-document.getElementById('bal').innerText = ...
+var demoBal = Number(localStorage.getItem('demoBal') || 9938.80);
+var realBal = Number(localStorage.getItem('realBal') || 0);
+var isDemo = true;
+document.getElementById('bal').innerText = demoBal.toFixed(2);
+document.getElementById('bal').onclick = function(){
+  isDemo = !isDemo;
+  document.getElementById('bal').innerText = (isDemo?demoBal:realBal).toFixed(2);
+  alert('Real Account: $'+realBal.toFixed(2)+'\nDemo: $'+demoBal.toFixed(2)+'\n\nTap balance again to switch');
+};

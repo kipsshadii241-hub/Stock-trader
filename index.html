@@ -1,28 +1,194 @@
 <!DOCTYPE html>
-<html><head><meta name="viewport" content="width=device-width,initial-scale=1">
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <script src="https://cdn.tailwindcss.com"></script>
-<style>body{background:#0b0b0f;color:white}canvas{width:100%;display:block}</style>
-</head><body class="p-2">
+<style>
+body{background:#0e0e14;color:white;font-family:Inter,sans-serif}
+canvas{width:100%;display:block}
+</style>
+</head>
+<body class="pb-24">
 
-<div class="flex justify-between items-center"><div class="flex items-center gap-2"><div class="w-8 h-8 bg-[#ff6b00] rounded flex items-center justify-center font-black text-black">KQ</div><span id="balance">$10096.72</span></div><button onclick="doDeposit()" class="bg-[#ff6b00] text-black px-5 py-1.5 rounded-full font-bold">Deposit</button></div>
+<!-- HEADER -->
+<div class="flex justify-between items-center bg-[#14141e] p-3">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-[#ff6b00] rounded-lg flex items-center justify-center font-black text-black text-sm">KQ</div>
+<span class="font-bold text-sm">KQbinary</span>
+<div class="flex items-center gap-1 bg-zinc-900 px-3 py-1.5 rounded-full ml-2 border border-zinc-800">
+<span class="w-5 h-5 bg-[#ff6b00] rounded-full flex items-center justify-center text-[9px] font-bold text-black">R</span>
+<span id="balance" class="text-sm ml-1">$0.00</span>
+<span class="text-[9px] ml-1">▼</span>
+</div>
+</div>
+<button onclick="doDeposit()" class="bg-[#ff6b00] text-black px-5 py-1.5 rounded-full font-bold text-sm">Deposit</button>
+</div>
 
-<div class="bg-[#14141a] rounded-xl mt-3 p-3"><div class="flex justify-between"><span>Volatility 10 (1s) Index</span><span id="priceNow" class="bg-[#ff6b00] text-black px-2 rounded font-bold">9447.93</span></div><canvas id="chart" width="700" height="320"></canvas><div id="digitStats" class="flex justify-between mt-2 text-[10px]"></div><div id="digitsRow" class="flex gap-1 mt-2"></div><div id="digitSelect" class="flex gap-1 mt-2"></div></div>
+<!-- TABS -->
+<div class="flex justify-around px-2 py-3 text-[12px] bg-[#0e0e14] border-b border-zinc-800/50">
+<button id="tab-matches" class="text-zinc-500">Matches/Differs</button>
+<button id="tab-even" class="bg-[#2a1a18] border border-[#ff6b00] text-[#ff6b00] px-5 py-1.5 rounded-full font-bold">Even/Odd</button>
+<button id="tab-over" class="text-zinc-500">Over/Under</button>
+</div>
 
-<div class="flex gap-2 mt-3"><button id="autoBtn" onclick="setMode('auto')" class="flex-1 bg-[#ff6b00] text-black py-3 rounded-xl font-bold">AUTO</button><button id="manualBtn" onclick="setMode('manual')" class="flex-1 bg-zinc-900 py-3 rounded-xl">MANUAL</button></div>
+<!-- CHART CARD -->
+<div class="bg-[#14141e] m-3 rounded-2xl p-3 border border-zinc-800">
+<div class="flex justify-between text-[11px] items-center">
+<div class="flex items-center gap-2"><span class="bg-[#ff6b00]/20 text-[#ff6b00] px-2 py-0.5 rounded text-[9px] font-bold">1T</span><span class="font-semibold">Volatility 10 (1s) Index</span><span class="text-zinc-500">▼</span></div>
+<span class="bg-zinc-800 px-2.5 py-1 rounded-full text-[10px]">50%</span>
+</div>
+<div class="flex justify-between text-[11px] mt-2 text-zinc-400">
+<span id="priceDetail">9449.10 -0.01 (-0.01%)</span>
+<span id="priceRight" class="text-white">9449.10</span>
+</div>
+<canvas id="chart" width="900" height="380" class="mt-2"></canvas>
+<div class="flex justify-between text-[9px] text-zinc-600 mt-2">
+<span>36:24</span><span>13:38:54</span><span>13:41:25</span><span>13:43:55</span><span>13:46:26</span>
+</div>
+</div>
 
-<div class="flex gap-2 mt-3"><button onclick="placeTrade('match')" class="flex-1 bg-[#1a1a22] py-4 rounded-xl">Match <span id="matchPayout">$19.50</span></button><button onclick="placeTrade('differ')" class="flex-1 bg-[#1a1a22] py-4 rounded-xl">Differ <span id="differPayout">$10.56</span></button></div>
+<!-- EVEN/ODD STATS -->
+<div class="bg-[#14141e] mx-3 rounded-2xl p-3 border border-zinc-800">
+<div class="flex justify-between text-[9px] tracking-widest">
+<span class="text-zinc-500">EVEN / ODD</span>
+<span><span class="text-[#ff6b00]">HOT 0</span> <span class="text-[#6ea8ff] ml-2">COLD 4</span> <span class="ml-2 text-zinc-400">LAST 0</span></span>
+</div>
+<div id="bars" class="flex gap-1 mt-3 h-14 items-end"></div>
+<div id="digitsRow" class="flex gap-1 mt-3"></div>
+<div class="flex items-center gap-2 mt-3">
+<span class="text-[9px] text-[#ff6b00] font-bold">EVEN 51%</span>
+<div class="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden"><div id="evenBar" class="h-full bg-[#ff6b00] w-[51%]"></div></div>
+<span class="text-[9px] text-zinc-500 font-bold">ODD 49%</span>
+</div>
+</div>
 
-<button id="stopBtn" onclick="stopAuto()" class="w-full mt-3 bg-[#ff6b00] text-black py-3 rounded-xl font-bold hidden">■ STOP</button><p id="log" class="text-center text-[11px] mt-3">Starting...</p>
+<!-- AUTO / MANUAL -->
+<div class="flex gap-2 mx-3 mt-3">
+<button id="autoBtn" onclick="startAuto()" class="flex-1 bg-[#ff6b00] text-black py-3.5 rounded-xl font-black text-[13px]">AUTO</button>
+<button id="manualBtn" onclick="stopAuto()" class="flex-1 bg-[#1e1e26] py-3.5 rounded-xl font-bold text-[13px] border border-zinc-800">MANUAL</button>
+</div>
+
+<!-- STAKE -->
+<div class="bg-[#14141e] mx-3 mt-3 rounded-2xl p-3 border border-zinc-800">
+<div class="flex justify-between items-center">
+<button onclick="changeStake(-1)" class="w-9 h-9 bg-zinc-800 rounded-full font-bold">—</button>
+<div class="text-center"><div class="text-[9px] text-zinc-500">STAKE</div><div class="flex items-center gap-1"><span class="text-zinc-500">$</span><span id="stakeVal" class="font-bold text-[20px]">10</span></div></div>
+<button onclick="changeStake(1)" class="w-9 h-9 bg-zinc-800 rounded-full font-bold">+</button>
+</div>
+<div class="grid grid-cols-6 gap-1.5 mt-3 text-[11px]">
+<button class="bg-zinc-800 py-2.5 rounded-full">$1</button>
+<button class="bg-zinc-800 py-2.5 rounded-full">$5</button>
+<button id="s10" class="bg-[#2a1a18] border border-[#ff6b00] text-[#ff6b00] py-2.5 rounded-full font-bold">$10</button>
+<button class="bg-zinc-800 py-2.5 rounded-full">$25</button>
+<button class="bg-zinc-800 py-2.5 rounded-full">$50</button>
+<button class="bg-zinc-800 py-2.5 rounded-full">$100</button>
+</div>
+<div class="grid grid-cols-3 gap-2 mt-3 text-[10px]">
+<div class="bg-[#1a1a22] p-3 rounded-xl border border-zinc-800 text-center"><div class="text-zinc-500">◎ TARGET</div><div class="mt-1">$ <span class="font-bold">200</span></div></div>
+<div class="bg-[#1a1a22] p-3 rounded-xl border border-zinc-800 text-center"><div class="text-zinc-500">◷ STOP LOSS</div><div class="mt-1">$ <span class="font-bold">999</span></div></div>
+<div class="bg-[#1a1a22] p-3 rounded-xl border border-zinc-800 text-center"><div class="text-zinc-500">✧ MULT</div><div class="mt-1">x <span class="font-bold">2</span></div></div>
+</div>
+</div>
+
+<!-- EVEN / ODD BUTTONS -->
+<div class="flex gap-2 mx-3 mt-3">
+<button onclick="placeTrade('even')" class="flex-1 bg-[#1e1512] border border-[#ff6b00]/40 py-4 rounded-xl text-left px-4">
+<div class="font-bold text-[#ff6b00] text-[13px]">Even</div><div class="flex justify-between mt-1 items-end"><span id="evenPay" class="text-[15px] font-bold">$19.52</span><span class="text-[9px] text-zinc-500 text-right">95.20%<br>Payout</span></div>
+</button>
+<button onclick="placeTrade('odd')" class="flex-1 bg-[#1e1512] border border-[#ff6b00]/40 py-4 rounded-xl text-left px-4">
+<div class="font-bold text-[#ff6b00] text-[13px]">Odd</div><div class="flex justify-between mt-1 items-end"><span id="oddPay" class="text-[15px] font-bold">$19.52</span><span class="text-[9px] text-zinc-500 text-right">95.20%<br>Payout</span></div>
+</button>
+</div>
+
+<button id="stopBtn" onclick="stopAuto()" class="mx-3 mt-3 w-[calc(100%-24px)] bg-[#ff6b00] text-black py-3.5 rounded-xl font-black hidden">■ STOP BOT</button>
+<p id="log" class="text-center text-[11px] text-zinc-500 mt-3">Even/Odd Ready - Chart moving smooth...</p>
 
 <script>
-let prices=[],lastDigit=9,selectedDigit=3,stake=10,balance=10096.72,autoRunning=false,autoInterval=null,digitCounts=Array(10).fill(0),totalTicks=0;
-const canvas=document.getElementById('chart'),ctx=canvas.getContext('2d');
-function drawChart(){if(prices.length<2)return;ctx.clearRect(0,0,canvas.width,canvas.height);let min=Math.min(...prices),max=Math.max(...prices),range=max-min||1;ctx.beginPath();ctx.strokeStyle='#ff6b00';ctx.lineWidth=3;prices.forEach((p,i)=>{let x=(i/(prices.length-1))*canvas.width;let y=canvas.height-((p-min)/range)*canvas.height*0.8-canvas.height*0.1;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});ctx.stroke();}
-function renderDigits(){let row=document.getElementById('digitsRow'),sel=document.getElementById('digitSelect'),stats=document.getElementById('digitStats');row.innerHTML='';sel.innerHTML='';stats.innerHTML='';for(let i=0;i<10;i++){let pct=totalTicks?Math.round(digitCounts[i]/totalTicks*100):0;stats.innerHTML+=`<span>${pct}%</span>`;let active=i==lastDigit?'bg-[#ff3b30]':'bg-zinc-800';row.innerHTML+=`<div class="flex-1 ${active} py-1.5 rounded text-center">${i}</div>`;let selActive=i==selectedDigit?'bg-[#ff6b00] text-black ring-2 ring-white':'bg-zinc-800';sel.innerHTML+=`<div onclick="selectedDigit=${i};renderDigits()" class="flex-1 ${selActive} py-2 rounded text-center font-bold">${i}</div>`;}}
-function placeTrade(t){let win=(t=='differ'&&lastDigit!=selectedDigit)||(t=='match'&&lastDigit==selectedDigit);let profit=win?(t=='match'?stake*0.95:stake*0.056):-stake;balance+=profit;document.getElementById('balance').innerText='$'+balance.toFixed(2);document.getElementById('log').innerText=t.toUpperCase()+' '+selectedDigit+' Last '+lastDigit+' '+(win?'WIN':'LOSS');}
-function setMode(m){if(m=='auto'){autoRunning=true;document.getElementById('stopBtn').classList.remove('hidden');autoInterval=setInterval(()=>placeTrade('differ'),1200);}else{autoRunning=false;clearInterval(autoInterval);document.getElementById('stopBtn').classList.add('hidden');}}
-function stopAuto(){setMode('manual');}
-function addTick(q){prices.push(q);if(prices.length>100)prices.shift();lastDigit=parseInt(Math.abs(q*100).toString().slice(-1));digitCounts[lastDigit]++;totalTicks++;document.getElementById('priceNow').innerText=q.toFixed(2);drawChart();renderDigits();}
-let base=9447.93;setInterval(()=>{base+=(Math.random()-0.5)*1.8;addTick(base);},800);renderDigits();
-function doDeposit(){let p=prompt('Phone 254...','254708374149'),a=prompt('Amount','100');fetch('/api/mpesa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:p,amount:a})}).then(r=>r.json()).then(j=>alert(JSON.stringify(j)));}
-</script></body></html>
+let prices=[], lastDigit=0, stake=10, curStake=10, balance=0, startBal=0, auto=false, interval=null, counts=Array(10).fill(0), total=0;
+const canvas=document.getElementById('chart'), ctx=canvas.getContext('2d');
+
+// SMOOTH CHART LIKE YOUR VIDEO
+function drawChart(){
+ if(prices.length<2) return;
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ let min=Math.min(...prices), max=Math.max(...prices), range=max-min||2;
+
+ // gradient fill
+ let grad=ctx.createLinearGradient(0,0,0,canvas.height);
+ grad.addColorStop(0,'rgba(255,107,0,0.35)'); grad.addColorStop(1,'rgba(255,107,0,0)');
+ ctx.beginPath();
+ prices.forEach((p,i)=>{
+  let x=(i/(prices.length-1))*canvas.width;
+  let y=canvas.height - ((p-min)/range)*canvas.height*0.75 - 20;
+  if(i==0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+ });
+ ctx.lineTo(canvas.width,canvas.height);
+ ctx.lineTo(0,canvas.height);
+ ctx.closePath();
+ ctx.fillStyle=grad;
+ ctx.fill();
+
+ // smooth orange line
+ ctx.beginPath(); ctx.strokeStyle='#ff6b00'; ctx.lineWidth=3;
+ prices.forEach((p,i)=>{
+  let x=(i/(prices.length-1))*canvas.width;
+  let y=canvas.height - ((p-min)/range)*canvas.height*0.75 - 20;
+  if(i==0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+ });
+ ctx.stroke();
+
+ // glowing dot + dashed line like screenshot
+ let lastY=canvas.height - ((prices[prices.length-1]-min)/range)*canvas.height*0.75 - 20;
+ ctx.setLineDash([6,6]); ctx.beginPath(); ctx.strokeStyle='#444'; ctx.lineWidth=1;
+ ctx.moveTo(0,lastY); ctx.lineTo(canvas.width,lastY); ctx.stroke(); ctx.setLineDash([]);
+ ctx.beginPath(); ctx.arc(canvas.width,lastY,5,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill();
+ ctx.beginPath(); ctx.arc(canvas.width,lastY,7,0,Math.PI*2); ctx.fillStyle='#ff6b00'; ctx.fill();
+ ctx.beginPath(); ctx.arc(canvas.width,lastY,12,0,Math.PI*2); ctx.fillStyle='rgba(255,107,0,0.3)'; ctx.fill();
+}
+
+function render(){
+ let bars=document.getElementById('bars'), row=document.getElementById('digitsRow');
+ bars.innerHTML=''; row.innerHTML='';
+ let maxC=Math.max(...counts)||1;
+ for(let i=0;i<10;i++){
+  let h=Math.max(20,(counts[i]/maxC*100)||30);
+  let barColor=i%2==0?'bg-zinc-500':'bg-zinc-700'; if(i==0) barColor='bg-[#ff6b00]'; if(i==4) barColor='bg-[#ff8c5a]';
+  bars.innerHTML+=`<div class="flex-1 flex flex-col items-center gap-1"><div class="text-[9px] text-zinc-400">${counts[i]||[12,10,10,11,8,9,10,8,11,11][i]}</div><div class="${barColor} w-full rounded-sm" style="height:${h}%"></div></div>`;
+  let active=i==lastDigit?'bg-[#ff6b00] text-black':'bg-zinc-800 text-zinc-400';
+  row.innerHTML+=`<div class="flex-1 ${active} py-2.5 rounded-lg text-center text-[12px] font-bold">${i}</div>`;
+ }
+ let evenCount=counts.filter((_,i)=>i%2==0).reduce((a,b)=>a+b,0); let evenPct=total?Math.round(evenCount/total*100):51;
+ document.getElementById('evenBar').style.width=evenPct+'%';
+}
+
+function addTick(q){
+ prices.push(q); if(prices.length>90) prices.shift();
+ lastDigit=parseInt(Math.abs(q*100).toString().slice(-1));
+ counts[lastDigit]++; total++;
+ document.getElementById('priceDetail').innerText=q.toFixed(2)+' -0.01 (-0.01%)';
+ document.getElementById('priceRight').innerText=q.toFixed(2);
+ drawChart(); render();
+}
+
+function placeTrade(type){
+ let win=(type=='even'&&lastDigit%2==0)||(type=='odd'&&lastDigit%2==1);
+ let profit=win?curStake*0.952:-curStake; balance+=profit;
+ document.getElementById('balance').innerText='$'+balance.toFixed(2);
+ document.getElementById('log').innerHTML=`${type.toUpperCase()} Last ${lastDigit} <span style="color:${win?'#00ff88':'#ff5555'}">${win?'WIN +$'+profit.toFixed(2):'LOSS -$'+curStake}</span>`;
+ if(!win) curStake*=2; else curStake=stake;
+ document.getElementById('evenPay').innerText='$'+(curStake*1.952).toFixed(2);
+ document.getElementById('oddPay').innerText='$'+(curStake*1.952).toFixed(2);
+}
+function startAuto(){ if(auto) return; auto=true; startBal=balance; document.getElementById('stopBtn').classList.remove('hidden'); document.getElementById('autoBtn').classList.add('hidden'); interval=setInterval(()=>placeTrade('even'),1100); document.getElementById('log').innerText='AUTO EVEN running...'; }
+function stopAuto(){ auto=false; clearInterval(interval); document.getElementById('stopBtn').classList.add('hidden'); document.getElementById('autoBtn').classList.remove('hidden'); document.getElementById('log').innerText='STOPPED Balance $'+balance.toFixed(2); }
+function setStake(v){stake=v; curStake=v; document.getElementById('stakeVal').innerText=v;}
+function changeStake(d){setStake(Math.max(1,Math.min(100,stake+d)));}
+function doDeposit(){ let p=prompt('Phone 254...','254712681370'),a=prompt('Amount','100'); if(!p||!a) return; fetch('/api/mpesa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:p,amount:a})}).then(r=>r.json()).then(j=>alert(JSON.stringify(j))).catch(e=>alert(e)); }
+
+// START SMOOTH TICK EVERY 200ms LIKE VIDEO
+let base=9449.10;
+setInterval(()=>{ base+=(Math.random()-0.5)*0.7; addTick(base); },200);
+render(); addTick(base);
+</script>
+</body>
+</html>

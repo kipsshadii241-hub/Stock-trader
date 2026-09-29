@@ -1,0 +1,1 @@
+export default function handler(req,res){ console.log('MPESA CALLBACK',req.body); res.json({ResultCode:0,ResultDesc:'Accepted'}); }

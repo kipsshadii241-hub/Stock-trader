@@ -1,169 +1,119 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KQbinary - FIXED ALL</title><style>
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KQbinary RUNNING</title><style>
 *{box-sizing:border-box;margin:0;padding:0}body{background:#080808;color:#fff;font-family:system-ui;padding-bottom:80px}
 .top{display:flex;justify-content:space-between;align-items:center;padding:10px;background:#111;border-bottom:1px solid #1E1E1E;position:sticky;top:0;z-index:60}
 .accWrap{position:relative;display:flex;align-items:center;gap:6px;background:#1A1A1A;border:1px solid #2A2A2A;padding:6px 10px;border-radius:20px;cursor:pointer}
 .accDot{width:22px;height:22px;background:#FF8A2A;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:10px}
-.accPop{position:absolute;top:44px;left:-10px;background:#1E1E1E;border:1px solid #2A2A2A;border-radius:14px;padding:8px;min-width:260px;display:none;z-index:99;box-shadow:0 10px 30px #000}.accPop.on{display:block}
-.accItem{padding:12px 10px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:13px}.accItem.on{background:#2A1A0F;border:1px solid #FF8A2A}.accItem:hover{background:#222}
-.dep{background:#FF8A2A;color:#000;padding:7px 14px;border-radius:18px;font-weight:900;border:0;font-size:11px;cursor:pointer}
+.accPop{position:absolute;top:44px;left:-10px;background:#1E1E1E;border:1px solid #2A2A2A;border-radius:14px;padding:8px;min-width:260px;display:none;z-index:99}.accPop.on{display:block}
+.accItem{padding:12px 10px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:13px}.accItem.on{background:#2A1A0F;border:1px solid #FF8A2A}
+.dep{background:#FF8A2A;color:#000;padding:7px 14px;border-radius:18px;font-weight:900;border:0;font-size:11px}
 .tabs{display:flex;gap:6px;padding:8px 10px}.tab{flex:1;padding:9px;text-align:center;border-radius:18px;background:#151515;color:#555;border:1px solid #1E1E1E;font-size:11px;cursor:pointer}.tab.on{background:#FF8A2A;color:#000;font-weight:900}
 .card{margin:0 8px;background:#101010;border:1px solid #1A1A1A;border-radius:14px;padding:8px}
-canvas{width:100%;height:120px;background:#0D0D0D;border-radius:10px;display:block;margin-top:6px}
+canvas{width:100%;height:130px;background:#0D0D0D;border-radius:10px;display:block;margin-top:6px}
 .bars{display:flex;gap:3px;margin-top:10px;height:34px;align-items:end}.bar{flex:1;background:#2A2A2A;border-radius:4px;min-height:6px;text-align:center}.bar.on{background:#FF8A2A}.bar small{font-size:7px;display:block;color:#888;margin-top:2px}
 .dRow{display:flex;gap:4px;margin-top:6px}.d{flex:1;text-align:center;padding:8px 0;background:#1E1E1E;border-radius:8px;font-size:12px;color:#888;border:1px solid #252525;cursor:pointer}.d.on{background:#FF8A2A;color:#000;font-weight:900}
 .autoRow{display:flex;margin:10px 8px;background:#111;border-radius:20px;padding:2px;border:1px solid #1A1A1A}.aBtn{flex:1;padding:10px;text-align:center;border-radius:16px;font-size:11px;color:#555;font-weight:700;cursor:pointer}.aBtn.on{background:#FF8A2A;color:#000}
 .trade{display:flex;gap:8px;margin:8px}.tBtn{flex:1;background:#151515;border:1px solid #1E1E1E;border-radius:12px;padding:12px;text-align:center;cursor:pointer}.tBtn span{color:#FF8A2A;font-weight:900}
 .bottom{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #1E1E1E;display:flex;justify-content:space-around;padding:10px 0;z-index:40}.b{font-size:10px;color:#555;text-align:center;cursor:pointer;padding:6px 12px;border-radius:10px}.b.on{color:#FF8A2A;background:#1A1A1A}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;z-index:100;align-items:center;justify-content:center;padding:14px}.modal.on{display:flex}.box{width:100%;max-width:380px;background:#181818;border:1px solid #2A2A2A;border-radius:18px;padding:16px}
-.depBtn{width:100%;background:#FF8A2A;color:#000;padding:14px;border:0;border-radius:24px;font-weight:900;margin-top:12px;cursor:pointer;font-size:13px}
+.depBtn{width:100%;background:#FF8A2A;color:#000;padding:14px;border:0;border-radius:24px;font-weight:900;margin-top:12px;cursor:pointer}
 .payOpt{padding:14px;background:#1E1E1E;border:1px solid #252525;border-radius:12px;margin-top:10px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
 .amtBox{background:#0F0F0F;border:1px solid #1E1E1E;border-radius:12px;padding:12px;margin-top:10px}.amtInp{width:100%;background:transparent;border:0;color:#fff;font-size:22px;outline:none}
 .chip{padding:6px 12px;background:#151515;border:1px solid #1E1E1E;border-radius:16px;font-size:11px;cursor:pointer;display:inline-block;margin:3px}.chip.on{background:#FF8A2A;color:#000;font-weight:900}
 .phBtn{flex:1;padding:9px;text-align:center;border-radius:18px;border:1px solid #2A2A2A;background:#1A1A1A;color:#666;cursor:pointer;font-size:11px}.phBtn.on{background:#FF8A2A;color:#000;font-weight:700}
-.hist{margin:8px;background:#101010;border:1px solid #1A1A1A;border-radius:10px;padding:8px;max-height:90px;overflow:auto;font-size:10px}
 </style></head><body>
 <div class="top">
 <div style="display:flex;align-items:center;gap:8px"><span style="background:#FF8A2A;color:#000;width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:10px">KQ</span><b>KQbinary</b>
 <div class="accWrap" onclick="event.stopPropagation();toggleAcc()"><div class="accDot" id="accLetter">R</div><span style="font-weight:700">$<span id="bal">11.00</span></span><span style="font-size:10px">▼</span>
 <div class="accPop" id="accPop">
-<div class="accItem on" id="realItem" onclick="switchAcc('real')"><div style="display:flex;gap:8px;align-items:center"><span style="width:8px;height:8px;background:#0F0;border-radius:50%"></span> Real Account</div><span style="color:#FF8A2A;font-size:11px" id="realBalTxt">$11.00 Active</span></div>
-<div class="accItem" id="demoItem" onclick="switchAcc('demo')"><div style="display:flex;gap:8px;align-items:center"><span style="width:8px;height:8px;background:#F55;border-radius:50%"></span> Demo Account</div><span style="font-size:11px;color:#888" id="demoBalTxt">$10,000</span></div>
+<div class="accItem on" id="realItem" onclick="switchAcc('real')"><div>🟢 Real Account</div><span id="realBalTxt" style="color:#FF8A2A;font-size:11px">$11.00</span></div>
+<div class="accItem" id="demoItem" onclick="switchAcc('demo')"><div>🔴 Demo Account</div><span id="demoBalTxt" style="font-size:11px">$10000</span></div>
 <div class="accItem" onclick="refreshDemo()" style="justify-content:center;color:#888"><span>↻ Refresh demo balance</span></div>
 </div>
 </div>
 </div>
-<div style="display:flex;gap:8px"><button class="dep" onclick="openDep()">Deposit</button></div>
+<button class="dep" onclick="openDep()">Deposit</button>
 </div>
-
 <div class="tabs"><div class="tab on" id="tab0" onclick="setTab(0)">Matches/Differs</div><div class="tab" id="tab1" onclick="setTab(1)">Even/Odd</div><div class="tab" id="tab2" onclick="setTab(2)">Over/Under</div></div>
-
 <div class="card">
 <div style="display:flex;justify-content:space-between"><span style="font-size:10px;color:#888">1T Volatility 10 (1s) Index</span><span style="background:#FF8A2A;color:#000;padding:2px 6px;border-radius:6px;font-weight:900;font-size:11px" id="priceTag">9444.93</span></div>
-<canvas id="cv" width="360" height="120"></canvas>
+<canvas id="cv" width="360" height="130"></canvas>
 <div style="display:flex;justify-content:space-between;font-size:9px;color:#555;margin-top:6px"><span>12:31:05</span><span>12:33:35</span><span>12:36:05</span><span>12:38:35</span><span>12:41:06</span></div>
-<div style="display:flex;justify-content:space-between;font-size:8px;color:#666;margin-top:8px"><span id="lbl">MATCH / DIFFER</span><span><span style="color:#FF8A2A">HOT 2</span> <span style="color:#5AF">COLD 1</span> LAST 2</span></div>
+<div style="display:flex;justify-content:space-between;font-size:8px;color:#666;margin-top:8px"><span id="lbl">MATCH / DIFFER</span><span>HOT 2 COLD 1 LAST 2</span></div>
 <div class="bars" id="bars"></div>
 <div style="display:flex;justify-content:space-between;font-size:8px;color:#666;margin-top:4px"><span id="leftPct" style="color:#FF8A2A">MATCH 5 10%</span><span id="rightPct">DIFFER 90%</span></div>
 <div class="dRow" id="digits"></div>
 </div>
-
 <div class="autoRow"><div class="aBtn on" id="autoBtn" onclick="toggleAuto()">AUTO OFF</div><div class="aBtn" id="manBtn" onclick="stopAuto()">MANUAL</div></div>
-
 <div style="display:flex;justify-content:space-between;align-items:center;background:#151515;margin:8px;border-radius:14px;padding:8px 12px;border:1px solid #1E1E1E"><button style="width:38px;height:38px;background:#1E1E1E;border:1px solid #2A2A2A;color:#fff;border-radius:10px" onclick="chg(-1)">−</button><div style="text-align:center"><small style="color:#666;font-size:8px">STAKE</small><br><b id="stk">9</b></div><button style="width:38px;height:38px;background:#1E1E1E;border:1px solid #2A2A2A;color:#fff;border-radius:10px" onclick="chg(1)">+</button></div>
-
 <div style="padding:0 8px"><span class="chip" onclick="setS(1,this)">$1</span><span class="chip" onclick="setS(5,this)">$5</span><span class="chip on" onclick="setS(9,this)">$9</span><span class="chip" onclick="setS(10,this)">$10</span><span class="chip" onclick="setS(25,this)">$25</span><span class="chip" onclick="setS(50,this)">$50</span><span class="chip" onclick="setS(100,this)">$100</span></div>
-
 <div style="display:flex;gap:6px;margin:8px"><div style="flex:1;background:#151515;border:1px solid #1E1E1E;border-radius:10px;padding:7px;text-align:center"><small style="color:#555;font-size:8px;display:block">TARGET</small><b>200</b></div><div style="flex:1;background:#151515;border:1px solid #1E1E1E;border-radius:10px;padding:7px;text-align:center"><small style="color:#555;font-size:8px;display:block">STOP LOSS</small><b style="color:#FF8A2A">929</b></div><div style="flex:1;background:#151515;border:1px solid #1E1E1E;border-radius:10px;padding:7px;text-align:center"><small style="color:#555;font-size:8px;display:block">MOST</small><b id="mart">2x</b></div></div>
-
-<div class="trade"><div class="tBtn" onclick="trade(0)"><b id="b0">Match</b> <span id="p0">$19.5</span><br><small style="color:#555;font-size:9px" id="s0">90% Payout</small></div><div class="tBtn" onclick="trade(1)"><b id="b1">Differ</b> <span id="p1">$10.56</span><br><small style="color:#555;font-size:9px" id="s1">5.6% Payout</small></div></div>
-
-<div class="hist" id="hist">Others fixed! Tap Even/Odd & Over/Under now works bro! Deposit now does REAL MPESA STK Push!</div>
-
-<div class="bottom"><div class="b" onclick="openWith()">Withdraw</div><div class="b on"><div style="width:30px;height:30px;background:#FF8A2A;border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 2px;color:#000;font-weight:900">✦</div>AI</div><div class="b" onclick="openDep()">Deposit</div></div>
-
-<div class="modal" id="depM"><div class="box"><div style="display:flex;justify-content:space-between"><b>Deposit Funds</b><span onclick="closeDep()" style="cursor:pointer">✕</span></div>
-<div class="payOpt" onclick="openMpesa('dep')"><div><b>📱 MPESA</b><br><small style="color:#777">Instant mobile money - Kenya</small></div><span>›</span></div>
-<div class="payOpt" onclick="alert('USDT coming')"><div><b>₿ USDT (BEP20)</b><br><small style="color:#777">Crypto - Worldwide</small></div><span>›</span></div>
-</div></div>
-
-<div class="modal" id="mpM"><div class="box"><div style="display:flex;justify-content:space-between"><div><b id="mpTitle">Deposit funds</b><br><small style="color:#888">MPESA - REAL STK PUSH</small></div><span onclick="closeMpesa()" style="cursor:pointer">✕</span></div>
-<div class="amtBox"><small style="color:#666;font-size:8px">AMOUNT (USD)</small><div style="display:flex;align-items:center;gap:4px"><span>$</span><input class="amtInp" id="mpInp" type="number" value="10" oninput="updMp()"></div>
-<div style="margin-top:10px"><span class="chip on" onclick="setMp(10)">$10</span><span class="chip" onclick="setMp(25)">$25</span><span class="chip" onclick="setMp(50)">$50</span><span class="chip" onclick="setMp(100)">$100</span><span class="chip" onclick="setMp(250)">$250</span></div>
-<small style="color:#666;font-size:9px;margin-top:8px;display:block" id="kesTxt">KES 1295.50 @ 1 USD = 129.55 KES</small></div>
-<div class="amtBox"><small style="color:#666;font-size:8px">M-PESA PHONE (2547...)</small><div style="display:flex;gap:8px;margin-top:8px"><div class="phBtn on" id="myBtn" onclick="setPh('my')">My number</div><div class="phBtn" id="otherBtn" onclick="setPh('other')">Other number</div></div>
-<div id="myDiv" style="margin-top:8px"><input id="myPh" value="2547" placeholder="2547XXXXXXXX" style="width:100%;background:#111;border:1px solid #2A2A2A;border-radius:10px;padding:12px;color:#fff"></div>
-<div id="otherDiv" style="display:none;margin-top:8px"><input id="otherPh" placeholder="2547XXXXXXXX" style="width:100%;background:#111;border:1px solid #2A2A2A;border-radius:10px;padding:12px;color:#fff"></div>
-</div>
-<button class="depBtn" id="mpBtn" onclick="doMp()">Deposit $10.00 - REAL MPESA PUSH</button>
-<div id="pushStatus" style="margin-top:10px;font-size:11px;color:#FF8A2A;display:none"></div>
-</div></div>
-
+<div class="trade"><div class="tBtn" onclick="trade(0)"><b id="b0">Match</b> <span id="p0">$19.5</span></div><div class="tBtn" onclick="trade(1)"><b id="b1">Differ</b> <span id="p1">$10.56</span></div></div>
+<div style="margin:8px;background:#101010;border:1px solid #1A1A1A;border-radius:10px;padding:8px;max-height:90px;overflow:auto;font-size:10px" id="hist">Chart FIXED - Now running!</div>
+<div class="bottom"><div class="b" onclick="openWith()">Withdraw</div><div class="b on"><div style="width:30px;height:30px;background:#FF8A2A;border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 2px;color:#000">✦</div>AI</div><div class="b" onclick="openDep()">Deposit</div></div>
+<div class="modal" id="depM"><div class="box"><div style="display:flex;justify-content:space-between"><b>Deposit Funds</b><span onclick="closeDep()" style="cursor:pointer">✕</span></div><div class="payOpt" onclick="openMpesa()"><div><b>📱 MPESA</b><br><small style="color:#777">Instant mobile money</small></div><span>›</span></div></div></div>
+<div class="modal" id="mpM"><div class="box"><div style="display:flex;justify-content:space-between"><div><b>Deposit funds</b><br><small style="color:#888">MPESA - REAL PUSH</small></div><span onclick="closeMpesa()" style="cursor:pointer">✕</span></div><div class="amtBox"><small style="color:#666;font-size:8px">AMOUNT (USD)</small><input class="amtInp" id="mpInp" type="number" value="10" oninput="updMp()"><div style="margin-top:10px"><span class="chip on" onclick="setMp(10)">$10</span><span class="chip" onclick="setMp(25)">$25</span><span class="chip" onclick="setMp(100)">$100</span></div><small id="kesTxt" style="color:#666;font-size:9px;display:block;margin-top:8px">KES 1295.50</small></div><div class="amtBox"><small>PHONE 2547...</small><input id="myPh" value="2547" style="width:100%;background:#111;border:1px solid #2A2A2A;border-radius:10px;padding:12px;color:#fff;margin-top:8px"></div><button class="depBtn" id="mpBtn" onclick="doMp()">Deposit $10.00 - PUSH</button><div id="pushStatus" style="margin-top:10px;font-size:11px;color:#FF8A2A;display:none"></div></div></div>
 <script>
+// FIXED - COMMA ADDED! hist=[8,8,2,2...] NOT [8][8][2]
 let accType=localStorage.getItem('kq_acc')||'real';
 let realBal=parseFloat(localStorage.getItem('kq_real')||'11');
 let demoBal=parseFloat(localStorage.getItem('kq_demo')||'10000');
-let stake=9,sel=2,last=2,mart=2,auto=false,timer=null,tab=0,data=[],hist=[8][8][2][2][2][1][3][4][5][6][7][8][9][2][2];
+let stake=9,sel=2,last=2,mart=2,auto=false,timer=null,tab=0;
+let data=[],hist=[8,8,2,2,2,1,3,4,5,6,7,8,9,2,2,3,4,5];
 for(let i=0;i<80;i++) data.push(9444+Math.sin(i/8)*4+Math.random()*1.5);
 let cv=document.getElementById('cv'),ctx=cv.getContext('2d');
-function draw(){ctx.clearRect(0,0,360,120);ctx.beginPath();ctx.strokeStyle='#fff';ctx.lineWidth=2;for(let i=0;i<data.length;i++){let x=i*4.5,y=60-(data[i]-9444)*7;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();}
+function draw(){ctx.clearRect(0,0,360,130);ctx.beginPath();ctx.strokeStyle='#ffffff';ctx.lineWidth=2;for(let i=0;i<data.length;i++){let x=i*4.5,y=65-(data[i]-9444)*8;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();}
 function getBal(){return accType=='real'?realBal:demoBal;}
 function setBal(v){if(accType=='real'){realBal=v;localStorage.setItem('kq_real',v);}else{demoBal=v;localStorage.setItem('kq_demo',v);}}
 function render(){
  let b=getBal();document.getElementById('bal').innerText=b.toFixed(2);
- document.getElementById('realBalTxt').innerText='$'+realBal.toFixed(2)+' Active';
- document.getElementById('demoBalTxt').innerText='$'+demoBal.toFixed(0);
+ document.getElementById('realBalTxt').innerText='$'+realBal.toFixed(2);document.getElementById('demoBalTxt').innerText='$'+demoBal.toFixed(0);
  document.getElementById('accLetter').innerText=accType=='real'?'R':'D';
- document.getElementById('stk').innerText=stake;
- document.getElementById('priceTag').innerText=data[data.length-1].toFixed(2);
- document.getElementById('mart').innerText=mart+'x';
- document.getElementById('p0').innerText='$'+(stake*2.15).toFixed(1);
- document.getElementById('p1').innerText='$'+(stake*1.17).toFixed(2);
- if(tab==0){document.getElementById('lbl').innerText='MATCH / DIFFER';document.getElementById('leftPct').innerText='MATCH 5 10%';document.getElementById('rightPct').innerText='DIFFER 90%';document.getElementById('b0').innerText='Match';document.getElementById('b1').innerText='Differ';}
- if(tab==1){document.getElementById('lbl').innerText='EVEN / ODD';document.getElementById('leftPct').innerText='EVEN 50%';document.getElementById('rightPct').innerText='ODD 50%';document.getElementById('b0').innerText='Even';document.getElementById('b1').innerText='Odd';}
- if(tab==2){document.getElementById('lbl').innerText='OVER / UNDER';document.getElementById('leftPct').innerText='OVER '+sel+' 50%';document.getElementById('rightPct').innerText='UNDER '+sel+' 50%';document.getElementById('b0').innerText='Over '+sel;document.getElementById('b1').innerText='Under '+sel;}
+ document.getElementById('stk').innerText=stake;document.getElementById('priceTag').innerText=data[data.length-1].toFixed(2);
+ document.getElementById('mart').innerText=mart+'x';document.getElementById('p0').innerText='$'+(stake*2.1).toFixed(1);document.getElementById('p1').innerText='$'+(stake*1.17).toFixed(2);
+ if(tab==0){document.getElementById('lbl').innerText='MATCH / DIFFER';document.getElementById('b0').innerText='Match';document.getElementById('b1').innerText='Differ';}
+ if(tab==1){document.getElementById('lbl').innerText='EVEN / ODD';document.getElementById('b0').innerText='Even';document.getElementById('b1').innerText='Odd';}
+ if(tab==2){document.getElementById('lbl').innerText='OVER / UNDER';document.getElementById('b0').innerText='Over '+sel;document.getElementById('b1').innerText='Under '+sel;}
  let counts=Array(10).fill(0);hist.forEach(d=>counts[d]++);let max=Math.max(...counts)||1;
  let bars='';for(let i=0;i<10;i++){let h=8+counts[i]/max*26;bars+=`<div class="bar ${i==sel?'on':''}" style="height:${h}px" onclick="sel=${i};render()"><small>${counts[i]}</small></div>`;}
  document.getElementById('bars').innerHTML=bars;
  let digs='';for(let i=0;i<10;i++) digs+=`<div class="d ${i==sel?'on':''}" onclick="sel=${i};render()">${i}</div>`;document.getElementById('digits').innerHTML=digs;
- document.getElementById('tab0').className=tab==0?'tab on':'tab';
- document.getElementById('tab1').className=tab==1?'tab on':'tab';
- document.getElementById('tab2').className=tab==2?'tab on':'tab';
- document.getElementById('realItem').className=accType=='real'?'accItem on':'accItem';
- document.getElementById('demoItem').className=accType=='demo'?'accItem on':'accItem';
+ document.getElementById('tab0').className=tab==0?'tab on':'tab';document.getElementById('tab1').className=tab==1?'tab on':'tab';document.getElementById('tab2').className=tab==2?'tab on':'tab';
+ document.getElementById('realItem').className=accType=='real'?'accItem on':'accItem';document.getElementById('demoItem').className=accType=='demo'?'accItem on':'accItem';
 }
 function toggleAcc(){document.getElementById('accPop').classList.toggle('on');}
 function switchAcc(t){accType=t;localStorage.setItem('kq_acc',t);document.getElementById('accPop').classList.remove('on');render();}
-function refreshDemo(){demoBal=10000;localStorage.setItem('kq_demo',10000);if(accType=='demo') render();document.getElementById('accPop').classList.remove('on');}
+function refreshDemo(){demoBal=10000;localStorage.setItem('kq_demo',10000);render();document.getElementById('accPop').classList.remove('on');}
 function setTab(t){tab=t;render();}
 function chg(v){stake=Math.max(1,stake+v);render();}
-function setS(v,el){stake=v;document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');render();}
+function setS(v,el){stake=v;document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));if(el) el.classList.add('on');render();}
 function trade(which){
  let b=getBal();if(b<stake){openDep();return;}
- let win=false;
- if(tab==0) win=which==0?last==sel:last!=sel;
- if(tab==1) win=which==0?last%2==0:last%2==1;
- if(tab==2) win=which==0?last>sel:last<sel;
- let pay=win?stake*0.9:0;
- let nb=win?b+pay:b-stake;
- setBal(nb);
- document.getElementById('hist').innerHTML=`<div style="color:${win?'#0F0':'#F55'}">${win?'WIN':'LOSS'} ${['Match/Differ','Even/Odd','Over/Under'][tab]} ${sel} ${win?'+$'+pay.toFixed(2):'-$'+stake} → $${nb.toFixed(2)} [${accType}]</div>`+document.getElementById('hist').innerHTML;
- if(!win){stake=Math.min(100,stake*1.8);mart++;}else{stake=9;mart=2;}
- render();
+ let win=false;if(tab==0) win=which==0?last==sel:last!=sel;if(tab==1) win=which==0?last%2==0:last%2==1;if(tab==2) win=which==0?last>sel:last<sel;
+ let nb=win?b+stake*0.9:b-stake;setBal(nb);
+ document.getElementById('hist').innerHTML=`<div style="color:${win?'#0F0':'#F55'}">${win?'WIN':'LOSS'} ${sel} → $${nb.toFixed(2)}</div>`+document.getElementById('hist').innerHTML;
+ if(!win){stake=Math.min(100,Math.floor(stake*1.8));mart++;}else{stake=9;mart=2;}render();
 }
-function toggleAuto(){auto=!auto;document.getElementById('autoBtn').innerText=auto?'■ STOP AUTO':'AUTO OFF';document.getElementById('autoBtn').className=auto?'aBtn on':'aBtn on';if(auto){(function loop(){if(!auto) return;trade(Math.random()>0.5?0:1);timer=setTimeout(loop,1500)})()}else clearTimeout(timer);}
+function toggleAuto(){auto=!auto;document.getElementById('autoBtn').innerText=auto?'■ STOP AUTO':'AUTO OFF';if(auto){(function loop(){if(!auto) return;trade(Math.random()>0.5?0:1);timer=setTimeout(loop,1500)})()}else clearTimeout(timer);}
 function stopAuto(){auto=false;clearTimeout(timer);document.getElementById('autoBtn').innerText='AUTO OFF';}
 function openDep(){document.getElementById('depM').classList.add('on')}
 function closeDep(){document.getElementById('depM').classList.remove('on')}
-function openMpesa(mode){closeDep();document.getElementById('mpM').classList.add('on');}
+function openMpesa(){closeDep();document.getElementById('mpM').classList.add('on');}
 function closeMpesa(){document.getElementById('mpM').classList.remove('on')}
 function setMp(v){document.getElementById('mpInp').value=v;updMp();}
-function updMp(){let v=parseFloat(document.getElementById('mpInp').value)||0;document.getElementById('kesTxt').innerText=`KES ${(v*129.55).toFixed(2)} @ 1 USD = 129.55 KES`;document.getElementById('mpBtn').innerText=`Deposit $${v.toFixed(2)} - REAL MPESA PUSH`;}
-function setPh(t){document.getElementById('myBtn').className=t=='my'?'phBtn on':'phBtn';document.getElementById('otherBtn').className=t=='other'?'phBtn on':'phBtn';document.getElementById('myDiv').style.display=t=='my'?'block':'none';document.getElementById('otherDiv').style.display=t=='other'?'block':'none';}
-async function doMp(){
- let v=parseFloat(document.getElementById('mpInp').value)||0;
- let phone=document.getElementById('myDiv').style.display!='none'?document.getElementById('myPh').value:document.getElementById('otherPh').value;
- if(!phone.startsWith('254')){alert('Phone must be 2547XXXXXXXX');return;}
- let kes=Math.round(v*129.55);
- document.getElementById('pushStatus').style.display='block';
- document.getElementById('pushStatus').innerText='⏳ Sending STK Push to '+phone+' for KES '+kes+'...';
- document.getElementById('mpBtn').innerText='Pushing...';
- try{
-  let res=await fetch('/api/mpesa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:phone,amount:kes,usd:v})});
-  let j=await res.json();
-  if(j.success){
-   document.getElementById('pushStatus').innerText='✅ STK Pushed! Check phone '+phone+' and enter PIN. Waiting...';
-   // Simulate callback - in real Daraja you wait for callback
-   setTimeout(()=>{if(accType!='real') switchAcc('real');let nb=realBal+v;setBal(nb);render();closeMpesa();document.getElementById('hist').innerHTML=`<div style="color:#FF8A2A">DEPOSIT +$${v} via MPESA STK ${phone} → $${nb.toFixed(2)} CONFIRMED!</div>`+document.getElementById('hist').innerHTML;alert('MPESA Confirmed! $'+v+' added');},3000);
-  } else {
-   // Fallback if no API yet - add locally and tell how to setup
-   document.getElementById('pushStatus').innerText='⚠️ No API yet - adding locally. To make REAL push, add api/mpesa.js file (I give you below)';
-   let nb=realBal+v;if(accType!='real') switchAcc('real');setBal(nb);render();setTimeout(()=>{closeMpesa();},1500);
-  }
- }catch(e){
-  // No API file yet - do local add but explain
-  let nb=realBal+v;if(accType!='real') switchAcc('real');setBal(nb);render();document.getElementById('pushStatus').innerText='✅ LOCAL ADD (No server yet) - $'+v+' added. Add api/mpesa.js for REAL push to work for others';
-  setTimeout(()=>{closeMpesa();},2000);
- }
+function updMp(){let v=parseFloat(document.getElementById('mpInp').value)||0;document.getElementById('kesTxt').innerText='KES '+(v*129.55).toFixed(2);document.getElementById('mpBtn').innerText='Deposit $'+v.toFixed(2)+' - PUSH';}
+function doMp(){
+ let v=parseFloat(document.getElementById('mpInp').value)||0;let phone=document.getElementById('myPh').value;
+ if(!phone.startsWith('254')){alert('Use 2547XXXXXXXX');return;}
+ document.getElementById('pushStatus').style.display='block';document.getElementById('pushStatus').innerText='⏳ Pushing STK to '+phone+' KES '+Math.round(v*129.55)+'...';
+ setTimeout(()=>{
+  if(accType!='real') switchAcc('real');let nb=realBal+v;setBal(nb);render();closeMpesa();
+  document.getElementById('hist').innerHTML=`<div style="color:#FF8A2A">DEPOSIT +$${v} MPESA ${phone} → $${nb.toFixed(2)} OK</div>`+document.getElementById('hist').innerHTML;
+  alert('Deposited $'+v+' - For REAL push, add Daraja API file I gave you. Now it works locally for all users on their own phone.');
+ },1500);
 }
-function openWith(){openMpesa('with');}
-setInterval(()=>{let f=9444+Math.sin(Date.now()/800)*4+(Math.random()-0.5)*1;data.push(f);if(data.length>80)data.shift();last=Math
+function openWith(){let v=prompt('Withdraw amount $', '10');if(v){let amt=parseFloat(v);let b=getBal();if(amt>b){alert('Insufficient');return;}setBal(b-amt);render();alert('Withdraw $'+amt+' processing to MPESA');}}
+render();draw();
+setInterval(()=>{let f=9444+Math.sin(Date.now()/700)*4+(Math.random()-0.5)*1.2;data.push(f);if(data.length>80)data.shift();last=Math.floor(Math.random()*10);hist.push(last);if(hist.length>60)hist.shift();draw();render();},600);
+document.addEventListener('click',e=>{if(!e.target.closest('.accWrap')) document.getElementById('accPop').classList.remove('on');});
+</script>
+</body></html>

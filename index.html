@@ -1,24 +1,48 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard</title></head>
-<body style="margin:0;background:#0F0F0F;color:#fff;font-family:system-ui;padding:16px">
-<div style="max-width:390px;margin:auto">
-<h2>Welcome, <span style="color:#FF6444" id="name">Kipkoech</span> 👋</h2>
-<p id="email" style="color:#888;font-size:14px">you@gmail.com</p>
-
-<div style="background:#1C1C1E;border-radius:16px;padding:20px;margin-top:16px">
-<p style="color:#888;font-size:12px;margin:0">BALANCE</p>
-<h1 id="bal" style="margin:6px 0">$0.00</h1>
-<p style="color:#22C55E;margin:0">+0.00% today</p>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>KQBinary</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#0A0A0A;color:#fff}
+.top{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#121212;border-bottom:1px solid #222}
+.logo{display:flex;align-items:center;gap:6px;font-weight:800}
+.logo span{background:#FF6444;color:#000;width:26px;height:26px;display:grid;place-items:center;border-radius:6px;font-size:12px}
+.bal{background:#1E1E1E;padding:6px 10px;border-radius:20px;font-size:13px;display:flex;align-items:center;gap:6px}
+.dep{background:#FF6444;color:#000;border:0;padding:7px 14px;border-radius:8px;font-weight:800;font-size:13px}
+.tabs{display:flex;gap:8px;padding:10px 12px}
+.tabs div{flex:1;text-align:center;padding:8px;border-radius:20px;background:#1E1E1E;font-size:12px;color:#888}
+.tabs .on{background:#2A1A18;color:#FF6444;border:1px solid #FF6444}
+.chartBox{margin:0 12px;background:#121212;border-radius:12px;padding:10px;border:1px solid #222}
+.chartHead{display:flex;justify-content:space-between;font-size:11px;color:#888}
+#chart{width:100%;height:160px;margin-top:8px;position:relative;background:#0A0A0A;border-radius:8px;overflow:hidden}
+.digits{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin:12px 12px 0}
+.digits div{background:#1E1E1E;padding:8px 0;text-align:center;border-radius:6px;font-size:12px;color:#888}
+.digits .hot{background:#FF6444;color:#000;font-weight:800}
+.controls{display:flex;gap:8px;margin:12px 12px 0}
+.btnMode{flex:1;padding:10px;border-radius:10px;border:0;font-weight:800}
+.btnMode.on{background:#FF6444;color:#000}
+.btnMode.off{background:#1E1E1E;color:#888}
+.stakeBox{display:flex;align-items:center;justify-content:space-between;background:#121212;margin:12px;border-radius:12px;padding:12px;border:1px solid #222}
+.stakeBox button{background:#1E1E1E;border:0;color:#fff;width:32px;height:32px;border-radius:8px;font-size:18px}
+.presets{display:flex;gap:6px;padding:0 12px}
+.presets div{flex:1;background:#1E1E1E;padding:8px;text-align:center;border-radius:8px;font-size:12px;border:1px solid #222}
+.presets .on{border-color:#FF6444;color:#FF6444;background:#2A1A18}
+.tradeBtns{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
+.tradeBtns button{padding:14px;border-radius:12px;border:0;font-weight:900;text-align:left}
+.even{background:#2A1818;color:#FF6444;border:1px solid #FF6444 !important}
+.odd{background:#1A1A2A;color:#8B8BFF;border:1px solid #444 !important}
+.bot{display:flex;justify-content:space-around;padding:12px;background:#121212;position:fixed;bottom:0;left:0;right:0;border-top:1px solid #222}
+</style>
+</head>
+<body>
+<div class="top">
+<div class="logo"><span>KQ</span> KQbinary</div>
+<div class="bal"><span style="background:#333;width:18px;height:18px;border-radius:50%;display:grid;place-items:center">R</span> <span id="bal">$0.00</span></div>
+<button class="dep" onclick="deposit()">Deposit</button>
 </div>
 
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px">
-<div onclick="location.href='#trade'" style="background:#1C1C1E;padding:18px;border-radius:14px;text-align:center">📈<br><b>Trade</b><br><small style="color:#888">Buy/Sell</small></div>
-<div onclick="document.getElementById('depositBox').style.display='block'" style="background:#1C1C1E;padding:18px;border-radius:14px;text-align:center">💰<br><b>Deposit</b><br><small style="color:#888">M-Pesa</small></div>
-<div onclick="alert('Market: BTC $67,420 +2.4% | ETH $3,410 +1.2% | GOLD $2,340')" style="background:#1C1C1E;padding:18px;border-radius:14px;text-align:center">📊<br><b>Market</b><br><small style="color:#888">Live prices</small></div>
-<div onclick="alert('Profile: '+localStorage.getItem('traderName')+' - '+localStorage.getItem('traderEmail'))" style="background:#1C1C1E;padding:18px;border-radius:14px;text-align:center">👤<br><b>Profile</b><br><small style="color:#888">View</small></div>
-</div>
+<div class="tabs"><div>Matches/Differs</div><div class="on">Even/Odd</div><div>Over/Under</div></div>
 
-<div id="depositBox" style="display:none;background:#1C1C1E;padding:16px;border-radius:12px;margin-top:16px">
-<h4>M-Pesa Deposit</h4>
-<p style="color:#888;font-size:13px">Paybill 400200 Acc 123456</p>
-<input id="amt" type="number" placeholder="Amount KES (e.g. 1000)" style="width:100%;padding
+<div class="chartBox">
+<div class="chartHead"><div><b style="color:#fff">Volatility 10 (1s) Index</b><br><span id="price">9450.81 +0.02 (+0.02%)</span></div><div style="background:#1E1E1E;padding:4px 8px;border-radius:6px">50%</div></div>
+<canvas id="chart"></canvas>
+<div style="display:flex;justify-content:space-between;font-size:10px;color:#555;margin-top:4

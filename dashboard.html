@@ -1,9 +1,22 @@
-var demoBal = Number(localStorage.getItem('demoBal') || 9938.80);
-var realBal = Number(localStorage.getItem('realBal') || 0);
-var isDemo = true;
-document.getElementById('bal').innerText = demoBal.toFixed(2);
-document.getElementById('bal').onclick = function(){
-  isDemo = !isDemo;
-  document.getElementById('bal').innerText = (isDemo?demoBal:realBal).toFixed(2);
-  alert('Real Account: $'+realBal.toFixed(2)+'\nDemo: $'+demoBal.toFixed(2)+'\n\nTap balance again to switch');
-};
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KQbinary</title>
+<style>body{margin:0;background:#0E0E0E;color:#fff;font-family:system-ui} .top{padding:12px;background:#141414;display:flex;justify-content:space-between}.bal{background:#2A1515;border:1px solid #FF4444;padding:6px 12px;border-radius:20px}.tab{flex:1;padding:10px;text-align:center;border-radius:20px;background:#1A1A1A;color:#666;border:1px solid #333}.on{background:#2A1815!important;color:#FF6444!important;border-color:#FF6444!important}.card{margin:10px;background:#161616;border-radius:12px;padding:10px;border:1px solid #222}.d{flex:1;padding:10px 0;text-align:center;border-radius:8px;background:#1E1E1E;border:1px solid #333}.chip{flex:1;background:#1A1A1A;border:1px solid #333;padding:10px;border-radius:10px;color:#fff}</style>
+</head><body>
+<div class="top"><b>KQbinary</b><div class="bal" id="balBox">$9938.80</div></div>
+<div style="display:flex;gap:5px;padding:10px"><div class="tab">Matches</div><div class="tab">Even/Odd</div><div class="tab on">Over/Under</div></div>
+<div class="card"><canvas id="ch" width="320" height="110" style="width:100%"></canvas><div id="bars" style="display:flex;gap:3px;height:24px;margin-top:8px"></div><div id="digs" style="display:flex;gap:4px;margin-top:8px"></div></div>
+<div style="display:flex;gap:8px;padding:10px"><button onclick="trade('over')" style="flex:1;background:#1A1A1A;border:1px solid #333;border-radius:14px;padding:14px;color:#fff;text-align:left"><b style="color:#FF6444">Over <span id="s1">5</span></b><span style="float:right">$19.80</span><br><small style="color:#666">98% Payout</small></button><button onclick="trade('under')" style="flex:1;background:#1A1A1A;border:1px solid #333;border-radius:14px;padding:14px;color:#fff;text-align:left"><b style="color:#FF6B6B">Under <span id="s2">5</span></b><span style="float:right">$15.83</span><br><small style="color:#666">58.3% Payout</small></button></div>
+<div style="margin:10px;background:#FF6444;color:#000;padding:12px;border-radius:20px;text-align:center;font-weight:900">AUTO</div>
+<div style="margin:10px;background:#161616;padding:12px;border-radius:12px;display:flex;justify-content:space-between;align-items:center"><button onclick="cs(-1)" style="width:44px;height:44px;background:#222;border:0;color:#fff;border-radius:10px;font-size:20px">-</button><div style="text-align:center"><small style="color:#888">STAKE</small><br><b>$<span id="stk">10</span></b></div><button onclick="cs(1)" style="width:44px;height:44px;background:#222;border:0;color:#fff;border-radius:10px;font-size:20px">+</button></div>
+<div style="display:flex;gap:6px;padding:0 10px"><button onclick="ss(1)" class="chip">$1</button><button onclick="ss(5)" class="chip">$5</button><button onclick="ss(10)" class="chip" style="border-color:#FF6444;color:#FF6444">$10</button><button onclick="ss(25)" class="chip">$25</button><button onclick="ss(50)" class="chip">$50</button></div>
+<script>
+let bal=9938.80,sel=5,stake=10,data=[];for(let i=0;i<50;i++)data.push(9450+Math.sin(i/5));
+let cv=document.getElementById('ch'),ctx=cv.getContext('2d');
+function draw(){ctx.clearRect(0,0,320,110);ctx.beginPath();ctx.strokeStyle='#fff';ctx.lineWidth=2;for(let i=0;i<data.length;i++){let x=i*6.5,y=55-(data[i]-9450)*10;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();}
+setInterval(()=>{data.push(9450+Math.sin(Date.now()/400)+Math.random());if(data.length>50)data.shift();draw();},700);
+function render(){let h='';for(let i=0;i<10;i++){h+=`<div class="d" style="${i==sel?'background:#2A1815;color:#FF6444;border-color:#FF6444':''}" onclick="sel=${i};document.getElementById('s1').innerText=${i};document.getElementById('s2').innerText=${i};render()">${i}</div>`;}document.getElementById('digs').innerHTML=h;let b='';for(let j=0;j<10;j++)b+=`<div style="flex:1;height:${8+Math.random()*16}px;background:${j==sel?'#FF6444':'#333'};border-radius:3px"></div>`;document.getElementById('bars').innerHTML=b;document.getElementById('balBox').innerText='$'+bal.toFixed(2);}
+function cs(v){stake=Math.max(1,stake+v);document.getElementById('stk').innerText=stake;}
+function ss(v){stake=v;document.getElementById('stk').innerText=v;}
+function trade(t){if(bal<stake){alert('No balance');return;}bal-=stake;render();let d=Math.floor(Math.random()*10);setTimeout(()=>{let win=(t=='over'?d>sel:d<sel);if(win){let p=t=='over'?stake*0.98:stake*0.583;bal+=stake+p;alert('WIN! Last digit '+d+' +$'+p.toFixed(2));}else{alert('LOSS! Last digit '+d);}render();},700);}
+render();draw();
+</script></body></html>

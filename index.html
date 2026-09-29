@@ -1,57 +1,27 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Trader KE</title>
-</head>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Trader KE</title></head>
 <body style="margin:0;background:#0F0F0F;color:#fff;font-family:system-ui;padding:18px">
-<div style="max-width:390px;margin:auto" id="box1">
+<div style="max-width:390px;margin:auto" id="form">
 <h2 style="text-align:center">Create Account</h2>
-
-<p style="color:#888;font-size:13px">Full Name</p>
-<div style="background:#1C1C1E;border-radius:12px;padding:14px">👤 <input id="n1" value="Kipkoech" style="background:transparent;border:0;color:#fff;width:80%;outline:none"></div>
-
-<p style="color:#888;font-size:13px;margin-top:14px">Email</p>
-<div style="background:#1C1C1E;border:1px solid #FF6444;border-radius:12px;padding:14px">✉️ <input id="e1" style="background:transparent;border:0;color:#fff;width:80%;outline:none" placeholder="you@gmail.com"></div>
-
-<p style="color:#888;font-size:13px;margin-top:14px">Country</p>
-<div style="background:#FF6444;color:#000;padding:14px;border-radius:12px;font-weight:700">KE Kenya</div>
-
-<p style="color:#888;font-size:13px;margin-top:14px">Phone Number</p>
-<div style="display:flex;gap:8px"><div style="background:#1C1C1E;padding:14px;border-radius:12px">+254</div><div style="background:#1C1C1E;padding:14px;border-radius:12px;flex:1">📞 <input id="ph" style="background:transparent;border:0;color:#fff;outline:none;width:80%" placeholder="712681370"></div></div>
-
-<p style="color:#888;font-size:13px;margin-top:14px">Password</p>
-<div style="background:#1C1C1E;padding:14px;border-radius:12px">🔒 <input id="p1" type="password" style="background:transparent;border:0;color:#fff;outline:none;width:80%" placeholder="Min 6 chars"></div>
-
-<p style="color:#888;font-size:13px;margin-top:14px">Confirm Password</p>
-<div style="background:#1C1C1E;padding:14px;border-radius:12px">🔒 <input id="p2" type="password" style="background:transparent;border:0;color:#fff;outline:none;width:80%" placeholder="Repeat"></div>
-
-<button id="btn" style="width:100%;background:#FF6444;color:#000;border:0;padding:16px;border-radius:12px;font-weight:900;margin-top:22px;font-size:16px">Create Account →</button>
+<p style="color:#888;font-size:13px">Full Name</p><div style="background:#1C1C1E;border-radius:12px;padding:14px">👤 <input id="n1" value="Kipkoech" style="background:transparent;border:0;color:#fff;width:80%;outline:none"></div>
+<p style="color:#888;font-size:13px;margin-top:14px">Email</p><div style="background:#1C1C1E;border:1px solid #FF6444;border-radius:12px;padding:14px">✉️ <input id="e1" style="background:transparent;border:0;color:#fff;width:80%;outline:none" placeholder="you@gmail.com"></div>
+<p style="color:#888;font-size:13px;margin-top:14px">Country</p><div style="background:#FF6444;color:#000;padding:14px;border-radius:12px;font-weight:700">KE Kenya</div>
+<p style="color:#888;font-size:13px;margin-top:14px">Phone</p><div style="display:flex;gap:8px"><div style="background:#1C1C1E;padding:14px;border-radius:12px">+254</div><div style="background:#1C1C1E;padding:14px;border-radius:12px;flex:1"><input id="ph" style="background:transparent;border:0;color:#fff;outline:none;width:80%" placeholder="712681370"></div></div>
+<p style="color:#888;font-size:13px;margin-top:14px">Password</p><div style="background:#1C1C1E;padding:14px;border-radius:12px"><input id="p1" type="password" style="background:transparent;border:0;color:#fff;outline:none;width:80%" placeholder="Min 6"></div>
+<p style="color:#888;font-size:13px;margin-top:14px">Confirm</p><div style="background:#1C1C1E;padding:14px;border-radius:12px"><input id="p2" type="password" style="background:transparent;border:0;color:#fff;outline:none;width:80%" placeholder="Repeat"></div>
+<button id="btn" style="width:100%;background:#FF6444;color:#000;border:0;padding:16px;border-radius:12px;font-weight:900;margin-top:22px">Create Account →</button>
 </div>
-
-<div id="box2" style="display:none;max-width:390px;margin:auto;text-align:center;padding-top:60px">
-<h1>✅</h1>
-<h2>Account Created!</h2>
-<p id="showName" style="color:#FF6444;font-weight:700"></p>
-<p id="showEmail" style="color:#888"></p>
-<button onclick="location.reload()" style="width:100%;background:#FF6444;color:#000;border:0;padding:16px;border-radius:12px;font-weight:900;margin-top:30px">Go to Dashboard</button>
-</div>
-
 <script>
-document.getElementById('btn').addEventListener('click', function(){
- var name = document.getElementById('n1').value;
- var email = document.getElementById('e1').value;
- var pass = document.getElementById('p1').value;
- var cpass = document.getElementById('p2').value;
- if(!name || !email || !pass){ alert('Please fill all fields'); return; }
- if(pass !== cpass){ alert('Passwords do not match'); return; }
- if(pass.length < 6){ alert('Password must be 6+ characters'); return; }
- document.getElementById('box1').style.display='none';
- document.getElementById('showName').innerText = name;
- document.getElementById('showEmail').innerText = email;
- document.getElementById('box2').style.display='block';
-});
+document.getElementById('btn').onclick=function(){
+ var n=document.getElementById('n1').value;
+ var e=document.getElementById('e1').value;
+ var p=document.getElementById('p1').value;
+ var c=document.getElementById('p2').value;
+ if(!n||!e||!p){alert('Fill all');return}
+ if(p!==c){alert('Passwords no match');return}
+ localStorage.setItem('traderName',n);
+ localStorage.setItem('traderEmail',e);
+ window.location.href='dashboard.html';
+}
 </script>
-</body>
-</html>
+</body></html>

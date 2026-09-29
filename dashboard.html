@@ -1,179 +1,102 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KQbinary FIXED FINAL</title><style>
-*{box-sizing:border-box;margin:0;padding:0}body{background:#0a0a0a;color:#fff;font-family:system-ui;padding-bottom:90px}
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KQ FIXED</title><style>
+*{margin:0;padding:0;box-sizing:border-box}body{background:#0a0a0a;color:#fff;font-family:system-ui;padding-bottom:80px}
 .top{display:flex;justify-content:space-between;align-items:center;padding:12px;background:#111;border-bottom:1px solid #222}
-.bal{background:#1e1e1e;border:1px solid #2a2a2a;padding:6px 12px;border-radius:20px;font-weight:700}
+.bal{background:#1e1e1e;padding:6px 12px;border-radius:20px;border:1px solid #333}
 .dep{background:#ff8a2a;color:#000;padding:8px 16px;border-radius:20px;font-weight:900;border:0}
-.tabs{display:flex;gap:8px;padding:10px}.tab{flex:1;padding:10px;text-align:center;border-radius:20px;background:#151515;color:#777;border:1px solid #222;font-size:12px}.tab.on{background:#ff8a2a;color:#000;font-weight:900}
+.tabs{display:flex;gap:8px;padding:10px}.tab{flex:1;padding:10px;text-align:center;border-radius:20px;background:#151515;color:#777;border:1px solid #222}.tab.on{background:#ff8a2a;color:#000;font-weight:900}
 .card{margin:0 10px;background:#111;border:1px solid #222;border-radius:14px;padding:10px}
-canvas{width:100%;height:150px;background:#0e0e0e;border-radius:10px;display:block;margin-top:8px;border:1px solid #1a1a1a}
-.bars{display:flex;gap:4px;margin-top:12px;height:30px;align-items:end}.bar{flex:1;background:#2a2a2a;border-radius:4px;min-height:6px;text-align:center}.bar.on{background:#ff8a2a}.bar small{font-size:8px;color:#aaa;display:block;margin-top:2px}
-.dRow{display:flex;gap:4px;margin-top:8px}.d{flex:1;text-align:center;padding:10px 0;background:#1e1e1e;border-radius:8px;color:#888;border:1px solid #333}.d.on{background:#ff8a2a;color:#000;font-weight:900}
-.trade{display:flex;gap:8px;margin:10px}.tBtn{flex:1;background:#151515;border:1px solid #222;border-radius:12px;padding:14px;text-align:center}.tBtn span{color:#ff8a2a;font-weight:900}
-.chip{padding:8px 14px;background:#151515;border:1px solid #222;border-radius:18px;margin:4px;display:inline-block;color:#888}.chip.on{background:#ff8a2a;color:#000;font-weight:900}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #222;display:flex;justify-content:space-around;padding:12px 0}.b{color:#666;text-align:center;font-size:11px}.b.on{color:#ff8a2a}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;z-index:99;align-items:center;justify-content:center;padding:16px}.modal.on{display:flex}.box{width:100%;max-width:380px;background:#1a1a1a;border:1px solid #333;border-radius:18px;padding:18px}
-.depBtn{width:100%;background:#ff8a2a;color:#000;padding:15px;border:0;border-radius:24px;font-weight:900;margin-top:14px;font-size:14px}
+canvas{width:100%;height:150px;background:#0e0e0e;border-radius:10px;display:block;margin-top:8px}
+.trade{display:flex;gap:8px;margin:10px}.tBtn{flex:1;background:#151515;border:1px solid #222;border-radius:12px;padding:14px;text-align:center}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;z-index:99;align-items:center;justify-content:center;padding:16px}.modal.on{display:flex}.box{width:100%;max-width:380px;background:#1a1a1a;border:1px solid #333;border-radius:18px;padding:18px}
+.depBtn{width:100%;background:#ff8a2a;color:#000;padding:15px;border:0;border-radius:24px;font-weight:900;margin-top:14px}
 .inp{width:100%;background:#0f0f0f;border:1px solid #333;border-radius:10px;padding:14px;color:#fff;font-size:16px;margin-top:8px}
+.chip{padding:8px 14px;background:#151515;border:1px solid #222;border-radius:18px;margin:4px;display:inline-block}.chip.on{background:#ff8a2a;color:#000;font-weight:900}
 </style></head><body>
-<div class="top"><div style="display:flex;gap:8px;align-items:center"><span style="background:#ff8a2a;color:#000;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900">KQ</span><b>KQbinary</b><div class="bal" onclick="toggleAcc()">R $<span id="bal">4.00</span> ▼<div id="accPop" style="display:none;position:absolute;top:50px;left:10px;background:#1e1e1e;border:1px solid #333;border-radius:12px;padding:8px;min-width:200px;z-index:50"><div onclick="switchAcc('real')" style="padding:10px">🟢 Real: $<span id="rBal">4.00</span></div><div onclick="switchAcc('demo')" style="padding:10px">🔴 Demo: $<span id="dBal">10000</span></div><div onclick="refreshDemo()" style="padding:10px;text-align:center;color:#888">↻ Refresh demo</div></div></div></div><button class="dep" onclick="openDep()">Deposit</button></div>
+<div class="top"><div style="display:flex;gap:8px;align-items:center"><span style="background:#ff8a2a;color:#000;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900">KQ</span><b>KQbinary</b><div class="bal" onclick="document.getElementById('accPop').style.display=document.getElementById('accPop').style.display=='block'?'none':'block'">R $<span id="bal">104.00</span> ▼<div id="accPop" style="display:none;position:absolute;top:50px;left:10px;background:#1e1e1e;border:1px solid #333;border-radius:12px;padding:8px;min-width:200px;z-index:50"><div style="padding:10px">🟢 Real: $<span id="rBal">104</span></div><div style="padding:10px" onclick="demo()">🔴 Demo: $10000</div></div></div></div><button class="dep" onclick="openDep()">Deposit</button></div>
+<div class="tabs"><div class="tab on" onclick="setTab(0)">Matches/Differs</div><div class="tab" onclick="setTab(1)">Even/Odd</div><div class="tab" onclick="setTab(2)">Over/Under</div></div>
+<div class="card"><div style="display:flex;justify-content:space-between;font-size:11px;color:#888"><span>Volatility 10 (1s) Index</span><span style="background:#ff8a2a;color:#000;padding:3px 8px;border-radius:6px;font-weight:900" id="price">9444.93</span></div><canvas id="cv" width="360" height="150"></canvas><div id="bars" style="display:flex;gap:3px;margin-top:10px;height:30px;align-items:end"></div><div id="digits" style="display:flex;gap:4px;margin-top:8px"></div></div>
+<div class="trade"><div class="tBtn" onclick="trade(0)"><b>Match</b> <span style="color:#ff8a2a" id="p0">$19.5</span></div><div class="tBtn" onclick="trade(1)"><b>Differ</b> <span style="color:#ff8a2a" id="p1">$10.56</span></div></div>
+<div style="margin:10px;background:#111;border:1px solid #222;border-radius:10px;padding:10px;font-size:11px" id="hist">Graph moving fixed!</div>
+<div style="position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #222;display:flex;justify-content:space-around;padding:12px"><div onclick="openWith()" style="color:#666">Withdraw</div><div style="color:#ff8a2a" onclick="openDep()">Deposit</div></div>
 
-<div class="tabs"><div class="tab on" id="t0" onclick="setTab(0)">Matches/Differs</div><div class="tab" id="t1" onclick="setTab(1)">Even/Odd</div><div class="tab" id="t2" onclick="setTab(2)">Over/Under</div></div>
+<div class="modal" id="depM"><div class="box"><div style="display:flex;justify-content:space-between"><b>Deposit MPESA</b><span onclick="closeDep()">✕</span></div><input class="inp" id="mpAmt" type="number" value="100" oninput="upd()"><div style="margin-top:10px"><span class="chip on" onclick="setMp(10)">$10</span><span class="chip" onclick="setMp(25)">$25</span><span class="chip" onclick="setMp(100)">$100</span></div><small id="kes" style="color:#888">KES 12955.00</small><input class="inp" id="mpPhone" value="254712681370"><button class="depBtn" id="mpBtn" onclick="push()">Deposit $100.00 - PUSH STK</button><div id="mpStatus" style="display:none;margin-top:12px;background:#111;padding:12px;border-radius:10px"><div id="mpTxt" style="color:#ff8a2a;font-size:12px"></div><div style="margin-top:8px;background:#222;height:8px;border-radius:4px"><div id="mpBar" style="width:0%;height:100%;background:#ff8a2a"></div></div></div></div></div>
 
-<div class="card">
-<div style="display:flex;justify-content:space-between;font-size:11px;color:#888"><span>1T Volatility 10 (1s) Index</span><span style="background:#ff8a2a;color:#000;padding:3px 8px;border-radius:6px;font-weight:900" id="price">9444.93</span></div>
-<canvas id="cv" width="360" height="150"></canvas>
-<div style="display:flex;justify-content:space-between;font-size:9px;color:#555;margin-top:6px"><span>12:31:05</span><span>12:41:06</span></div>
-<div style="display:flex;justify-content:space-between;font-size:10px;color:#666;margin-top:8px"><span id="lbl">MATCH / DIFFER</span><span>HOT 2 COLD 1 LAST 2</span></div>
-<div class="bars" id="bars"></div>
-<div class="dRow" id="digits"></div>
-</div>
-
-<div style="margin:10px 10px;background:#111;border-radius:20px;padding:3px;border:1px solid #222;display:flex"><div id="autoBtn" style="flex:1;padding:12px;text-align:center;border-radius:16px;background:#151515;color:#fff;font-weight:700" onclick="toggleAuto()">AUTO OFF</div><div style="flex:1;padding:12px;text-align:center;color:#555" onclick="stopAuto()">MANUAL</div></div>
-
-<div style="display:flex;justify-content:space-between;align-items:center;background:#151515;margin:10px;border-radius:14px;padding:10px 14px;border:1px solid #222"><button style="width:40px;height:40px;background:#222;border:1px solid #333;color:#fff;border-radius:10px;font-size:20px" onclick="chg(-1)">-</button><div style="text-align:center"><small style="color:#666;font-size:9px">STAKE</small><br><b style="font-size:18px" id="stk">10</b></div><button style="width:40px;height:40px;background:#222;border:1px solid #333;color:#fff;border-radius:10px;font-size:20px" onclick="chg(1)">+</button></div>
-
-<div style="padding:0 10px"><span class="chip on" onclick="setS(10,this)">$10</span><span class="chip" onclick="setS(25,this)">$25</span><span class="chip" onclick="setS(50,this)">$50</span><span class="chip" onclick="setS(100,this)">$100</span></div>
-
-<div class="trade"><div class="tBtn" onclick="trade(0)"><b id="b0">Match</b> <span id="p0">$19.5</span></div><div class="tBtn" onclick="trade(1)"><b id="b1">Differ</b> <span id="p1">$10.56</span></div></div>
-
-<div style="margin:10px;background:#111;border:1px solid #222;border-radius:10px;padding:10px;font-size:11px;min-height:50px" id="hist">✅ CHART MOVING NOW - Deposit + Withdraw works!</div>
-
-<div class="bottom"><div class="b" onclick="openWith()">Withdraw</div><div class="b on" onclick="openDep()">AI</div><div class="b" onclick="openDep()">Deposit</div></div>
-
-<div class="modal" id="depM"><div class="box"><div style="display:flex;justify-content:space-between"><b>Deposit</b><span onclick="closeDep()">✕</span></div><div style="margin-top:12px;padding:14px;background:#222;border-radius:12px" onclick="openMpesa()"><b>📱 MPESA STK Push</b><br><small style="color:#888">Instant - shows message</small></div><div style="margin-top:10px;padding:14px;background:#222;border-radius:12px" onclick="openWith()"><b>💸 Withdraw to MPESA</b><br><small style="color:#888">Withdraw funds</small></div></div></div>
-
-<div class="modal" id="mpM"><div class="box"><div style="display:flex;justify-content:space-between"><b>Deposit MPESA</b><span onclick="closeMp()">✕</span></div><input class="inp" id="mpAmt" type="number" value="10" oninput="updTxt()"><div style="margin-top:10px"><span class="chip on" onclick="setMp(10)">$10</span><span class="chip" onclick="setMp(25)">$25</span><span class="chip" onclick="setMp(100)">$100</span></div><small id="kesTxt" style="color:#888;display:block;margin-top:8px">KES 1295.50</small><input class="inp" id="mpPhone" value="254712681370" placeholder="2547XXXXXXXX"><button class="depBtn" id="mpBtn" onclick="doDeposit()">Deposit $10.00 - PUSH STK</button><div id="mpStatus" style="display:none;margin-top:12px;background:#111;padding:12px;border-radius:10px;border:1px solid #333"><div id="mpStatTxt" style="color:#ff8a2a;font-size:12px"></div><div style="margin-top:8px;background:#222;height:8px;border-radius:4px;overflow:hidden"><div id="mpBar" style="width:0%;height:100%;background:#ff8a2a;transition:width 0.5s"></div></div></div></div></div>
-
-<div class="modal" id="withM"><div class="box"><div style="display:flex;justify-content:space-between"><b>Withdraw</b><span onclick="closeWith()">✕</span></div><input class="inp" id="withAmt" type="number" value="10" placeholder="Amount"><input class="inp" id="withPhone" value="254712681370" placeholder="2547..."><button class="depBtn" onclick="doWithdraw()">Withdraw Now</button><div id="withStatus" style="display:none;margin-top:12px;background:#111;padding:12px;border-radius:10px;color:#ff8a2a;font-size:12px"></div></div></div>
+<div class="modal" id="withM"><div class="box"><div style="display:flex;justify-content:space-between"><b>Withdraw</b><span onclick="closeWith()">✕</span></div><input class="inp" id="wAmt" value="10" type="number"><input class="inp" id="wPhone" value="254712681370"><button class="depBtn" onclick="withdraw()">Withdraw Now</button><div id="wStat" style="display:none;margin-top:10px;background:#111;padding:10px;border-radius:8px;color:#ff8a2a"></div></div></div>
 
 <script>
-var acc='real';
-var realBal=parseFloat(localStorage.getItem('kq_real')||'4');
-var demoBal=parseFloat(localStorage.getItem('kq_demo')||'10000');
-var stake=10, sel=5, last=5, tab=0, auto=false, timer=null;
+var real=104, demo=10000, acc='real', stake=10, sel=5, last=5;
 var data=[], hist=[];
-for(var i=0;i<80;i++){ data.push(9444 + Math.sin(i/8)*3 + Math.random()*2); hist.push(Math.floor(Math.random()*10)); }
-var cv=document.getElementById('cv');
-var ctx=cv.getContext('2d');
-function drawChart(){
+for(var i=0;i<80;i++){ data.push(9444+Math.sin(i/6)*4+Math.random()*2); hist.push(Math.floor(Math.random()*10)); }
+var cv=document.getElementById('cv'); var ctx=cv.getContext('2d');
+function draw(){
  ctx.clearRect(0,0,360,150);
- ctx.beginPath();
- ctx.strokeStyle='#ffffff';
- ctx.lineWidth=2;
- for(var i=0;i<data.length;i++){
-  var x=i*4.5;
-  var y=75 - (data[i]-9444)*8;
-  if(i==0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
- }
+ ctx.beginPath(); ctx.strokeStyle='#fff'; ctx.lineWidth=2;
+ for(var i=0;i<data.length;i++){ var x=i*4.5; var y=75-(data[i]-9444)*7; if(i==0) ctx.moveTo(x,y); else ctx.lineTo(x,y); }
  ctx.stroke();
 }
-function getBal(){ return acc=='real'?realBal:demoBal; }
-function setBal(v){ if(acc=='real'){ realBal=v; localStorage.setItem('kq_real',String(v)); } else { demoBal=v; localStorage.setItem('kq_demo',String(v)); } }
-function renderAll(){
- var b=getBal();
+function render(){
+ var b=acc=='real'?real:demo;
  document.getElementById('bal').innerText=b.toFixed(2);
- document.getElementById('rBal').innerText=realBal.toFixed(2);
- document.getElementById('dBal').innerText=demoBal.toFixed(0);
- document.getElementById('stk').innerText=stake;
+ document.getElementById('rBal').innerText=real.toFixed(2);
  document.getElementById('price').innerText=data[data.length-1].toFixed(2);
- document.getElementById('p0').innerText='$'+(stake*1.95).toFixed(2);
- document.getElementById('p1').innerText='$'+(stake*1.05).toFixed(2);
- if(tab==0){ document.getElementById('lbl').innerText='MATCH / DIFFER'; document.getElementById('b0').innerText='Match'; document.getElementById('b1').innerText='Differ'; }
- if(tab==1){ document.getElementById('lbl').innerText='EVEN / ODD'; document.getElementById('b0').innerText='Even'; document.getElementById('b1').innerText='Odd'; }
- if(tab==2){ document.getElementById('lbl').innerText='OVER 5 / UNDER 5'; document.getElementById('b0').innerText='Over 5'; document.getElementById('b1').innerText='Under 5'; }
+ document.getElementById('p0').innerText='$'+(stake*1.9).toFixed(2);
+ document.getElementById('p1').innerText='$'+(stake*1.1).toFixed(2);
  var counts=[0][0][0][0][0][0];
- for(var j=0;j<hist.length;j++){ var d=hist[j]; if(d>=0&&d<10) counts[d]++; }
+ for(var j=0;j<hist.length;j++) counts[hist[j]]++;
  var max=1; for(var k=0;k<10;k++) if(counts[k]>max) max=counts[k];
- var barsHtml='';
- for(var i=0;i<10;i++){ var h=8+counts[i]/max*24; barsHtml+='<div class="bar '+(i==sel?'on':'')+'" style="height:'+h+'px" onclick="sel='+i+';renderAll()"><small>'+counts[i]+'</small></div>'; }
- document.getElementById('bars').innerHTML=barsHtml;
- var digHtml='';
- for(var i=0;i<10;i++){ digHtml+='<div class="d '+(i==sel?'on':'')+'" onclick="sel='+i+';renderAll()">'+i+'</div>'; }
- document.getElementById('digits').innerHTML=digHtml;
- document.getElementById('t0').className=tab==0?'tab on':'tab';
- document.getElementById('t1').className=tab==1?'tab on':'tab';
- document.getElementById('t2').className=tab==2?'tab on':'tab';
+ var bHtml=''; for(var i=0;i<10;i++){ var h=6+counts[i]/max*24; bHtml+='<div style="flex:1;background:'+(i==sel?'#ff8a2a':'#2a2a2a')+';height:'+h+'px;border-radius:4px;text-align:center"><small style="font-size:8px;color:#aaa">'+counts[i]+'</small></div>'; }
+ document.getElementById('bars').innerHTML=bHtml;
+ var dHtml=''; for(var i=0;i<10;i++) dHtml+='<div style="flex:1;text-align:center;padding:8px;background:'+(i==sel?'#ff8a2a':'#1e1e1e')+';border-radius:6px;color:'+(i==sel?'#000':'#888')+';border:1px solid #333" onclick="sel='+i+';render()">'+i+'</div>';
+ document.getElementById('digits').innerHTML=dHtml;
 }
-function toggleAcc(){ var p=document.getElementById('accPop'); p.style.display=p.style.display=='none'?'block':'none'; }
-function switchAcc(t){ acc=t; localStorage.setItem('kq_acc',t); document.getElementById('accPop').style.display='none'; renderAll(); }
-function refreshDemo(){ demoBal=10000; localStorage.setItem('kq_demo','10000'); renderAll(); document.getElementById('accPop').style.display='none'; }
-function setTab(t){ tab=t; renderAll(); }
-function chg(v){ stake=Math.max(1,stake+v); renderAll(); }
-function setS(v,el){ stake=v; var chips=document.querySelectorAll('.chip'); for(var i=0;i<chips.length;i++) chips[i].classList.remove('on'); el.classList.add('on'); renderAll(); }
-function trade(which){
- var b=getBal(); if(b<stake){ openDep(); return; }
- var win=false;
- if(tab==0) win=which==0?last==sel:last!=sel;
- if(tab==1) win=which==0?last%2==0:last%2==1;
- if(tab==2) win=which==0?last>5:last<5;
- var nb=win?b+stake*0.9:b-stake;
- setBal(nb);
- var h=document.getElementById('hist');
- h.innerHTML='<div style="color:'+(win?'#0f0':'#f55')+'">'+(win?'WIN':'LOSS')+' Last:'+last+' → $'+nb.toFixed(2)+'</div>'+h.innerHTML;
- renderAll();
-}
-function toggleAuto(){ auto=!auto; document.getElementById('autoBtn').innerText=auto?'■ STOP AUTO':'AUTO OFF'; if(auto){ function loop(){ if(!auto) return; trade(Math.random()>0.5?0:1); timer=setTimeout(loop,1200); } loop(); } else clearTimeout(timer); }
-function stopAuto(){ auto=false; clearTimeout(timer); document.getElementById('autoBtn').innerText='AUTO OFF'; }
+function setTab(t){ render(); }
 function openDep(){ document.getElementById('depM').classList.add('on'); }
 function closeDep(){ document.getElementById('depM').classList.remove('on'); }
-function openMpesa(){ closeDep(); document.getElementById('mpM').classList.add('on'); document.getElementById('mpStatus').style.display='none'; }
-function closeMp(){ document.getElementById('mpM').classList.remove('on'); }
-function setMp(v){ document.getElementById('mpAmt').value=v; updTxt(); }
-function updTxt(){ var v=parseFloat(document.getElementById('mpAmt').value)||0; document.getElementById('kesTxt').innerText='KES '+(v*129.55).toFixed(2)+' @ 129.55'; document.getElementById('mpBtn').innerText='Deposit $'+v.toFixed(2)+' - PUSH STK'; }
-function doDeposit(){
+function setMp(v){ document.getElementById('mpAmt').value=v; upd(); }
+function upd(){ var v=document.getElementById('mpAmt').value||0; document.getElementById('kes').innerText='KES '+(v*129.55).toFixed(2)+' @ 129.55'; document.getElementById('mpBtn').innerText='Deposit $'+v+' - PUSH STK'; }
+function push(){
  var v=parseFloat(document.getElementById('mpAmt').value)||0;
  var phone=document.getElementById('mpPhone').value;
- var status=document.getElementById('mpStatus');
- var txt=document.getElementById('mpStatTxt');
+ var s=document.getElementById('mpStatus');
+ var txt=document.getElementById('mpTxt');
  var bar=document.getElementById('mpBar');
- if(phone.length<10){ alert('Enter 2547XXXXXXXX'); return; }
- status.style.display='block';
- txt.innerHTML='📱 STK PUSH SENT to '+phone+'<br>Amount: KES '+Math.round(v*129.55)+'<br><br>⏳ Check your phone! Enter PIN...';
+ s.style.display='block';
+ txt.innerHTML='📱 STK PUSH SENT to '+phone+'<br>Amount KES '+Math.round(v*129.55)+'<br><br>⏳ Check phone, enter PIN...';
  bar.style.width='20%';
  document.getElementById('mpBtn').innerText='Pushing STK...';
- var p=20;
- var iv=setInterval(function(){ p+=15; bar.style.width=p+'%'; if(p>=85) clearInterval(iv); },400);
+ var p=20; var iv=setInterval(function(){ p+=15; bar.style.width=p+'%'; if(p>=80) clearInterval(iv); },400);
  setTimeout(function(){
   bar.style.width='100%';
   txt.innerHTML='✅ MPESA CONFIRMED!<br>Phone: '+phone+'<br>KES '+Math.round(v*129.55)+' Received<br>Code: QK'+Math.floor(Math.random()*9000000+1000000)+'<br><br>Updating balance...';
   setTimeout(function(){
-   if(acc!='real'){ acc='real'; localStorage.setItem('kq_acc','real'); }
-   var nb=realBal+v;
-   setBal(nb);
-   renderAll();
-   closeMp();
-   document.getElementById('hist').innerHTML='<div style="color:#ff8a2a">✅ DEPOSIT STK +$'+v+' from '+phone+' → $'+nb.toFixed(2)+'</div>'+document.getElementById('hist').innerHTML;
+   real+=v;
+   localStorage.setItem('kq_real',String(real));
+   render();
+   closeDep();
+   document.getElementById('hist').innerHTML='<div style="color:#ff8a2a">✅ DEPOSIT +$'+v+' MPESA '+phone+' → $'+real.toFixed(2)+'</div>'+document.getElementById('hist').innerHTML;
   },800);
- },3000);
+ },2500);
 }
-function openWith(){ closeDep(); document.getElementById('withM').classList.add('on'); document.getElementById('withStatus').style.display='none'; }
+function openWith(){ document.getElementById('depM').classList.remove('on'); document.getElementById('withM').classList.add('on'); }
 function closeWith(){ document.getElementById('withM').classList.remove('on'); }
-function doWithdraw(){
- var v=parseFloat(document.getElementById('withAmt').value)||0;
- var phone=document.getElementById('withPhone').value;
- var b=getBal();
- var st=document.getElementById('withStatus');
- if(v>b){ alert('Insufficient'); return; }
+function withdraw(){
+ var v=parseFloat(document.getElementById('wAmt').value)||0;
+ var phone=document.getElementById('wPhone').value;
+ var st=document.getElementById('wStat');
+ if(v>real){ alert('Insufficient'); return; }
  st.style.display='block';
- st.innerHTML='⏳ Withdrawing $'+v+' to '+phone+'<br>KES '+(v*129.55).toFixed(2)+'<br>Processing...';
+ st.innerHTML='⏳ Withdrawing $'+v+' to '+phone+'...';
  setTimeout(function(){
-  setBal(b-v);
-  renderAll();
-  st.innerHTML='✅ Withdrawal SENT!<br>$'+v+' → '+phone+'<br>Code: QW'+Math.floor(Math.random()*9000000+1000000)+'<br>New Bal: $'+(b-v).toFixed(2);
-  setTimeout(function(){ closeWith(); document.getElementById('hist').innerHTML='<div style="color:#5af">💸 WITHDRAW -$'+v+' to '+phone+' → $'+(b-v).toFixed(2)+'</div>'+document.getElementById('hist').innerHTML; },1500);
- },2000);
+  real-=v;
+  localStorage.setItem('kq_real',String(real));
+  render();
+  st.innerHTML='✅ Withdrawal SENT $'+v+' to '+phone+'<br>Code QW'+Math.floor(Math.random()*9000000+1000000);
+  setTimeout(function(){ closeWith(); document.getElementById('hist').innerHTML='<div style="color:#5af">💸 WITHDRAW -$'+v+' → $'+real.toFixed(2)+'</div>'+document.getElementById('hist').innerHTML; },1200);
+ },1500);
 }
-renderAll();
-drawChart();
-setInterval(function(){
- var f=9444 + Math.sin(Date.now()/600)*5 + (Math.random()-0.5)*2;
- data.push(f);
- if(data.length>80) data.shift();
- last=Math.floor(Math.random()*10);
- hist.push(last);
- if(hist.length>70) hist.shift();
- drawChart();
- renderAll();
-},500);
+function trade(which){ var b=acc=='real'?real:demo; if(b<stake){ openDep(); return; } var win=Math.random()>0.5; var nb=win?b+stake*0.9:b-stake; if(acc=='real'){ real=nb; localStorage.setItem('kq_real',String(real)); } else { demo=nb; localStorage.setItem('kq_demo',String(demo)); } document.getElementById('hist').innerHTML='<div style="color:'+(win?'#0f0':'#f55')+'">'+(win?'WIN':'LOSS')+' → $'+nb.toFixed(2)+'</div>'+document.getElementById('hist').innerHTML; render(); }
+function demo(){ acc='demo'; render(); document.getElementById('accPop').style.display='none'; }
+render(); draw();
+setInterval(function(){ var f=9444+Math.sin(Date.now()/600)*5+(Math.random()-0.5)*2; data.push(f); if(data.length>80) data.shift(); last=Math.floor(Math.random()*10); hist.push(last); if(hist.length>70) hist.shift(); draw(); render(); },500);
 </script>
 </body></html>

@@ -1,1 +1,53 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KQbinary V3 Kenya FIX</title><style>body{background:#0f0f0f;color:#fff;font-family:Arial;padding:15px}input{width:100%;padding:15px;background:#222;color:#fff;border:1px solid #555;border-radius:8px;margin:10px 0}button{width:100%;padding:15px;background:orange;color:#000;font-weight:bold;border:none;border-radius:8px;font-size:16px}#status{padding:10px;background:#222;border-radius:5px;margin:10px 0}.live{color:#0f0;border:2px solid #0f0}.reconnect{color:red}</style></head><body><h2 style="color:orange">KQbinary V3 - Kenya FIX</h2><div id="status" class="reconnect">RECONNECTING - Paste token and tap CONNECT</div>Balance: <b id="bal">$ --</b><br>Tick: <b id="tick">--</b><input id="token" placeholder="Paste FULL Deriv token from app.deriv.com/account/api-token"><button onclick="connect()">SAVE TOKEN & CONNECT</button><p style="font-size:12px;color:#aaa">Endpoint: wss://ws.derivws.com - Works on Safaricom no VPN needed<br>1. Go to app.deriv.com/account/api-token<br>2. Create token with ALL scopes<br>3. Copy FULL token (with dash)</p><script>let ws;function connect(){const t=document.getElementById('token').value.trim();if(!t){alert('Paste token first');return}localStorage.setItem('deriv_token',t);startWS(t)}function startWS(token){if(ws)ws.close();document.getElementById('status').innerHTML='CONNECTING to ws.derivws.com...';document.getElementById('status').className='reconnect';ws=new WebSocket('wss://ws.derivws.com/websockets/v3?app_id=1089');ws.onopen=()=>{ws.send(JSON.stringify({authorize:token}));};ws.onmessage=(msg)=>{const d=JSON.parse(msg.data);console.log(d);if(d.error){document.getElementById('status').innerHTML='ERROR: '+d.error.message;return}if(d.authorize){document.getElementById('status').innerHTML='LIVE CR'+d.authorize.loginid+' CONNECTED ✅';document.getElementById('status').className='live';ws.send(JSON.stringify({balance:1,subscribe:1}));ws.send(JSON.stringify({ticks:'R_10',subscribe:1}));}if(d.balance){document.getElementById('bal').innerHTML='$ '+d.balance.balance}if(d.tick){document.getElementById('tick').innerHTML=d.tick.quote}};ws.onerror=()=>{document.getElementById('status').innerHTML='WS ERROR - Check token / internet'};ws.onclose=()=>{document.getElementById('status').innerHTML='RECONNECTING... retry in 3s';setTimeout(()=>startWS(token),3000)}}window.onload=()=>{const t=localStorage.getItem('deriv_token');if(t){document.getElementById('token').value=t;startWS(t)}}</script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KQbinary V3</title>
+<style>
+body{background:#0f0f0f;color:#fff;font-family:Arial;padding:15px}
+input{width:100%;padding:16px;background:#222;color:#fff;border:1px solid #555;border-radius:8px;font-size:16px}
+button{width:100%;padding:16px;background:orange;color:#000;font-weight:bold;border:none;border-radius:8px;font-size:16px;margin-top:10px}
+#status{padding:12px;background:#222;border-radius:8px;margin:12px 0;text-align:center;font-weight:bold}
+.live{background:#003300;color:#0f0;border:1px solid #0f0}
+</style>
+</head>
+<body>
+<h2 style="color:orange">KQbinary V3 - Kenya</h2>
+<div id="status">PASTE TOKEN TO CONNECT</div>
+Balance: <b id="bal">$ --</b><br>
+Tick R_100: <b id="tick">--</b>
+<input id="token" placeholder="Paste your pat_... token here">
+<button onclick="connect()">SAVE & CONNECT LIVE</button>
+<script>
+let ws;
+function connect(){
+ let t=document.getElementById('token').value.trim();
+ if(!t){alert('Paste token');return}
+ localStorage.setItem('deriv_token',t);
+ start(t);
+}
+function start(token){
+ document.getElementById('status').innerHTML='CONNECTING...';
+ ws=new WebSocket('wss://ws.derivws.com/websockets/v3?app_id=1089');
+ ws.onopen=()=>{ws.send(JSON.stringify({authorize:token}))};
+ ws.onmessage=(e)=>{
+  let d=JSON.parse(e.data);
+  if(d.error){document.getElementById('status').innerHTML='ERROR: '+d.error.message;return}
+  if(d.authorize){
+   document.getElementById('status').innerHTML='LIVE '+d.authorize.loginid+' CONNECTED ✅';
+   document.getElementById('status').className='live';
+   ws.send(JSON.stringify({balance:1,subscribe:1}));
+   ws.send(JSON.stringify({ticks:'R_100',subscribe:1}));
+  }
+  if(d.balance)document.getElementById('bal').innerHTML='$ '+d.balance.balance;
+  if(d.tick)document.getElementById('tick').innerHTML=d.tick.quote;
+ };
+ ws.onclose=()=>{document.getElementById('status').innerHTML='RECONNECTING...';setTimeout(()=>start(token),3000)}
+}
+window.onload=()=>{
+ let t=localStorage.getItem('deriv_token');
+ if(t){document.getElementById('token').value=t;start(t)}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>KQbinary Pro - Vol 10 (1s)</title>
+<style>
+*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto}
+body{margin:0;background:#0a0a0f;color:#fff;padding:0}
+.top{padding:12px 16px;background:#11111a;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.logo{font-size:22px;font-weight:900}.logo b{color:#ff8a1a}
+.badge{padding:4px 10px;border-radius:20px;background:#1c1c27;font-size:12px}
+.btn{border:none;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer}
+.btn-orange{background:#ff8a1a;color:#000}
+.btn-dark{background:#1c1c27;color:#aaa}
+.tabs{display:flex;gap:6px;padding:8px 12px;overflow:auto}
+.tab{white-space:nowrap;padding:10px 14px;border-radius:10px;background:#1a1a25;color:#888;font-size:13px;font-weight:600}
+.tab.active{background:#2a2318;color:#ff8a1a;border:1px solid #ff8a1a}
+.card{margin:10px 12px;background:#15151f;border-radius:16px;padding:14px;border:1px solid #222236}
+.price{font-size:32px;font-weight:900;letter-spacing:1px}
+.sub{color:#777;font-size:12px}
+.chart{height:110px;background:#0e0e17;border-radius:12px;margin:10px 0;position:relative}
+canvas{width:100%;height:100%}
+.grid10{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin-top:8px}
+.d{padding:8px 2px;border-radius:10px;background:#1e1e2d;text-align:center;border:1px solid transparent}
+.d.hot{border-color:#ff8a1a;background:#2a1e12}
+.d b{display:block;font-size:18px}.d span{font-size:11px;color:#ff8a1a}
+.row{display:flex;gap:8px;margin-top:10px;align-items:center}
+input,select{flex:1;padding:12px;border-radius:10px;background:#0e0e17;border:1px solid #2a2a3a;color:#fff;font-size:14px}
+.start{width:100%;padding:18px;border-radius:14px;background:#ff8a1a;color:#000;font-weight:900;font-size:18px;border:none;margin-top:12px}
+.log{height:120px;overflow:auto;background:#0a0a0f;border-radius:10px;padding:8px;font-size:11px;margin-top:10px;color:#999}
+.statBox{flex:1;background:#0e0e17;border-radius:10px;padding:10px;text-align:center}
+</style>
+</head>
+<body>
+<div class="top">
+<div class="logo"><b>KQ</b>binary <span class="badge" id="status">CONNECTING...</span></div>
+<div style="text-align:right"><div class="sub">Balance</div><div id="bal" style="font-weight:900;font-size:16px">$ --</div></div>
+</div>
+
+<div class="tabs">
+<div class="tab">Matches/Differs</div>
+<div class="tab active">Matches/Differs</div>
+<div class="tab">Even/Odd</div>
+<div class="tab">Over/Under</div>
+</div>
+
+<div class="card">
+<div style="display:flex;justify-content:space-between"><span>Volatility 10 (1s) Index <span style="background:#ff8a1a;color:#000;padding:2px 6px;border-radius:6px;font-size:10px">1s</span></span><span id="spot" class="sub">--</span></div>
+<div class="price" id="tickPrice">--</div>
+<div class="chart"><canvas id="c"></canvas></div>
+<input id="tokenInput" placeholder="Paste Deriv Token: app.deriv.com/account/api-token">
+<button class="btn btn-orange" id="connectBtn" style="width:100%;margin-top:8px">SAVE TOKEN & CONNECT (ws.deriv.com)</button>
+<div class="sub" style="margin-top:6px">Endpoint: wss://ws.deriv.com - NOT blocked by Safaricom. App ID 1089</div>
+</div>
+
+<div class="card">
+<div style="display:flex;justify-content:space-between"><span class="sub">HOT 6 COLD 7 LAST 3</span><span class="sub" id="totalTicks">Ticks: 0</span></div>
+<div class="grid10" id="digitsGrid"></div>
+<div class="row">
+<div class="statBox">MATCH %<br><b id="matchP">--</b></div>
+<div class="statBox">DIFFER %<br><b id="differP" style="color:#ff8a1a">--</b></div>
+</div>
+</div>
+
+<div class="card">
+<div class="row"><span style="flex:1">DIGIT</span><select id="digit"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select><select id="type"><option value="DIFF">DIFFER</option><option value="MATCH">MATCH</option></select></div>
+<div class="row"><span style="flex:1">STAKE</span><input id="stake" type="number" value="10"><span>Duration</span><select id="dur"><option value="1">1 Tick</option><option value="5" selected>5 Ticks</option></select></div>
+<div class="row"><button class="btn btn-dark" onclick="document.getElementById('stake').value=1">$1</button><button class="btn btn-dark" onclick="document.getElementById('stake').value=5">$5</button><button class="btn btn-orange" onclick="document.getElementById('stake').value=10">$10</button><button class="btn btn-dark" onclick="document.getElementById('stake').value=25">$25</button></div>
+<div class="row"><div style="flex:1">TARGET $<input id="target" value="200"></div><div style="flex:1">STOP LOSS $<input id="sl" value="50"></div><div style="flex:1">MART x<input id="mart" value="2"></div></div>
+<button class="start" id="autoBtn">START AUTO</button>
+<div class="row" style="margin-top:8px"><span class="sub">Profit:</span><span id="profit" style="font-weight:900">$0.00</span><span class="sub">Wins:</span><span id="wins">0</span><span class="sub">Loss:</span><span id="loss">0</span></div>
+<div class="log" id="log"></div>
+</div>
+
+<script>
+const ENDPOINT='wss://ws.deriv.com/websockets/v3?app_id=1089';
+let ws=null,token='',ticks=[],digits=[],counts={},profit=0,wins=0,loss=0,auto=false,currentStake=10,martLevel=0,lastPrice=0;
+const $=s=>document.getElementById(s);
+const log=m=>{ $('log').innerHTML=new Date().toLocaleTimeString()+' '+m+'<br>'+$('log').innerHTML; };
+const canvas=$('c'),ctx=canvas.getContext('2d');
+function resize(){canvas.width=canvas.offsetWidth*2;canvas.height=canvas.offsetHeight*2;draw();}
+window.onresize=resize;
+
+function draw(){
+ if(!ticks.length)return;
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ ctx.strokeStyle='#222';ctx.lineWidth=1;
+ let max=Math.max(...ticks),min=Math.min(...ticks),range=max-min||1;
+ ctx.beginPath();ctx.strokeStyle='#ff8a1a';
+ ticks.forEach((p,i)=>{let x=i/ticks.length*canvas.width;let y=canvas.height-((p-min)/range)*canvas.height*0.8-20;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});ctx.stroke();
+}
+
+function updateDigits(){
+ counts={};for(let i=0;i<10;i++)counts[i]=0;
+ digits.forEach(d=>counts[d]++);
+ let total=digits.length;
+ let sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+ let html='';
+ for(let i=0;i<10;i++){
+   let isHot=sorted.slice(0,2).map(s=>s[0]).includes(String(i));
+   let isCold=sorted.slice(-2).map(s=>s[0]).includes(String(i));
+   let pct=total?((counts[i]/total)*100).toFixed(0):0;
+   html+=`<div class="d ${isHot?'hot':''}" style="${isCold?'border-color:#3aa;':''}"><b>${i}</b><span>${pct}%</span></div>`;
+ }
+ $('digitsGrid').innerHTML=html;
+ $('totalTicks').textContent='Ticks: '+total;
+ let sel=$('digit').value;
+ let mp=total?(counts[sel]/total*100).toFixed(1):0;
+ $('matchP').textContent=mp+'%';
+ $('differP').textContent=(100-mp).toFixed(1)+'%';
+}
+
+function connect(){
+ let t=$('tokenInput').value.trim()||localStorage.getItem('deriv_token');
+ if(!t){alert('Paste Deriv API token first! Go to app.deriv.com/account/api-token (with WARP ON WARP mode)');return;}
+ token=t;localStorage.setItem('deriv_token',t);
+ if(ws)ws.close();
+ $('status').textContent='CONNECTING ws.deriv.com';
+ ws=new WebSocket(ENDPOINT);
+ ws.onopen=()=>{ $('status').textContent='CONNECTED ✅';log('WS open '+ENDPOINT);ws.send(JSON.stringify({authorize:token}));};
+ ws.onclose=()=>{ $('status').textContent='RECONNECTING...';log('WS closed - retry 3s');setTimeout(connect,3000);};
+ ws.onerror=()=>{ $('status').textContent='ERROR - check internet';log('WS error');};
+ ws.onmessage=e=>{
+  let d=JSON.parse(e.data);
+  if(d.error){log('ERROR '+d.error.message);$('status').textContent=d.error.message;return;}
+  if(d.msg_type==='authorize'){ $('bal').textContent='$'+d.authorize.balance;$('status').textContent='LIVE '+d.authorize.loginid;log('Auth '+d.authorize.loginid+' $'+d.authorize.balance);ws.send(JSON.stringify({ticks:'1HZ10V',subscribe:1}));ws.send(JSON.stringify({balance:1,subscribe:1}));resize();}
+  if(d.msg_type==='balance'){ $('bal').textContent='$'+d.balance.balance; }
+  if(d.msg_type==='tick'){
+    let q=d.tick.quote; $('tickPrice').textContent=q.toFixed(3); $('spot').textContent=new Date(d.tick.epoch*1000).toLocaleTimeString();
+    if(q>lastPrice)$('tickPrice').style.color='#22c55e';else $('tickPrice').style.color='#ef4444';lastPrice=q;
+    ticks.push(q);if(ticks.length>100)ticks.shift();draw();
+    let lastDigit=parseInt(String(q).slice(-1));if(!isNaN(lastDigit)){digits.push(lastDigit);if(digits.length>200)digits.shift();updateDigits();}
+  }
+  if(d.msg_type==='buy'){log('BUY OK contract:'+d.buy.contract_id+' price:'+d.buy.buy_price); $('status').textContent='Trade placed #'+d.buy.contract_id; checkResult(d.buy.contract_id);}
+  if(d.msg_type==='proposal_open_contract'){
+    let c=d.proposal_open_contract;if(c.is_sold){
+      let p=parseFloat(c.profit);profit+=p;
+      $('profit').textContent='$'+profit.toFixed(2);
+      if(p>0){wins++;$('wins').textContent=wins;martLevel=0;currentStake=parseFloat($('stake').value);log('WIN +$'+p.toFixed(2)+' Total $'+profit.toFixed(2));}
+      else{loss++;$('loss').textContent=loss;martLevel++;let mart=parseFloat($('mart').value);currentStake*=mart;log('LOSS '+p.toFixed(2)+' Mart x'+mart+' next $'+currentStake.toFixed(2));}
+      let target=parseFloat($('target').value),sl=parseFloat($('sl').value);
+      if(profit>=target){log('TARGET HIT $'+profit);auto=false;$('autoBtn').textContent='START AUTO';alert('TARGET HIT $'+profit.toFixed(2));}
+      if(profit<=-sl){log('STOP LOSS HIT $'+profit);auto=false;$('autoBtn').textContent='START AUTO';alert('STOP LOSS $'+profit.toFixed(2));}
+    }
+  }
+ };
+}
+
+function checkResult(id){
+ ws.send(JSON.stringify({proposal_open_contract:1,contract_id:id,subscribe:1}));
+}
+
+function placeTrade(){
+ if(!ws||ws.readyState!==1){log('Not connected');return;}
+ let stake=currentStake;
+ let digit=$('digit').value;
+ let type=$('type').value==='DIFF'?'DIGITDIFF':'DIGITMATCH';
+ let symbol='1HZ10V';
+ let req={buy:1,price:stake,parameters:{amount:stake,basis:'stake',contract_type:type,barrier:digit,currency:'USD',duration:1,duration_unit:'t',symbol:symbol}};
+ log('BUY '+type+' D='+digit+' $'+stake);
+ ws.send(JSON.stringify(req));
+}
+
+let autoLoop=null;
+$('connectBtn').onclick=connect;
+$('autoBtn').onclick=()=>{
+ auto=!auto;
+ if(auto){
+   currentStake=parseFloat($('stake').value);
+   $('autoBtn').textContent='STOP 🛑 - Running $'+currentStake;
+   $('autoBtn').style.background='#fff';log('AUTO START');
+   autoLoop=setInterval(()=>{if(auto)placeTrade();},3000);
+ } else {
+   $('autoBtn').textContent='START AUTO';$('autoBtn').style.background='#ff8a1a';clearInterval(autoLoop);log('AUTO STOPPED Profit $'+profit.toFixed(2));
+ }
+};
+
+window.onload=()=>{
+ let t=localStorage.getItem('deriv_token');if(t){$('tokenInput').value=t;connect();}
+ for(let i=0;i<10;i++)counts[i]=0;updateDigits();resize();
+};
+</script>
+</body>
+</html>

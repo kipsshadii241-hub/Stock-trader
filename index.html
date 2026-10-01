@@ -1,199 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>RQPtrade Kenya - V4 Final</title>
-<style>
-:root{--red:#ff3b3b;--bg:#080b12;--card:#11141f;--border:#1e2436;--text:#8a91a8;--green:#22c55e}
-*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,sans-serif;-webkit-tap-highlight-color:transparent;user-select:none}
-body{background:var(--bg);color:#fff;overflow-x:hidden}
-.page{display:none;min-height:100vh;padding-bottom:80px}.page.active{display:block}
-.header{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--border);background:#0c0f1a;position:sticky;top:0;z-index:30}
-.logo{font-weight:900;font-size:22px}.logo span{color:var(--red)}
-.btn-red{background:var(--red);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-weight:700;font-size:13px}
-.badge{border:1px solid rgba(255,59,59,.3);background:rgba(255,59,59,.1);color:#ff7b7b;padding:6px 12px;border-radius:20px;font-size:11px;display:inline-flex;gap:6px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px}
-input{width:100%;background:#151a27;border:1px solid #2a324a;color:#fff;padding:14px;border-radius:12px;margin:7px 0;font-size:14px;outline:none}
-.ticker{font-family:monospace;font-size:32px;font-weight:900;color:var(--red);text-align:center;padding:14px 0}
-.d10{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:12px 0}
-.d10 div{background:#1a1f2e;border-radius:8px;padding:7px 2px;text-align:center;font-size:12px;font-weight:700;border:1px solid transparent}
-.d10 div.active{background:var(--red);color:#fff;transform:scale(1.08)}
-.d10 small{display:block;font-size:8px;color:#8a91a8;font-weight:400}
-.evenOdd{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
-.evenOdd button{padding:14px;border-radius:12px;border:1px solid #2a324a;font-weight:800;color:#fff}
-.even{background:linear-gradient(135deg,#12261a,#1a3d25)} .odd{background:linear-gradient(135deg,#2a1616,#4a2222)}
-.botNav{position:fixed;bottom:0;left:0;right:0;background:#0c0f1a;border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:8px 0 18px;z-index:40}
-.botNav div{text-align:center;font-size:10px;color:var(--text);flex:1;padding:6px} .botNav div.active{color:var(--red)}
-.drawer{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:50;display:none}.drawer.open{display:block}
-.drawerInner{width:80%;max-width:300px;height:100%;background:#0f1320;padding:20px;overflow-y:auto}
-.mItem{padding:14px 0;border-bottom:1px solid #1a1f2e;display:flex;justify-content:space-between;color:#cbd5e1;font-size:14px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:60;display:none;align-items:end;justify-content:center}.modal.open{display:flex}
-.modalBox{background:#151a27;width:100%;max-width:420px;border-radius:20px 20px 0 0;padding:20px;max-height:85vh;overflow-y:auto;border:1px solid var(--border)}
-.payOpt{background:#1c2235;border:1px solid #2a324a;border-radius:12px;padding:14px;margin:8px 0;display:flex;gap:12px;align-items:center}
-.payOpt.active{border-color:var(--red);background:rgba(255,59,59,.12)}
-.historyItem{display:flex;justify-content:space-between;background:#151a27;padding:12px;border-radius:10px;margin:6px 0;font-size:12px;border:1px solid #1e2436}
-.win{color:var(--green)} .loss{color:var(--red)}
-</style>
-</head>
-<body>
-
-<div class="header">
-<div style="display:flex;gap:10px;align-items:center"><span style="font-size:24px" onclick="toggleDrawer()">☰</span><div class="logo">RQP<span>trade</span></div></div>
-<div style="display:flex;gap:8px;align-items:center"><div style="background:#151a27;padding:6px 10px;border-radius:8px;font-size:12px" id="balTop">$0.00</div><button class="btn-red" onclick="openDeposit()">Deposit</button></div>
-</div>
-
-<!-- LANDING -->
-<div id="p-landing" class="page active" style="padding:18px;background:radial-gradient(600px 400px at 80% 30%, rgba(255,59,59,.12), transparent)">
-<div class="badge"><div style="width:6px;height:6px;background:var(--red);border-radius:50%"></div> Markets available around the clock</div>
-<h1 style="font-size:42px;line-height:.95;font-weight:900;margin:16px 0">Trade with a clearer point of view.</h1>
-<p style="color:var(--text);font-size:14px;max-width:360px">Explore synthetic markets, define your risk, and manage each contract from a professional trading workspace.</p>
-<div style="display:flex;gap:10px;margin-top:18px"><button class="btn-red" style="padding:14px 22px" onclick="show('trade')">Start trading →</button><button style="background:transparent;border:1px solid #2a324a;color:#fff;padding:14px 22px;border-radius:10px" onclick="show('register')">Register</button></div>
-<div class="card" style="margin-top:24px"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text)"><span>Volatility 10 (1s) Index</span><span id="lpPrice" style="color:#4ade80">9449.62</span></div><div class="ticker" id="lpTick">9449.62</div><div style="height:70px;background:#0c0e18;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text)">● LIVE REAL DERIV FEED</div></div>
-<div style="display:flex;gap:14px;margin-top:18px;font-size:11px;color:var(--text)"><span>✓ Defined maximum loss</span><span>✓ Demo access</span><span>✓ Mobile-ready</span></div>
-</div>
-
-<!-- REGISTER -->
-<div id="p-register" class="page" style="padding:20px">
-<h2>Create account</h2><p style="color:var(--text);font-size:13px;margin:6px 0 16px">Fill in your details to get started</p>
-<input id="rName" value="Kipkoech" placeholder="Full Name"><input id="rEmail" value="kipsshadii241@gmail.com" placeholder="Email">
-<div style="background:var(--red);padding:12px;border-radius:12px;font-size:13px;margin:7px 0">KE Kenya</div>
-<div style="display:flex;gap:8px"><div style="background:#151a27;border:1px solid #2a324a;padding:14px;border-radius:12px">+254</div><input id="rPhone" value="712681370" style="flex:1"></div>
-<input id="rPass" type="password" placeholder="Password min 8 chars"><div id="passErr" style="color:var(--red);font-size:12px;display:none">Password must be at least 8 characters.</div>
-<button class="btn-red" style="width:100%;padding:14px;margin-top:12px" onclick="doRegister()">Create Account →</button>
-<p style="text-align:center;margin-top:12px;font-size:13px;color:var(--text)">Have account? <span style="color:var(--red)" onclick="show('login')">Sign in</span></p>
-</div>
-
-<!-- LOGIN -->
-<div id="p-login" class="page" style="padding:20px">
-<h2>Welcome back</h2><p style="color:var(--text);font-size:13px;margin:6px 0 16px">Sign in to continue trading</p>
-<input value="kipsshadii241@gmail.com" placeholder="Email"><input type="password" placeholder="Password">
-<button class="btn-red" style="width:100%;padding:14px;margin-top:10px" onclick="show('trade')">Sign in →</button>
-<p style="text-align:center;margin-top:12px;font-size:13px;color:var(--text)">No account? <span style="color:var(--red)" onclick="show('register')">Create one</span></p>
-</div>
-
-<!-- TRADE -->
-<div id="p-trade" class="page" style="padding:12px">
-<div style="display:flex;gap:6px;font-size:11px;margin-bottom:10px"><span style="background:#151a27;padding:6px 10px;border-radius:6px">Matches/Differs</span><span style="background:var(--red);padding:6px 10px;border-radius:6px">Even/Odd</span><span style="background:#151a27;padding:6px 10px;border-radius:6px">Over/Under</span></div>
-<div class="card">
-<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text)"><span>Volatility 10 (1s) Index</span><span id="tradePrice2" style="color:#4ade80">9449.623</span></div>
-<div class="ticker" id="tradePrice">9449.623</div>
-<div id="digitGrid" class="d10"></div>
-<div class="evenOdd"><button class="even" onclick="placeTrade('Even')">Even<br><small>50.20%</small><br>$19.52</button><button class="odd" onclick="placeTrade('Odd')">Odd<br><small>49.80%</small><br>$19.52</button></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:10px;color:var(--text)"><div style="background:#151a27;padding:8px;border-radius:8px">DURATION<br><b style="color:#fff">2 ticks</b></div><div style="background:#151a27;padding:8px;border-radius:8px">STAKE<br><b style="color:#fff">$10</b></div><div style="background:#151a27;padding:8px;border-radius:8px">TARGET<br><b style="color:#fff">200</b></div><div style="background:#151a27;padding:8px;border-radius:8px">STOP LOSS<br><b style="color:#fff">999</b></div></div>
-<div id="tradeLog" style="margin-top:12px;font-size:12px;text-align:center;color:#4ade80"></div>
-</div>
-</div>
-
-<!-- MARKETS FIXED -->
-<div id="p-markets" class="page" style="padding:16px">
-<h2 style="margin-bottom:12px">Markets</h2>
-<div class="card" style="margin-bottom:8px" onclick="show('trade')"><b>Volatility 10 (1s) Index</b><br><small style="color:var(--green)" id="m1">9449.62 +0.12%</small></div>
-<div class="card" style="margin-bottom:8px"><b>Volatility 25 (1s) Index</b><br><small style="color:#ff6b6b">1284.01 -0.82%</small></div>
-<div class="card" style="margin-bottom:8px"><b>Volatility 50 Index</b><br><small style="color:var(--green)">4567.21 +0.45%</small></div>
-<div class="card" style="margin-bottom:8px"><b>Volatility 75 Index</b><br><small style="color:var(--green)">7891.33 +0.22%</small></div>
-<div class="card"><b>Volatility 100 Index</b><br><small style="color:#ff6b6b">3421.09 -0.11%</small></div>
-</div>
-
-<!-- HISTORY FIXED -->
-<div id="p-history" class="page" style="padding:16px">
-<h2 style="margin-bottom:12px">History</h2>
-<div id="historyList"><div style="color:var(--text);text-align:center;margin-top:40px;font-size:13px">No trades yet<br>Place Even/Odd to see history</div></div>
-</div>
-
-<!-- ACCOUNT -->
-<div id="p-account" class="page" style="padding:16px">
-<h2>Account</h2>
-<div class="card" style="margin-top:12px"><b id="accName">Kipkoech</b><br><small style="color:var(--text)" id="accEmail">kipsshadii241@gmail.com</small><br><small style="color:var(--text)">+254 712681370</small></div>
-<div class="card" style="margin-top:12px">Balance: <b id="accBal">$0.00</b><br><small style="color:var(--text)">KES approx: KES 0</small></div>
-<button style="width:100%;margin-top:16px;background:transparent;border:1px solid var(--red);color:var(--red);padding:12px;border-radius:10px" onclick="show('landing')">Log out</button>
-</div>
-
-<!-- DRAWER -->
-<div id="drawer" class="drawer" onclick="toggleDrawer()"><div class="drawerInner" onclick="event.stopPropagation()">
-<div class="logo" style="margin-bottom:20px">RQP<span>trade</span></div>
-<div class="mItem" onclick="openDeposit();toggleDrawer()">Deposit <span>›</span></div>
-<div class="mItem" onclick="show('p-history');toggleDrawer()">History <span>›</span></div>
-<div class="mItem" onclick="show('p-markets');toggleDrawer()">Markets <span>›</span></div>
-<div class="mItem">How to Trade <span>›</span></div>
-<div class="mItem">Refer & Earn <span>›</span></div>
-<div class="mItem" onclick="show('p-account');toggleDrawer()">Account <span>›</span></div>
-<div class="mItem">Live Chat <span>›</span></div>
-<div style="margin-top:20px;color:var(--text);font-size:11px">Support<br>support@rqptrade.com</div>
-</div></div>
-
-<!-- DEPOSIT -->
-<div id="depositModal" class="modal"><div class="modalBox">
-<div style="display:flex;justify-content:space-between;margin-bottom:12px"><h3>Deposit Funds</h3><span onclick="closeDeposit()" style="font-size:22px">×</span></div>
-<div class="payOpt active" onclick="selectPay(this)"><div style="width:36px;height:36px;background:#1ebe5f;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800">M</div><div><b>M-PESA</b><br><small style="color:var(--text)">Instant mobile money • Kenya</small></div></div>
-<div class="payOpt" onclick="selectPay(this)"><div style="width:36px;height:36px;background:#26a17b;border-radius:8px;display:flex;align-items:center;justify-content:center">T</div><div><b>USDT (TRC20)</b><br><small style="color:var(--text)">Cryptocurrency</small></div></div>
-<div class="payOpt" onclick="selectPay(this)"><div style="width:36px;height:36px;background:#000;border-radius:8px;display:flex;align-items:center;justify-content:center">W</div><div><b>Worldcoin (WLD)</b><br><small style="color:var(--text)">Crypto • Fast</small></div></div>
-<div class="payOpt" onclick="selectPay(this)"><div style="width:36px;height:36px;background:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:10px">P2P</div><div><b>P2P Marketplace</b><br><small style="color:var(--text)">Buy from merchants</small></div></div>
-<input id="depAmount" value="10" placeholder="Amount USD"><input id="depPhone" value="712681370" placeholder="Phone">
-<button class="btn-red" style="width:100%;padding:14px;margin-top:12px" onclick="doDeposit()">Continue to Deposit →</button>
-</div></div>
-
-<div class="botNav"><div class="active" id="navTrade" onclick="show('trade')"><span style="font-size:16px">₮</span><br>Trade</div><div id="navMarkets" onclick="show('markets')"><span style="font-size:16px">↗</span><br>Markets</div><div id="navHist" onclick="show('history')"><span style="font-size:16px">◷</span><br>History</div><div id="navAcc" onclick="show('account')"><span style="font-size:16px">◍</span><br>Account</div></div>
-
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>RQP Trade V6</title><style>:root{--red:#ff2e2e;--bg:#0a0e1a;--card:#131a2a;--br:#1e2a44;--txt:#7a859e}*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;user-select:none;-webkit-tap-highlight-color:transparent}body{background:var(--bg);color:#fff}.page{display:none}.page.active{display:block}.top{height:48px;background:#0f1422;display:flex;align-items:center;justify-content:space-between;padding:0 10px;border-bottom:1px solid var(--br);position:sticky;top:0;z-index:20}.logo{font-weight:900}.logo b{color:var(--red)}.tabs{display:flex;gap:6px;padding:8px;background:#0f1422}.tab{padding:6px 10px;border-radius:6px;background:#1a2235;color:var(--txt);font-size:11px;border:none}.tab.active{background:var(--red);color:#fff}.chartWrap{background:var(--card);margin:6px;border-radius:10px;padding:8px;border:1px solid var(--br)}.digits{display:flex;justify-content:space-between;margin:6px 0}.digit{width:30px;height:30px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;background:#1a2235;border:1px solid var(--br)}.digit.active{background:var(--red);color:#fff}.digit small{font-size:7px}.grid10{display:grid;grid-template-columns:repeat(10,1fr);gap:3px}.gbox{background:#1a2235;padding:6px 0;text-align:center;border-radius:6px;font-size:11px}.gbox.active{background:var(--red)}.stakeRow{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0}.box{background:#1a2235;padding:8px;border-radius:8px;text-align:center;font-size:11px;border:1px solid var(--br)}.btnTrade{padding:10px;border-radius:10px;border:none;color:#fff;font-weight:800;width:100%}.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:50;display:none;align-items:center;justify-content:center;padding:16px}.modal.open{display:flex}.modalBox{background:#162040;width:100%;max-width:380px;border-radius:16px;padding:16px;border:1px solid var(--br);max-height:90vh;overflow:auto}.payOpt{background:#1e2b47;padding:12px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--br)}.amountBtns{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:8px 0}.amountBtns button{background:#1a2235;border:1px solid var(--br);color:#fff;padding:8px 0;border-radius:8px;font-size:12px}.amountBtns button.active{background:var(--red)}input{width:100%;background:#0a0e1a;border:1px solid var(--br);color:#fff;padding:12px;border-radius:10px;margin:6px 0}.btnRed{background:var(--red);color:#fff;border:none;padding:12px;border-radius:10px;width:100%;font-weight:700}</style></head><body>
+<div class="top"><div style="display:flex;gap:8px;align-items:center"><span onclick="document.getElementById('menu').style.display='flex'">☰</span><div class="logo">RQP<span style="color:var(--red)">trade</span> <small style="background:var(--red);padding:2px 6px;border-radius:10px;font-size:9px;margin-left:6px">Real</small></div></div><div style="display:flex;gap:8px;align-items:center"><div id="bal" style="font-size:12px">$0.00</div><button class="btnRed" style="padding:6px 12px;font-size:11px" onclick="openDep()">Deposit</button></div></div>
+<div class="tabs"><button class="tab" onclick="this.classList.add('active')">Matches/Differs</button><button class="tab active">Even/Odd</button><button class="tab">Over/Under</button></div>
+<div class="chartWrap"><div style="display:flex;justify-content:space-between;font-size:11px"><b>Volatility 10 (1s) Index</b><span style="background:#1a2235;padding:2px 6px;border-radius:6px">50%</span></div><div style="font-size:10px;color:var(--txt)" id="vPrice">9449.58 -0.38 (-10.05%)</div><div style="height:110px;position:relative;margin:6px 0;background:#0a0e1a;border-radius:8px;overflow:hidden"><svg width="100%" height="100%" id="chartSvg"><path id="cPath" d="M0 20 L40 30 L80 90 L120 100 L160 40 L200 60" fill="none" stroke="#ff3b3b" stroke-width="1.5"/></svg><div style="position:absolute;right:6px;top:40%;background:#fff;color:#000;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700" id="cPrice">9449.188</div></div><div class="digits" id="digitCircles"></div><div style="display:flex;justify-content:space-between;font-size:9px;color:var(--txt)"><span>12.0%</span><span>9.5%</span><span>9.5%</span><span>10.2%</span><span>10.6%</span><span>9.3%</span><span>10.1%</span><span>10.1%</span><span>8.8%</span><span>10.1%</span></div><div style="display:grid;grid-template-columns:1fr 1fr;background:#0a0e1a;border-radius:8px;margin:8px 0;padding:2px"><button style="background:var(--red);color:#fff;border:none;padding:6px;border-radius:6px;font-size:11px;font-weight:700">AUTO</button><button style="background:transparent;color:var(--txt);border:none;padding:6px;font-size:11px">MANUAL</button></div><div style="display:flex;justify-content:space-between;font-size:10px"><span style="color:var(--txt)">DURATION</span><span>2 ticks</span></div><div class="grid10" id="durGrid"></div><div class="stakeRow"><div class="box"><div style="color:var(--txt);font-size:8px">STAKE</div><div style="display:flex;justify-content:space-between;align-items:center"><span onclick="stake=Math.max(1,stake-1);upStake()">−</span><b>$<span id="stake">10</span></b><span onclick="stake++;upStake()">+</span></div></div><div class="box"><div style="color:var(--txt);font-size:8px">SESSION P/L</div><div id="pnl">+0.00</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;font-size:9px"><div class="box">◉ TARGET<br><b>$ 280</b></div><div class="box" style="color:#ff6b6b">◍ STOP LOSS<br><b>$ 999</b></div><div class="box">⚙ MULT<br><b>x 2</b></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px"><button class="btnTrade" style="background:#1a2235;border:1px solid #fff" onclick="trade('Even')">Even <span style="float:right">$1.95</span><br><small style="font-size:8px;color:var(--txt)">52.01%</small></button><button class="btnTrade" style="background:#1a2235;border:1px solid var(--red)" onclick="trade('Odd')">Odd <span style="float:right">$1.95</span><br><small style="font-size:8px;color:var(--txt)">50.05%</small></button></div><div id="log" style="text-align:center;font-size:11px;margin-top:6px;color:#22c55e"></div></div>
+<!-- DEPOSIT MODAL EXACT LIKE VIDEO -->
+<div id="depModal" class="modal"><div class="modalBox"><div style="display:flex;justify-content:space-between"><b>Deposit funds</b><span onclick="closeDep()">✕</span></div><small style="color:var(--txt)">Choose payment method</small><div class="payOpt" onclick="openMpesa()"><div style="display:flex;gap:10px;align-items:center"><div style="background:#00a651;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center">M</div><div><b style="font-size:13px">MPESA</b><br><small style="color:var(--txt);font-size:10px">Instant mobile money</small></div></div><span>›</span></div><div class="payOpt"><div style="display:flex;gap:10px"><div style="background:#26a17b;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center">T</div><div><b style="font-size:13px">USDT (TRC20)</b><br><small style="color:var(--txt);font-size:10px">Cryptocurrency</small></div></div><span>›</span></div><div class="payOpt"><div style="display:flex;gap:10px"><div style="background:#000;width:32px;height:32px;border-radius:8px">W</div><div><b style="font-size:13px">Worldcoin (WLD)</b><br><small style="color:var(--txt);font-size:10px">Cryptocurrency</small></div></div><span>›</span></div><div class="payOpt"><div style="display:flex;gap:10px"><div style="background:var(--red);width:32px;height:32px;border-radius:8px;font-size:10px;display:flex;align-items:center;justify-content:center">P2P</div><div><b style="font-size:13px">P2P Marketplace</b><br><small style="color:var(--txt);font-size:10px">Buy funds from approved merchants</small></div></div><span>›</span></div></div></div>
+<div id="mpesaModal" class="modal"><div class="modalBox"><div style="display:flex;justify-content:space-between"><b>Deposit funds<br><small style="color:var(--txt)">MPESA</small></b><span onclick="closeMpesa()">✕</span></div><label style="font-size:11px;color:var(--txt)">AMOUNT (USD)</label><input id="amt" value="0" oninput="calcKES()"><div class="amountBtns"><button onclick="setAmt(1)">$1</button><button onclick="setAmt(10)" class="active">$10</button><button onclick="setAmt(25)">$25</button><button onclick="setAmt(50)">$50</button><button onclick="setAmt(100)">$100</button><button onclick="setAmt(250)">$250</button></div><div style="font-size:11px;margin:6px 0"><span id="kes">KES 0.00</span> • 1 USD = 129.70 KES</div><div style="background:#1a2235;padding:8px;border-radius:8px;font-size:10px;color:var(--txt)">Min deposit: $5.00 Daily cap: $10,000.00 Remaining today: $10,000.00</div><label style="font-size:11px;color:var(--txt);margin-top:8px;display:block">M-PESA PHONE NUMBER</label><div style="background:#0a0e1a;border:1px solid var(--br);padding:10px;border-radius:8px;display:flex;gap:8px"><span>🇰🇪</span><input id="phone" value="+2547****370" style="margin:0;padding:0;border:none;background:transparent"></div><small style="font-size:9px;color:var(--txt)">Deposits can only be made from your registered number.</small><button id="depBtn" class="btnRed" style="margin-top:12px" onclick="doDep()">Deposit $10.00</button><div id="stkStatus" style="display:none;text-align:center;margin-top:12px"><div style="width:32px;height:32px;border:3px solid var(--br);border-top-color:var(--red);border-radius:50%;margin:0 auto;animation:spin 1s linear infinite"></div><b style="display:block;margin-top:8px">Check your phone</b><small style="color:var(--txt)" id="stkMsg">We've sent an STK push for $10.00 - KES 1297<br>Enter your M-Pesa PIN to complete the deposit.<br>Waiting for confirmation... about 4 minutes</small></div></div></div>
+<!-- MENU -->
+<div id="menu" class="modal" style="align-items:start;justify-content:start"><div style="background:#0f172a;width:80%;height:100%;padding:16px"><div style="display:flex;justify-content:space-between"><b>RQP<span style="color:var(--red)">trade</span> Menu</b><span onclick="document.getElementById('menu').style.display='none'">✕</span></div><div style="margin-top:16px;display:flex;flex-direction:column;gap:14px;font-size:14px;color:#cbd5e1"><div>⬇ Deposit</div><div>⬆ Withdraw</div><div>🕒 History</div><div>📄 Reports</div><div>📖 How to Trade</div><div>✨ Refer & Earn</div><div>👤 Account</div><div>💬 Live Chat</div><div>🌐 Language</div><div>☀ Light theme</div></div><div style="margin-top:40px;border-top:1px solid var(--br);padding-top:12px;font-size:11px;color:var(--txt)">Support<br>support@rqptrade.com<br><br><span style="color:var(--red)">↪ Log Out</span></div></div></div>
+<!-- ENTRY SCANNER -->
+<div id="scanModal" class="modal"><div class="modalBox"><div style="display:flex;justify-content:space-between"><b>🔍 Entry Scanner</b><span onclick="document.getElementById('scanModal').style.display='none'">✕</span></div><small style="color:var(--txt)">Pick the market category you want to scan. The deep scanner walks every volatility / synthetic index and surfaces the best entry point for that category based on historical tick patterns.</small><div style="margin-top:10px"><label style="font-size:11px">Market</label><select style="width:100%;background:#0a0e1a;border:1px solid var(--br);color:#fff;padding:10px;border-radius:8px;margin:6px 0"><option>Even / Odd</option><option>Over / Under</option><option>Matches / Differs</option></select></div><div style="font-size:11px;color:var(--txt);margin:8px 0">Ready to scan 0/12</div><button class="btnRed" onclick="alert('Scanning 12 markets... Best found: Volatility 10 - Even 58% win rate')">🔍 Deep Scan for Best Market</button><button style="width:100%;margin-top:8px;background:transparent;border:1px solid var(--br);color:#fff;padding:10px;border-radius:10px">Load Deep Scanner Bot</button></div></div>
+<div style="position:fixed;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:20px;background:#0f1422;border:1px solid var(--br);padding:8px 20px;border-radius:20px;font-size:10px;z-index:30"><div style="text-align:center" onclick="alert('Live Chat')">💬<br>Live Chat</div><div style="text-align:center;background:var(--red);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px" onclick="document.getElementById('scanModal').style.display='flex'">◍<br><small style="font-size:8px;position:absolute;margin-top:20px">AI</small></div><div style="text-align:center" onclick="alert('Positions')">📊<br>Positions</div></div>
 <script>
-let price=9449.623,balance=0,history=[];
-function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));let target=document.getElementById('p-'+id);if(!target)target=document.getElementById(id);if(target)target.classList.add('active');document.querySelectorAll('.botNav div').forEach(d=>d.classList.remove('active'));if(id==='trade')document.getElementById('navTrade').classList.add('active');if(id==='markets')document.getElementById('navMarkets').classList.add('active');if(id==='history')document.getElementById('navHist').classList.add('active');if(id==='account')document.getElementById('navAcc').classList.add('active');window.scrollTo(0,0)}
-function toggleDrawer(){document.getElementById('drawer').classList.toggle('open')}
-function openDeposit(){document.getElementById('depositModal').classList.add('open')}function closeDeposit(){document.getElementById('depositModal').classList.remove('open')}
-function selectPay(el){document.querySelectorAll('.payOpt').forEach(o=>o.classList.remove('active'));el.classList.add('active')}
-function doRegister(){let p=document.getElementById('rPass').value;if(p.length<8){document.getElementById('passErr').style.display='block';return;}document.getElementById('passErr').style.display='none';document.getElementById('accName').innerText=document.getElementById('rName').value;document.getElementById('accEmail').innerText=document.getElementById('rEmail').value;show('trade')}
-function placeTrade(type){
- let log=document.getElementById('tradeLog');
- let entryPrice=price;
- log.innerText=`Placing ${type} at ${entryPrice.toFixed(3)}...`;
- log.style.color='#8a91a8';
- setTimeout(()=>{
-   let currentLast=Math.floor(price)%10;
-   let isEven=currentLast%2===0;
-   let win=(type==='Even'&&isEven)||(type==='Odd'&&!isEven);
-   log.innerText=win?`✓ WIN ${type} last digit ${currentLast} +$9.52`:`✗ LOSS ${type} last digit ${currentLast} -$10`;
-   log.style.color=win?'#22c55e':'#ff3b3b';
-   if(win)balance+=9.52;else balance-=10;
-   if(balance<0)balance=0;
-   document.getElementById('balTop').innerText=`$${balance.toFixed(2)}`;
-   document.getElementById('accBal').innerText=`$${balance.toFixed(2)}`;
-   history.unshift({type,digit:currentLast,win,price:price.toFixed(3),time:new Date().toLocaleTimeString()});
-   updateHistory();
- },1500);
-}
-function updateHistory(){
- let list=document.getElementById('historyList');
- if(history.length===0)return;
- list.innerHTML=history.map(h=>`<div class="historyItem"><div><b>${h.type}</b> @ ${h.price}<br><small>${h.time} • digit ${h.digit}</small></div><div class="${h.win?'win':'loss'}">${h.win?'+$9.52':'-$10'}</div></div>`).join('');
-}
-function doDeposit(){
- let amt=parseFloat(document.getElementById('depAmount').value)||10;
- let ph=document.getElementById('depPhone').value;
- alert(`M-Pesa STK Push sent to 0${ph} for $${amt}\nIn real app, user enters PIN. Demo success!`);
- closeDeposit();
- balance+=amt;
- document.getElementById('balTop').innerText=`$${balance.toFixed(2)}`;
- document.getElementById('accBal').innerText=`$${balance.toFixed(2)}`;
- document.getElementById('tradeLog').innerText=`✓ Deposit $${amt} via M-Pesa 0${ph} - Credited!`;
- document.getElementById('tradeLog').style.color='#22c55e';
-}
-// REAL DERIV FEED
-try{
- let ws=new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=1089');
- ws.onopen=()=>{ws.send(JSON.stringify({ticks:'1HZ10V'}))};
- ws.onmessage=(e)=>{
-  let d=JSON.parse(e.data);
-  if(d.tick){price=parseFloat(d.tick.quote);document.getElementById('tradePrice').innerText=price.toFixed(3);document.getElementById('tradePrice2').innerText=price.toFixed(3);document.getElementById('lpTick').innerText=price.toFixed(2);document.getElementById('lpPrice').innerText=price.toFixed(2);let m1=document.getElementById('m1');if(m1)m1.innerText=price.toFixed(2)+' live';updateDigits();}
- }
-}catch(e){}
-function updateDigits(){
- let g=document.getElementById('digitGrid');if(!g)return;
- let last=Math.floor(price)%10;
- g.innerHTML='';
- for(let i=0;i<10;i++){let perc=(8+Math.random()*3).toFixed(1);g.innerHTML+=`<div class="${i===last?'active':''}">${i}<small>${perc}%</small></div>`}
-}
-setInterval(()=>{price+=(Math.random()-0.5)*0.5;document.getElementById('tradePrice').innerText=price.toFixed(3);document.getElementById('tradePrice2').innerText=price.toFixed(3);updateDigits();},800);
-updateDigits();show('landing');
-</script>
-</body>
-</html>
+let price=9449.58, stake=10, selected=9, balance=0;
+function openDep(){document.getElementById('depModal').classList.add('open')}function closeDep(){document.getElementById('depModal').classList.remove('open')}function openMpesa(){closeDep();document.getElementById('mpesaModal').classList.add('open');calcKES()}function closeMpesa(){document.getElementById('mpesaModal').classList.remove('open')}
+function setAmt(v){document.getElementById('amt').value=v;document.querySelectorAll('.amountBtns button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');calcKES()}
+function calcKES(){let a=parseFloat(document.getElementById('amt').value)||0;document.getElementById('kes').innerText='≈ KES '+(a*129.7).toFixed(2)+' • 1 USD = 129.70 KES';document.getElementById('depBtn').innerText='Deposit $'+a.toFixed(2);if(a>0&&a<5){document.getElementById('depBtn').innerText='Minimum deposit is $5';document.getElementById('depBtn').style.opacity='.5'}else{document.getElementById('depBtn').style.opacity='1'}}
+function doDep(){let a=parseFloat(document.getElementById('amt').value)||0;if(a<5){alert('Minimum deposit is $5');return}document.getElementById('depBtn').innerText='Sending STK push...';setTimeout(()=>{document.getElementById('depBtn').style.display='none';document.getElementById('stkStatus').style.display='block';document.getElementById('stkMsg').innerHTML=`We've sent an STK push for $${a.toFixed(2)} - KES ${(a*129.7).toFixed(0)}<br>Enter your M-Pesa PIN to complete the deposit.<br>Waiting for confirmation...`;setTimeout(()=>{balance+=a;document.getElementById('bal').innerText='$'+balance.toFixed(2);document.getElementById('log').innerText='✓ Deposit $'+a+' via M-Pesa - Credited!';closeMpesa();document.getElementById('depBtn').style.display='block';document.getElementById('stkStatus').style.display='none';document.getElementById('depBtn').innerText='Deposit $10.00'},4000)},1500)}
+function upStake(){document.getElementById('stake').innerText=stake}function trade(t){let last=Math.floor(price)%10;let isEven=last%2===0;let win=(t==='Even'&&isEven)||(t==='Odd'&&!isEven);document.getElementById('log').innerText=(win?'✓ WIN ':'✗ LOSS ')+t+' last '+last;if(win)balance+=stake*0.95;else balance-=stake;document.getElementById('bal').innerText='$'+balance.toFixed(2)}
+function render(){let c=document.getElementById('digitCircles');let d=document.getElementById('durGrid');if(!c)return;c.innerHTML='';d.innerHTML='';for(let i=0;i<10;i++){c.innerHTML+=`<div class="digit ${i===selected?'active':''}" onclick="selected=${i};render()">${i}</div>`}for(let i=1;i<=10;i++){d.innerHTML+=`<div class="gbox ${i===2?'active':''}">${i}</div>`}}
+render();
+try{let ws=new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=1089');ws.onopen=()=>ws.send(JSON.stringify({ticks:'R_10'}));ws.onmessage=(e)=>{let d=JSON.parse(e.data);if(d.tick){price=parseFloat(d.tick.quote);document.getElementById('vPrice').innerText=price.toFixed(2)+' '+(Math.random()>0.5?'+':'-')+'0.38 (-10.05%)';document.getElementById('cPrice').innerText=price.toFixed(3)}};}catch(e){}setInterval(()=>{price+=(Math.random()-0.5)*0.6;document.getElementById('vPrice').innerText=price.toFixed(2)+' -0.38';document.getElementById('cPrice').innerText=price.toFixed(3)},900);
+</script></body></html>

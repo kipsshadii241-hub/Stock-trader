@@ -1,66 +1,30 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RQPtrade</title><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#070a14;color:#fff;font-family:system-ui;overflow-x:hidden}.top{height:52px;display:flex;justify-content:space-between;align-items:center;padding:0 14px;border-bottom:1px solid #151d32;background:#070a14;position:sticky;top:0;z-index:20}.logo{font-weight:900;font-size:20px}.logo i{color:#ff2e2e;font-style:normal}.btn-red{background:#e53935;color:#fff;border:none;padding:8px 14px;border-radius:8px;font-weight:700;font-size:13px}.hero{padding:24px 16px 80px}.badge{display:inline-flex;gap:6px;background:#111a2e;border:1px solid #1e2d4f;padding:6px 10px;border-radius:8px;font-size:11px;color:#8b9bb8;margin:6px 0}.hero h1{font-size:34px;line-height:.95;margin:14px 0}.hero p{color:#8b9bb8;font-size:13px;max-width:360px}.row{display:flex;gap:10px;margin-top:14px}.btn-out{border:1px solid #24324f;background:transparent;color:#fff;padding:11px 18px;border-radius:10px}.checks{margin-top:20px;display:flex;gap:12px;font-size:11px;color:#8b9bb8}.ticker{position:fixed;bottom:0;left:0;right:0;background:#0e1528;border-top:1px solid #1a2744;display:flex;gap:20px;padding:8px 14px;font-size:11px;color:#6b7a99;z-index:10;white-space:nowrap}.ticker b{color:#fff}
-#tradePage{display:none;min-height:100vh;background:#070a14}.t-top{height:46px;background:#0b1222;border-bottom:1px solid #1a2744;display:flex;justify-content:space-between;align-items:center;padding:0 10px}.tabs{display:flex;gap:6px;padding:8px 10px}.tab{padding:6px 12px;border-radius:20px;background:#151e32;border:1px solid #1e2d4f;font-size:11px;color:#8b9bb8}.tab.on{background:#fff;color:#000;font-weight:700}.market{margin:6px 10px;background:#0f172a;border:1px solid #1e2d4f;border-radius:10px;padding:8px 10px;display:flex;justify-content:space-between}.chart{margin:0 10px;height:180px;background:#0b1222;border:1px solid #1e2d4f;border-radius:12px;position:relative}.chart svg{width:100%;height:100%}.priceTag{position:absolute;right:6px;top:50%;background:#fff;color:#000;font-size:10px;font-weight:800;padding:3px 6px;border-radius:6px}.digits{display:flex;justify-content:space-between;padding:10px 10px 18px}.d{width:32px;height:32px;border-radius:50%;background:#151e32;border:1px solid #1e2d4f;display:grid;place-items:center;font-size:13px;position:relative;cursor:pointer}.d.on{background:#e53935}.d small{position:absolute;bottom:-12px;font-size:7px;color:#6b7a99}.auto{display:flex;background:#0b1222;border:1px solid #1e2d4f;border-radius:20px;margin:6px 10px;padding:3px}.auto button{flex:1;padding:7px;border-radius:16px;border:none;font-size:12px;font-weight:700}.auto .on{background:#e53935;color:#fff}.auto .off{background:transparent;color:#6b7a99}.durHead{display:flex;justify-content:space-between;padding:0 12px;font-size:10px;color:#6b7a99}.dur{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;padding:6px 10px}.dur div{background:#151e32;border:1px solid #1e2d4f;padding:7px 0;text-align:center;border-radius:8px;font-size:11px;cursor:pointer}.dur div.on{background:#e53935}.stats{display:grid;grid-template-columns:70px 1fr 1fr 50px;gap:6px;padding:8px 10px}.s{background:#0f172a;border:1px solid #1e2d4f;border-radius:10px;padding:8px 4px;text-align:center}.s small{font-size:8px;color:#6b7a99;display:block}.s b{font-size:12px}.s input{width:100%;background:transparent;border:none;color:#fff;text-align:center;font-weight:700;font-size:12px}.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 10px 80px}.btns button{padding:14px;border-radius:12px;border:none;font-weight:800}.even{background:#1a233a;border:1px solid #2a3a5a;color:#fff}.odd{background:#2a1a1f;border:1px solid #e53935;color:#fff}.nav{position:fixed;bottom:0;left:0;right:0;background:#0b1222;border-top:1px solid #1a2744;display:flex;justify-content:space-around;padding:8px 0}.nav button{background:none;border:none;color:#6b7a99;font-size:10px}.nav .ai{width:42px;height:42px;background:#e53935;border-radius:50%;color:#fff;font-weight:900;margin-top:-16px;border:3px solid #070a14}
-.modal{position:fixed;inset:0;background:rgba(2,5,12,.92);z-index:100;display:none;padding:16px;overflow:auto}.modal.open{display:flex;justify-content:center;align-items:flex-start}.box{background:#0f172a;border:1px solid #1e2d4f;border-radius:16px;width:100%;max-width:400px;margin:20px auto;padding:20px}.inp{margin:10px 0}.inp label{font-size:11px;color:#8b9bb8;display:block;margin-bottom:4px}.inp input{width:100%;background:#080c18;border:1px solid #1e2d4f;color:#fff;padding:12px;border-radius:10px}.depG{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0}.depG button{background:#151e32;border:1px solid #1e2d4f;color:#fff;padding:10px;border-radius:10px;font-weight:700}
-</style></head><body>
-<div id="land">
-<div class="top"><div class="logo"><b>RQP</b><i>trade</i></div><button class="btn-red" onclick="openS()">Open account</button></div>
-<div class="hero">
-<div class="badge">RQPTRADE TERMINAL Built for decisive traders</div><br>
-<div class="badge"><span style="width:7px;height:7px;background:#22c55e;border-radius:50%;display:inline-block"></span> Markets available around the clock</div>
-<h1>Trade with a clearer point of view.</h1>
-<p>Explore synthetic markets, define your risk, and manage each contract from a professional trading workspace.</p>
-<div class="row"><button class="btn-red" onclick="goTrade()">Start trading →</button><button class="btn-out" onclick="openS()">Register</button></div>
-<div class="checks"><span>✓ Defined maximum loss</span><span>✓ Demo access</span><span>✓ Mobile-ready</span></div>
-</div>
-<div class="ticker"><span>Volatility 10 <b>9,450.781</b> <span style="color:#22c55e">▲ +0.49%</span></span><span>Volatility 25 <b>1,283.643</b></span></div>
-</div>
+async function depositFunds(){
+  const amountInput = document.querySelector('input[type="number"]') || document.getElementById('amount');
+  const amount = amountInput ? amountInput.value : 10;
+  const phone = "254703689230";
+  
+  if(!amount) return alert('Enter amount');
+  
+  // Show loading
+  const btn = document.querySelector('button');
+  if(btn) btn.innerText = 'Sending STK...';
 
-<div id="tradePage">
-<div class="t-top"><div style="display:flex;align-items:center;gap:10px"><div class="logo" onclick="goLand()"><b>RQP</b><i>trade</i></div><div id="bal" style="font-weight:700;font-size:14px;margin-left:10px">$0.00</div></div><div style="display:flex;gap:6px"><button class="btn-red" onclick="openD()">Deposit</button><span onclick="goLand()" style="padding:8px">☰</span></div></div>
-<div class="tabs"><div class="tab">Matches/Differs</div><div class="tab on">Even/Odd</div><div class="tab">Over/Under</div></div>
-<div style="padding:4px 10px;font-size:11px;color:#6b7a99">How to trade Even/Odd?</div>
-<div class="market" onclick="alert('Volatility 10, 25, 50, 100, Crash, Boom')"><div><b id="mN">Volatility 10 (1s) Index</b><br><small id="mP" style="color:#6b7a99">9450.89</small></div><div>50% ▼</div></div>
-<div class="chart"><svg><path id="cP" fill="none" stroke="#ff3b3b" stroke-width="1.5"/></svg><div class="priceTag" id="pT">9450.781</div></div>
-<div class="digits" id="dRow"></div>
-<div class="auto"><button class="on">AUTO</button><button class="off">MANUAL</button></div>
-<div class="durHead"><span>DURATION</span><span><b>2 ticks</b></span></div>
-<div class="dur" id="dur"></div>
-<div class="stats"><div class="s"><small>STAKE</small><input id="stakeI" value="10" onchange="stake=this.value"><b>$</b></div><div class="s"><small>TARGET</small><input value="200"></div><div class="s"><small>STOP LOSS</small><input value="999"></div><div class="s"><small>MULT</small><input value="2"></div></div>
-<div class="btns"><button class="even" onclick="doT('Even')">Even<br><small>90.20%</small> $19.52</button><button class="odd" onclick="doT('Odd')">Odd<br><small>92.30%</small> $19.52</button></div>
-<div class="nav"><button>💬 Live Chat</button><button class="ai" onclick="openScan()">AI</button><button>📊 Positions</button></div>
-</div>
-
-<div id="signM" class="modal"><div class="box"><h2>Create account</h2><small style="color:#6b7a99">Fill in your details to get started</small>
-<div class="inp"><label>Full Name</label><input id="fN" value="Dennis"></div>
-<div class="inp"><label>Email</label><input id="eM" value="kippshadi241@gmail.com"></div>
-<div class="inp"><label>Country</label><input value="KE Kenya" readonly></div>
-<div class="inp"><label>Phone</label><input id="pH" value="+254703689230"></div>
-<div class="inp"><label>Password</label><input type="password" value="123456"></div>
-<button class="btn-red" style="width:100%;padding:14px;border-radius:12px;margin-top:10px" onclick="goTrade()">Create Account →</button>
-<div style="text-align:center;margin-top:10px"><span onclick="closeS()" style="color:#ff4d4d;cursor:pointer">✕ Close</span></div>
-</div></div>
-
-<div id="depM" class="modal"><div class="box"><div style="display:flex;justify-content:space-between"><h2>Deposit funds</h2><span onclick="closeD()" style="cursor:pointer">✕</span></div>
-<div style="background:#151e32;border:1px solid #e53935;padding:12px;border-radius:10px;margin:10px 0;text-align:center"><b>MPESA</b><br><small>Instant mobile money</small></div>
-<div class="inp"><label>AMOUNT (USD)</label><input id="dA" type="number" value="10" oninput="updD()"><div class="depG"><button onclick="setD(1)">$1</button><button onclick="setD(10)">$10</button><button onclick="setD(25)">$25</button><button onclick="setD(50)">$50</button><button onclick="setD(100)">$100</button><button onclick="setD(250)">$250</button></div><small id="dR">Fetching rate...</small></div>
-<div class="inp"><label>M-PESA PHONE</label><input id="dP" value="0703689230"><small style="color:#ff8a80">+25470***230 - must be your registered number</small></div>
-<button class="btn-red" style="width:100%;padding:14px;border-radius:12px" id="dB" onclick="realDep()">Deposit $10.00</button><small id="kes" style="display:block;text-align:center;margin-top:6px;color:#6b7a99">≈ KES 1297</small>
-</div></div>
-
-<div id="scanM" class="modal"><div class="box"><div style="display:flex;justify-content:space-between"><h2>Entry Scanner</h2><span onclick="closeScan()">✕</span></div><p style="font-size:12px;color:#8b9bb8;margin:8px 0">Deep scanner walks every volatility index and finds best entry.</p><div id="scanInfo">Scanning markets... <b id="sC">0/12</b></div><button id="sB" class="btn-red" style="width:100%;margin-top:10px">Scanning...</button><div id="best" style="display:none;margin-top:12px;background:#2a1f1a;border:1px solid #e53935;border-radius:12px;padding:12px"><small style="color:#ff8a80">BEST ENTRY FOUND</small><div style="display:flex;justify-content:space-between"><b>Volatility 100 Index</b><span style="color:#22c55e">79%</span></div><small>Suggested: Even</small><button class="btn-red" style="width:100%;margin-top:8px" onclick="closeScan()">Apply - Trade Volatility 100</button></div></div></div>
-
-<script>
-let bal=parseFloat(localStorage.getItem('rqp_bal')||'0'),price=9450.78,prices=[],last=4,dist=[10.3,8.4,9.9,10.8,8.6,10.2,11.8,12.1,8.2,9.7],stake=10;
-function renderD(){let h='';for(let i=0;i<10;i++){h+=`<div class="d ${i==last?'on':''}" onclick="last=${i};renderD()">${i}<small>${dist[i]}%</small></div>`}document.getElementById('dRow').innerHTML=h}
-function renderDur(){let h='';for(let i=1;i<=10;i++){h+=`<div class="${i==2?'on':''}" onclick="document.querySelectorAll('#dur div').forEach(e=>e.classList.remove('on'));this.classList.add('on')">${i}</div>`}document.getElementById('dur').innerHTML=h}
-function chart(){price+=(Math.random()-0.5)*1.5;prices.push(price);if(prices.length>60)prices.shift();let min=Math.min(...prices),max=Math.max(...prices),range=max-min;if(range<2)range=2;let p='';prices.forEach((v,i)=>{let x=(i/prices.length*100).toFixed(1);let y=(150-((v-min)/range*120)).toFixed(1);p+=(i==0?'M':'L')+x+' '+y+' '});document.getElementById('cP').setAttribute('d',p);document.getElementById('pT').innerText=price.toFixed(3);document.getElementById('mP').innerText=price.toFixed(2)+' +0.50';if(Math.random()>.7){last=Math.floor(Math.abs(price*10))%10;renderD()}}
-function openS(){document.getElementById('signM').classList.add('open')}function closeS(){document.getElementById('signM').classList.remove('open')}
-function goTrade(){closeS();document.getElementById('land').style.display='none';document.getElementById('tradePage').style.display='block';document.querySelector('.ticker').style.display='none';document.getElementById('bal').innerText='$'+bal.toFixed(2);renderD();renderDur()}
-function goLand(){document.getElementById('tradePage').style.display='none';document.getElementById('land').style.display='block';document.querySelector('.ticker').style.display='flex'}
-function openD(){document.getElementById('depM').classList.add('open');updD()}function closeD(){document.getElementById('depM').classList.remove('open')}
-function setD(v){document.getElementById('dA').value=v;updD()}function updD(){let a=parseFloat(document.getElementById('dA').value)||0;document.getElementById('dB').innerText='Deposit $'+a.toFixed(2);document.getElementById('kes').innerText='≈ KES '+(a*129.7).toFixed(0);document.getElementById('dR').innerText='Min $5.00 Daily cap $10,000'}
-async function realDep(){let amt=parseFloat(document.getElementById('dA').value);let phone=document.getElementById('dP').value;if(amt<5){alert('Min $5');return}let btn=document.getElementById('dB');btn.innerText='Sending STK to '+phone+'...';try{let res=await fetch('/api/mpesa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:amt,phone})});let data=await res.json();if(data.success){alert('✓ REAL STK sent! Check phone '+phone+' and enter PIN.');closeD()}else{throw new Error()}}catch(e){let code=prompt('REAL MPESA backend not yet set. To test: Enter MPESA Code from SMS (e.g QGH7...). For REAL STK, create api/mpesa.js file I sent earlier:');if(code&&code.length>=4){bal+=amt;localStorage.setItem('rqp_bal',bal);document.getElementById('bal').innerText='$'+bal.toFixed(2);alert('✓ Deposited $'+amt+' credited! Setup real Daraja API for auto STK.');closeD()}}btn.innerText='Deposit $'+amt.toFixed(2)}
-function openScan(){document.getElementById('scanM').classList.add('open');let c=0;let iv=setInterval(()=>{c++;document.getElementById('sC').innerText=c+'/12';document.getElementById('sB').innerText='Scanning... '+c+'/12';if(c>=12){clearInterval(iv);document.getElementById('best').style.display='block';document.getElementById('sB').style.display='none';document.getElementById('scanInfo').innerText='Scan complete 12/12'}},300)}function closeScan(){document.getElementById('scanM').classList.remove('open');document.getElementById('best').style.display='none';document.getElementById('sB').style.display='block'}
-function doT(s){let st=parseFloat(document.getElementById('stakeI').value)||10;if(st>bal){alert('Low balance! Deposit first');openD();return}alert(s+' trade $'+st+' placed! 2 ticks...');setTimeout(()=>{let win=Math.random()>.5;if(win){bal+=st*0.95;alert('WIN +$'+(st*0.95).toFixed(2))}else{bal-=st;alert('LOSS -$'+st)}localStorage.setItem('rqp_bal',bal);document.getElementById('bal').innerText='$'+bal.toFixed(2)},2000)}
-renderD();renderDur();for(let i=0;i<40;i++)prices.push(9450+Math.sin(i/4)*4);setInterval(chart,700);document.getElementById('bal').innerText='$'+bal.toFixed(2);
-</script></body></html>
+  try{
+    const res = await fetch('/api/mpesa',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({amount:amount, phone:phone})
+    });
+    const data = await res.json();
+    
+    if(data.success){
+      alert('✅ STK PUSH SENT to '+phone+'! Check phone and enter PIN');
+    }else{
+      alert('❌ Failed: '+(data.error||'Try again'));
+    }
+  }catch(err){
+    alert('Error: '+err.message);
+  } finally {
+    if(btn) btn.innerText = 'Deposit';
+  }
+}

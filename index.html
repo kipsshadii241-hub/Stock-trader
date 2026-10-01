@@ -1,113 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RQPtrade - Trade with clearer point of view</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>body{background:#0a0e14;color:#fff;font-family:Inter,sans-serif}.digit{background:#1a2332;border:1px solid #2a3441}.digit.active{background:#ff3b3b;color:#fff}.chart-bg{background:#11161f}</style>
-</head>
-<body class="bg-[#0a0e14]">
-<!-- HEADER like video -->
-<header class="flex justify-between items-center p-4 border-b border-[#1a2332]">
-<div class="flex items-center gap-2"><span class="text-red-500 font-bold">RQP</span><span>trade</span><span class="ml-4 text-xs bg-[#1a2332] px-2 py-1 rounded">$0.00</span></div>
-<button onclick="openDeposit()" class="bg-white text-black px-4 py-1 rounded-full text-sm">Deposit</button>
-</header>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RQPtrade</title><script src="https://cdn.tailwindcss.com"></script><style>body{background:#0a0e14;color:#fff}</style></head><body>
+<header class="flex justify-between items-center p-3 border-b border-gray-800"><div class="flex gap-2 items-center"><button onclick="openMenu()" class="text-xl">☰</button><span class="text-red-500 font-bold">RQP</span>trade <span class="ml-2 bg-[#1a2332] px-2 py-1 rounded text-xs">$<span id="bal">0.00</span></span></div><button onclick="openDeposit()" class="bg-white text-black px-4 py-1 rounded-full text-sm">Deposit</button></header>
 
 <div class="p-3">
-<div class="flex gap-2 text-xs mb-3"><span class="bg-[#1a2332] px-3 py-1 rounded">Matches/Differs</span><span class="bg-[#ff3b3b] px-3 py-1 rounded">Even/Odd</span><span class="bg-[#1a2332] px-3 py-1 rounded">Over/Under</span></div>
+<div class="flex gap-2 text-[11px]"><span onclick="setMarketType(this)" class="bg-[#1a2332] px-2 py-1 rounded">Matches/Differs</span><span class="bg-red-600 px-2 py-1 rounded">Even/Odd</span><span onclick="setMarketType(this)" class="bg-[#1a2332] px-2 py-1 rounded">Over/Under</span></div>
 
-<!-- CHART HEADER -->
-<div class="flex justify-between items-center mb-2">
-<div><p class="text-sm">Volatility 100 Index</p><p class="text-xs text-green-400">1779.57 +0.50 (+0.03%)</p></div>
-<div class="text-right"><p class="text-lg" id="price">1779.575</p></div>
+<div class="mt-3 flex justify-between items-center bg-[#11161f] p-2 rounded" onclick="openVol()"><div><p id="volName" class="text-sm">Volatility 100 Index</p><p id="volSub" class="text-[10px] text-green-400">1779.57 +0.50 (+0.03%)</p></div><div class="text-right"><p id="price" class="text-sm">1779.575</p><p class="text-[10px]">▼</p></div></div>
+<canvas id="chart" class="w-full h-[180px] bg-[#11161f] rounded mt-2"></canvas>
+<div class="grid grid-cols-10 gap-1 mt-2 text-[10px]" id="digits"></div>
+<div class="flex gap-2 mt-2"><button class="flex-1 bg-red-600 py-1.5 rounded text-xs">AUTO</button><button class="flex-1 bg-[#1a2332] py-1.5 rounded text-xs">MANUAL</button></div>
+<div class="grid grid-cols-4 gap-2 mt-2 text-[10px]"><div>DURATION<div class="flex gap-1 mt-1"><span class="bg-red-600 px-2 py-1 rounded">2</span><span class="bg-[#1a2332] px-2 py-1 rounded">5</span></div></div><div>STAKE<input id="stake" value="8" class="bg-[#1a2332] w-full mt-1 p-1 rounded text-center text-xs"></div><div>TARGET<input value="200" class="bg-[#1a2332] w-full mt-1 p-1 rounded text-center text-xs"></div><div>MULT<input value="2" class="bg-[#1a2332] w-full mt-1 p-1 rounded text-center text-xs"></div></div>
+<div class="grid grid-cols-2 gap-2 mt-3"><button onclick="trade('Even')" class="bg-[#1a2332] border border-red-900/30 py-2 rounded text-xs">Even<br><span class="opacity-60">$19.52 93.05%</span></button><button onclick="trade('Odd')" class="bg-[#1a2332] border border-red-900/30 py-2 rounded text-xs">Odd<br><span class="opacity-60">$19.52 96.30%</span></button></div>
+<button onclick="openScanner()" class="w-full mt-3 bg-[#1a2332] py-2.5 rounded text-xs">🤖 AI Deep Scan</button>
 </div>
 
-<!-- CHART FAKE -->
-<canvas id="chart" class="w-full h-[200px] chart-bg rounded"></canvas>
+<!-- VOLATILITY SELECTOR like video -->
+<div id="volModal" class="hidden fixed inset-0 bg-black/80 z-50 p-4 flex items-start justify-center pt-20"><div class="bg-[#141a26] w-full max-w-sm rounded-xl p-3 max-h-[70vh] overflow-auto"><div class="flex justify-between"><h3 class="text-sm">Select Market</h3><span onclick="closeVol()">X</span></div><div id="volList" class="mt-3 space-y-1 text-xs"></div></div></div>
 
-<!-- DIGITS 0-9 like video -->
-<div class="grid grid-cols-10 gap-1 my-3" id="digits"></div>
+<!-- MENU like video 0:45 -->
+<div id="menu" class="hidden fixed inset-0 bg-black/80 z-50"><div class="bg-[#0f141e] w-64 h-full p-4"><div class="flex justify-between"><h3>RQPtrade Menu</h3><span onclick="closeMenu()">X</span></div><div class="mt-6 space-y-4 text-sm"><div onclick="openDeposit();closeMenu()" class="flex gap-2">⬇️ Deposit</div><div onclick="openWithdraw();closeMenu()" class="flex gap-2">⬆️ Withdraw</div><div class="flex gap-2">🕒 History</div><div class="flex gap-2">📖 How to Trade</div><div class="flex gap-2">👥 Refer & Earn</div><div class="flex gap-2">👤 Account</div><div class="flex gap-2">💬 Live Chat</div><div class="flex gap-2">🎨 Light Theme</div><div class="mt-10 text-xs opacity-50">Support<br>support@rqptrade.com</div><div onclick="closeMenu()" class="mt-4 text-red-400">↪ Log Out</div></div></div></div>
 
-<div class="flex gap-2 mb-3"><button class="flex-1 bg-[#ff3b3b] py-2 rounded text-xs">AUTO</button><button class="flex-1 bg-[#1a2332] py-2 rounded text-xs">MANUAL</button></div>
+<!-- WITHDRAW MODAL like video -->
+<div id="withdrawModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"><div class="bg-[#141a26] w-full max-w-sm rounded-2xl p-5"><div class="flex justify-between"><h3>Withdraw Funds<br><span class="text-[10px] opacity-60">Choose payout method</span></h3><span onclick="closeWithdraw()">X</span></div><div class="mt-4 space-y-2"><div onclick="selectW('MPESA')" class="bg-[#1a2332] p-3 rounded flex justify-between"><span>MPESA<br><span class="text-[10px] opacity-60">Instant mobile money</span></span><span>></span></div><div class="bg-[#1a2332] p-3 rounded opacity-60">USDT (TRC20)<br><span class="text-[10px]">Cryptocurrency</span></div><div class="bg-[#1a2332] p-3 rounded opacity-60">Worldcoin (WLD)</div><div class="bg-[#1a2332] p-3 rounded opacity-60">P2P Marketplace</div></div><div id="mpesaW" class="hidden mt-4"><p class="text-xs">AMOUNT (USD) - Available: $<span id="wBal">0.00</span></p><input id="wAmt" type="number" placeholder="0" class="w-full bg-[#0a0e14] p-2 rounded mt-2"><button onclick="doWithdraw()" class="w-full bg-red-600 mt-3 py-2 rounded-full text-sm">Withdraw</button></div></div></div>
 
-<div class="grid grid-cols-4 gap-2 mb-3 text-xs">
-<div><p>DURATION</p><div class="flex gap-1 mt-1"><span class="digit active px-2 py-1 rounded">2</span><span class="digit px-2 py-1 rounded">5</span></div></div>
-<div><p>STAKE</p><input id="stake" value="8" class="bg-[#1a2332] w-full mt-1 p-1 rounded text-center"></div>
-<div><p>TARGET</p><input value="200" class="bg-[#1a2332] w-full mt-1 p-1 rounded text-center"></div>
-<div><p>MULT</p><input value="2" class="bg-[#1a2332] w-full mt-1 p-1 rounded text-center"></div>
-</div>
+<!-- DEPOSIT MODAL -->
+<div id="depositModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"><div class="bg-[#141a26] w-full max-w-sm rounded-2xl p-5"><div class="flex justify-between"><h3>Deposit funds<br><span class="text-[10px] opacity-60">MPESA</span></h3><span onclick="closeDeposit()">X</span></div><p class="text-xs mt-3">AMOUNT (USD)</p><p class="text-2xl font-bold">$<span id="depAmount">0</span></p><div class="grid grid-cols-6 gap-2 mt-2 text-[10px]"><button onclick="setAmt(1)" class="bg-[#1a2332] py-2 rounded">$1</button><button onclick="setAmt(10)" class="bg-[#1a2332] py-2 rounded">$10</button><button onclick="setAmt(25)" class="bg-[#1a2332] py-2 rounded">$25</button><button onclick="setAmt(50)" class="bg-[#1a2332] py-2 rounded">$50</button><button onclick="setAmt(100)" class="bg-[#1a2332] py-2 rounded">$100</button><button onclick="setAmt(250)" class="bg-[#1a2332] py-2 rounded">$250</button></div><p class="text-[10px] mt-3">M-PESA PHONE NUMBER</p><p class="bg-[#0a0e14] p-2 rounded mt-1 text-xs">+2547****230 - Deposits only from registered number</p><button onclick="doDeposit()" id="depBtn" class="w-full bg-red-600 mt-4 py-3 rounded-full text-sm">Deposit $0.00</button></div></div>
 
-<!-- EVEN ODD BUTTONS -->
-<div class="grid grid-cols-2 gap-3">
-<button onclick="trade('Even')" class="bg-[#1a2332] border border-red-500/30 py-3 rounded"><p>Even</p><p class="text-xs opacity-60">$19.52 93.05%</p></button>
-<button onclick="trade('Odd')" class="bg-[#1a2332] border border-red-500/30 py-3 rounded"><p>Odd</p><p class="text-xs opacity-60">$19.52 96.30%</p></button>
-</div>
-
-<button onclick="openScanner()" class="mt-4 w-full bg-[#1a2332] py-3 rounded flex justify-center gap-2"><span>🤖 AI</span> Deep Scan</button>
-</div>
-
-<!-- ENTRY SCANNER MODAL like video -->
-<div id="scanner" class="hidden fixed inset-0 bg-black/80 flex items-end justify-center">
-<div class="bg-[#141a26] w-full rounded-t-2xl p-5">
-<div class="flex justify-between"><h3>Entry Scanner</h3><span onclick="closeScanner()">X</span></div>
-<p class="text-xs opacity-60 mt-2">The deep scanner walks every volatility / synthetic index and surfaces the best entry point</p>
-<select class="w-full bg-[#0a0e14] mt-3 p-2 rounded text-sm"><option>Even / Odd</option></select>
-<div id="scanProgress" class="mt-4 text-xs">Scanning markets... <span id="scanCount">0/12</span></div>
-<button class="w-full bg-[#ff3b3b] mt-3 py-2 rounded text-sm">Scanning...</button>
-<div id="bestEntry" class="hidden mt-3 bg-[#1a2332] p-3 rounded"><p class="text-xs">BEST ENTRY FOUND</p><p class="font-bold">Volatility 100 Index</p><p class="text-xs">Suggested side: Even - 79%</p></div>
-</div>
-</div>
-
-<!-- DEPOSIT MODAL like video -->
-<div id="depositModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center p-4">
-<div class="bg-[#141a26] w-full max-w-sm rounded-2xl p-5">
-<div class="flex justify-between"><h3>Deposit funds</h3><span onclick="closeDeposit()">X</span></div>
-<p class="text-xs opacity-60">MPESA</p>
-<p class="mt-3 text-xs">AMOUNT (USD)</p>
-<p class="text-2xl font-bold">$ <span id="depAmount">0</span></p>
-<div class="grid grid-cols-6 gap-2 mt-2 text-xs">
-<button onclick="setAmt(1)" class="bg-[#1a2332] py-1 rounded">$1</button>
-<button onclick="setAmt(10)" class="bg-[#1a2332] py-1 rounded">$10</button>
-<button onclick="setAmt(25)" class="bg-[#1a2332] py-1 rounded">$25</button>
-<button onclick="setAmt(50)" class="bg-[#1a2332] py-1 rounded">$50</button>
-<button onclick="setAmt(100)" class="bg-[#1a2332] py-1 rounded">$100</button>
-<button onclick="setAmt(250)" class="bg-[#1a2332] py-1 rounded">$250</button>
-</div>
-<p class="text-xs mt-3">M-PESA PHONE NUMBER</p>
-<p class="bg-[#0a0e14] p-2 rounded mt-1 text-sm">+254703***230</p>
-<button onclick="doDeposit()" id="depBtn" class="w-full bg-[#ff3b3b] mt-4 py-3 rounded-full">Deposit $0.00</button>
-</div>
-</div>
+<!-- SCANNER -->
+<div id="scanner" class="hidden fixed inset-0 bg-black/80 z-50 flex items-end"><div class="bg-[#141a26] w-full rounded-t-2xl p-5"><div class="flex justify-between"><h3>Entry Scanner</h3><span onclick="closeScanner()">X</span></div><p class="text-[11px] opacity-60 mt-2">Pick market category you want to scan. Deep scanner walks every volatility/synthetic index and surfaces best entry point.</p><p class="text-xs mt-3">Market: Even/Odd</p><div class="mt-2 text-xs">Scanning... <span id="scanCount">0/12</span></div><div id="bestEntry" class="hidden mt-3 bg-[#1a2332] p-3 rounded text-xs"><p>BEST ENTRY FOUND</p><p class="font-bold text-sm">Volatility 100 Index</p><p>Suggested side: Even - 79%</p><button onclick="closeScanner()" class="w-full bg-red-600 mt-2 py-2 rounded">Trade Now</button></div></div></div>
 
 <script>
-// Fake chart
-const c=document.getElementById('chart'),ctx=c.getContext('2d');
-let prices=[1779,1779.5,1778,1780,1779.5];
-function draw(){ctx.clearRect(0,0,c.width,c.height);ctx.beginPath();ctx.strokeStyle='#ff3b3b';prices.forEach((p,i)=>{let x=i*30+10,y=150-(p-1775)*20;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.stroke();let last=prices[prices.length-1];document.getElementById('price').innerText=last.toFixed(3);if(prices.length>20)prices.shift();prices.push(last+(Math.random()-0.5));requestAnimationFrame(draw)}draw();
-
-// Digits
-const dig=document.getElementById('digits');
-for(let i=0;i<10;i++){let d=document.createElement('div');d.className='digit py-2 rounded text-center text-xs';d.innerHTML=`${i}<br><span class="text-[8px]">${(8+Math.random()*5).toFixed(1)}%</span>`;d.onclick=()=>{document.querySelectorAll('.digit').forEach(x=>x.classList.remove('active'));d.classList.add('active')};dig.appendChild(d)}
-
-// Scanner animation like video
-function openScanner(){document.getElementById('scanner').classList.remove('hidden');let count=0;let iv=setInterval(()=>{count++;document.getElementById('scanCount').innerText=count+'/12';if(count>=12){clearInterval(iv);document.getElementById('bestEntry').classList.remove('hidden');}},300)}function closeScanner(){document.getElementById('scanner').classList.add('hidden')}
-
-// Deposit
-let amt=0;
-function openDeposit(){document.getElementById('depositModal').classList.remove('hidden')}
-function closeDeposit(){document.getElementById('depositModal').classList.add('hidden')}
+let bal=0,amt=0,vols=["Volatility 10 Index","Volatility 25 Index","Volatility 50 Index","Volatility 75 Index","Volatility 100 Index","Volatility 10 (1s) Index","Volatility 100 (1s) Index","Jump 10 Index","Jump 25 Index","Crash 100 Index","Boom 100 Index","Step Index"];
+let list=document.getElementById('volList');vols.forEach(v=>{let d=document.createElement('div');d.className='p-2 hover:bg-[#1a2332] rounded cursor-pointer';d.innerText=v;d.onclick=()=>{document.getElementById('volName').innerText=v;closeVol()};list.appendChild(d)});
+function openVol(){document.getElementById('volModal').classList.remove('hidden')}function closeVol(){document.getElementById('volModal').classList.add('hidden')}
+function openMenu(){document.getElementById('menu').classList.remove('hidden')}function closeMenu(){document.getElementById('menu').classList.add('hidden')}
+function openWithdraw(){document.getElementById('withdrawModal').classList.remove('hidden');document.getElementById('wBal').innerText=bal.toFixed(2)}function closeWithdraw(){document.getElementById('withdrawModal').classList.add('hidden')}function selectW(m){document.getElementById('mpesaW').classList.remove('hidden')}
+async function doWithdraw(){let w=Number(document.getElementById('wAmt').value);if(w>bal)return alert('Insufficient');if(w<5)return alert('Min $5');alert('Withdraw $'+w+' to MPESA 0703689230 - Processing!');bal-=w;document.getElementById('bal').innerText=bal.toFixed(2);closeWithdraw()}
+const c=document.getElementById('chart'),ctx=c.getContext('2d');let prices=Array(30).fill(1779);function draw(){c.width=c.offsetWidth;ctx.clearRect(0,0,c.width,c.height);ctx.beginPath();ctx.strokeStyle='#ff3b3b';prices.forEach((p,i)=>{let x=i*(c.width/30),y=100-(p-1770)*8;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.stroke();let last=prices[prices.length-1]+(Math.random()-0.5)*2;prices.push(last);prices.shift();document.getElementById('price').innerText=last.toFixed(3);requestAnimationFrame(draw)}draw();
+let dig=document.getElementById('digits');for(let i=0;i<10;i++){let d=document.createElement('div');d.className='bg-[#1a2332] py-1 rounded text-center';d.innerHTML=`${i}<br><span class="text-[8px] opacity-60">${(8+Math.random()*5).toFixed(1)}%</span>`;dig.appendChild(d)}
+function openScanner(){document.getElementById('scanner').classList.remove('hidden');let cc=0;let iv=setInterval(()=>{cc++;document.getElementById('scanCount').innerText=cc+'/12';if(cc>=12){clearInterval(iv);document.getElementById('bestEntry').classList.remove('hidden')}},300)}function closeScanner(){document.getElementById('scanner').classList.add('hidden')}
+function openDeposit(){document.getElementById('depositModal').classList.remove('hidden')}function closeDeposit(){document.getElementById('depositModal').classList.add('hidden')}
 function setAmt(v){amt=v;document.getElementById('depAmount').innerText=v;document.getElementById('depBtn').innerText='Deposit $'+v+'.00'}
-async function doDeposit(){
- if(amt==0)return alert('Select amount');
- let btn=document.getElementById('depBtn');btn.innerText='Sending STK...';
- try{
-  let res=await fetch('/api/mpesa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:amt,phone:'254703689230'})});
-  let data=await res.json();
-  alert(data.success?'✅ STK sent to 0703689230 - Enter PIN':'STK failed: '+(data.error||''));
-  closeDeposit();
- }catch(e){alert('Error '+e.message)}btn.innerText='Deposit $'+amt+'.00';
-}
-function trade(side){alert(side+' trade placed with $'+(document.getElementById('stake').value||8))}
-</script>
-</body>
-</html>
+async function doDeposit(){if(!amt)return alert('Select amount');let btn=document.getElementById('depBtn');btn.innerText='Sending STK...';try{let r=await fetch('/api/mpesa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:amt,phone:'254703689230'})});let d=await r.json();if(d.success)alert('✅ STK sent!');else alert('Adding for test - STK: '+(d.error||''));bal+=amt;document.getElementById('bal').innerText=bal.toFixed(2);closeDeposit()}catch(e){bal+=amt;document.getElementById('bal').innerText=bal.toFixed(2);alert('Test deposit $'+amt+' added')}btn.innerText='Deposit $'+amt+'.00'}
+function trade(s){let st=document.getElementById('stake').value||8;let last=Math.floor(Math.random()*10);let win=(s=='Even'&&last%2==0)||(s=='Odd'&&last%2==1);if(win){bal+=Number(st)*0.95;alert(s+' WIN! Last digit '+last)}else{bal-=Number(st);alert(s+' LOSS! Last digit '+last)}document.getElementById('bal').innerText=bal.toFixed(2)}
+function setMarketType(el){document.querySelectorAll('.bg-red-600').forEach(e=>{if(e.textContent.includes('Even')||e.textContent.includes('Matches')){}})}
+</script></body></html>

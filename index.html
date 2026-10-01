@@ -1,55 +1,103 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RQPtrade</title><script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"><style>body{font-family:Inter;background:#080b12;color:#fff}input{background:#131a27;border:1px solid #1e2a3a}</style></head><body>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RQPtrade - Real MPESA</title>
+<style>
+body{background:#0a0e12;color:white;font-family:sans-serif;margin:0}
+.header{display:flex;justify-content:space-between;padding:15px;background:#111}
+.balance{color:#0f0;font-weight:bold}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:999;align-items:center;justify-content:center}
+.modal.active{display:flex}
+.modal-box{background:#1a1a1a;padding:25px;border-radius:12px;width:90%;max-width:350px}
+input{width:100%;padding:12px;margin:10px 0;border-radius:8px;border:1px solid #333;background:#222;color:white;box-sizing:border-box}
+button{width:100%;padding:14px;border-radius:8px;border:none;font-weight:bold;cursor:pointer}
+.btn-red{background:#8b0000;color:white}
+.btn-green{background:#0f0;color:black;margin-top:10px}
+.trade-area{padding:20px;text-align:center;margin-top:50px}
+</style>
+</head>
+<body>
 
-<!-- LANDING like 0:00 in video -->
-<div id="landing" class="min-h-screen p-6">
-<div class="flex justify-between items-center"><span class="font-bold">RQP<span class="text-red-500">trade</span></span><button onclick="show('login')" class="bg-white text-black px-4 py-1 rounded-full text-sm">Open account</button></div>
-<div class="mt-20"><span class="text-[10px] bg-[#131a27] px-3 py-1 rounded-full border border-red-900/30">RQP TRADE TERMINAL - Built for decisive traders</span><br><span class="text-[10px] mt-3 inline-block bg-red-900/20 text-red-400 px-3 py-1 rounded-full">● Markets available around the clock</span><h1 class="text-4xl font-bold mt-4 leading-tight">Trade with a<br>clearer point<br>of view.</h1><p class="text-xs opacity-60 mt-3">Explore synthetic markets, define your risk, and manage each contract from a professional trading workspace.</p><div class="flex gap-2 mt-6"><button onclick="show('trade')" class="bg-red-600 px-5 py-2 rounded-full text-sm">Start trading →</button><button onclick="show('signup')" class="bg-[#131a27] px-5 py-2 rounded-full text-sm">Register</button></div><div class="flex gap-4 mt-4 text-[10px]"><span>✓ Defined maximum loss</span><span>✓ Demo access</span><span>✓ Mobile-ready</span></div></div>
+<div class="header">
+  <div><b>RQPtrade</b> <span class="balance" id="balDisplay">$70.50</span></div>
+  <button onclick="openDeposit()" style="width:auto;padding:8px 15px;background:#ff4444;border-radius:20px">Deposit</button>
 </div>
 
-<!-- LOGIN like 1:15 in video -->
-<div id="login" class="hidden min-h-screen p-6 bg-[#080b12]"><div class="flex justify-between"><span class="font-bold">RQP<span class="text-red-500">trade</span></span></div><h2 class="text-2xl font-bold mt-20">Welcome back</h2><p class="text-xs opacity-60">Sign in to continue trading</p><div class="mt-6"><label class="text-xs">Email</label><input id="loginEmail" placeholder="you@example.com" class="w-full p-3 rounded-lg mt-1 text-sm"><label class="text-xs mt-4 block">Password</label><input id="loginPass" type="password" placeholder="Your password" class="w-full p-3 rounded-lg mt-1 text-sm"><p class="text-[10px] text-red-400 text-right mt-1">Forgot password?</p><button onclick="doLogin()" class="w-full bg-red-600 py-3 rounded-lg mt-6 text-sm">Sign in →</button><p class="text-xs text-center mt-4 opacity-60">Don't have an account? <span onclick="show('signup')" class="text-red-400 cursor-pointer">Create one</span></p></div></div>
-
-<!-- SIGNUP like 14s -->
-<div id="signup" class="hidden min-h-screen p-6"><div class="font-bold">RQP<span class="text-red-500">trade</span></div><h2 class="text-2xl font-bold mt-6">Create account</h2><p class="text-xs opacity-60">Fill in your details to get started</p><div class="mt-4 space-y-3 text-xs"><label>Full Name</label><input id="suName" placeholder="John Doe" class="w-full p-2.5 rounded-lg"><label>Email</label><input id="suEmail" placeholder="you@example.com" class="w-full p-2.5 rounded-lg"><label>Country</label><select class="w-full p-2.5 rounded-lg bg-[#131a27] border border-[#1e2a3a]"><option>KE Kenya</option></select><label>Phone Number</label><div class="flex gap-2"><span class="bg-[#131a27] border border-[#1e2a3a] p-2.5 rounded-lg">+254</span><input id="suPhone" placeholder="712345678" class="flex-1 p-2.5 rounded-lg"></div><label>Password</label><input type="password" placeholder="Min 6 characters" class="w-full p-2.5 rounded-lg"><button onclick="doSignup()" class="w-full bg-red-600 py-3 rounded-lg mt-2">Create account</button><p class="text-center">Have account? <span onclick="show('login')" class="text-red-400 cursor-pointer">Sign in</span></p></div></div>
-
-<!-- LOADING like 2.1s video - Welcome back Dennis -->
-<div id="loading" class="hidden min-h-screen bg-[#080b12] flex flex-col p-6 justify-center items-center text-center"><div class="w-full text-left"><span class="font-bold">RQP<span class="text-red-500">trade</span></span></div><div class="mt-20"><h2 class="text-xl font-bold">Welcome back</h2><p class="text-xs opacity-60">Preparing your trading workspace...</p><div class="flex justify-center gap-1 mt-6 h-8 items-end"><div class="w-1 bg-white h-2"></div><div class="w-1 bg-white h-4"></div><div class="w-1 bg-red-500 h-8"></div><div class="w-1 bg-white h-5"></div><div class="w-1 bg-red-500 h-7"></div><div class="w-1 bg-white h-3"></div></div><h3 class="mt-4">Welcome back, <span id="welcomeName" class="text-red-500">Dennis</span></h3><p class="text-[10px] opacity-60">Securing your session.</p><p class="text-[9px] opacity-40 mt-8 tracking-widest">OPENING TRADING TERMINAL</p><div class="w-20 h-0.5 bg-red-600 mx-auto mt-2"></div></div></div>
-
-<!-- TRADE TERMINAL like 6.3s video -->
-<div id="trade" class="hidden">
-<header class="flex justify-between items-center p-2 border-b border-[#1a2332] bg-[#0f141e]"><div class="flex items-center gap-2"><button onclick="openMenu()" class="text-lg">☰</button><span class="font-bold text-sm">RQP<span class="text-red-500">trade</span></span><span class="bg-[#1a2332] px-2 py-0.5 rounded text-[11px]">$<span id="bal">0.00</span></span><span class="bg-[#1a2332] px-2 py-0.5 rounded text-[10px]">▼</span></div><div class="flex gap-1"><span class="bg-[#1a2332] p-1 rounded text-xs">🔔</span><span class="bg-[#1a2332] p-1 rounded text-xs">⚙️</span><button onclick="openDeposit()" class="bg-white text-black px-3 py-1 rounded-full text-[11px]">Deposit</button></div></header>
-<div class="flex gap-1 p-2 text-[10px]"><span class="bg-[#1a2332] px-2 py-1 rounded">Matches/Differs</span><span class="bg-red-600 px-2 py-1 rounded">Even/Odd</span><span class="bg-[#1a2332] px-2 py-1 rounded">Over/Under</span><span class="bg-[#1a2332] px-2 py-1 rounded ml-auto">How to trade Even/Odd?</span></div>
-<div class="mx-2 bg-[#111827] p-2 rounded flex justify-between items-center"><div class="flex items-center gap-2"><span class="bg-[#1a2332] px-1 rounded text-[9px]">TT</span><select id="volName" class="bg-transparent text-[11px]"><option>Volatility 10 (1s) Index</option><option>Volatility 25 Index</option><option>Volatility 50 Index</option><option>Volatility 75 Index</option><option>Volatility 100 Index</option><option>Jump 10 Index</option><option>Crash 100 Index</option></select></div><span class="text-[9px] bg-[#1a2332] px-2 py-0.5 rounded">50%</span></div>
-<div class="relative mx-2 mt-1 bg-[#0e1420] rounded h-[200px]"><canvas id="chart" class="w-full h-full"></canvas><div class="absolute top-2 left-2 text-[10px]"><p id="volPrice" class="text-red-400">9450.79 -0.00 (-0.00%)</p></div><div class="absolute top-1/2 right-1 bg-red-600 text-[9px] px-1 rounded" id="livePrice">9450.798</div><div class="absolute right-1 top-2 text-[8px] opacity-50 text-right"><div>9450.825</div><div>9450.735</div><div>9450.646</div><div>9450.557</div><div>9450.467</div></div></div>
-<div class="grid grid-cols-10 gap-[2px] mx-2 mt-2" id="digits"></div>
-<div class="flex gap-2 mx-2 mt-2"><button class="flex-1 bg-[#1e293b] py-1.5 rounded text-[11px]">AUTO</button><button class="flex-1 bg-[#1e293b] py-1.5 rounded text-[11px] border border-red-900/50">MANUAL</button><span class="flex-1 text-right text-[10px]">2 ticks</span></div>
-<div class="grid grid-cols-4 gap-2 mx-2 mt-2 text-[9px]"><div>DURATION<div class="flex gap-1 mt-1"><span class="bg-[#1a2332] px-2 py-1 rounded">1</span><span class="bg-red-600 px-2 py-1 rounded">2</span><span class="bg-[#1a2332] px-2 py-1 rounded">5</span><span class="bg-[#1a2332] px-2 py-1 rounded">10</span></div></div><div>STAKE<input id="stake" value="10" class="w-full bg-[#1a2332] mt-1 p-1 rounded text-center text-[11px]"></div><div>SESSION P/L<div class="bg-[#1a2332] mt-1 p-1 rounded text-center">+0.00</div></div><div></div></div>
-<div class="grid grid-cols-3 gap-2 mx-2 mt-2 text-[9px]"><div>$ TARGET<input value="200" class="w-full bg-[#1a2332] mt-1 p-1 rounded text-center"></div><div>$ STOP LOSS<input value="999" class="w-full bg-[#1a2332] mt-1 p-1 rounded text-center"></div><div>MULT<input value="2" class="w-full bg-[#1a2332] mt-1 p-1 rounded text-center"></div></div>
-<div class="grid grid-cols-2 gap-2 mx-2 mt-3"><button onclick="trade('Even')" class="bg-[#1a2332] border border-[#2a3441] py-2 rounded"><p class="text-xs">Even</p><p class="text-[10px] opacity-60">$19.52</p><p class="text-[9px] text-green-400">95.20%</p></button><button onclick="trade('Odd')" class="bg-[#1a2332] border border-[#2a3441] py-2 rounded"><p class="text-xs">Odd</p><p class="text-[10px] opacity-60">$19.52</p><p class="text-[9px] text-green-400">95.30%</p></button></div>
-<div class="flex justify-around mt-4 border-t border-[#1a2332] py-2 text-[10px]"><span>💬 Live Chat</span><span class="bg-white text-black px-3 py-1 rounded-full">AI</span><span>📊 Positions</span></div>
+<div class="trade-area">
+  <h3>Volatility 10 (1s) Index</h3>
+  <p>Balance: <span id="mainBal">$70.50</span></p>
+  <button onclick="openDeposit()" class="btn-red" style="max-width:300px">Deposit $50.00</button>
+  <p style="margin-top:20px;color:#888;font-size:12px">Even/Odd trading - Live Chat</p>
 </div>
 
-<!-- MENU like 8.4s -->
-<div id="menu" class="hidden fixed inset-0 bg-black/70 z-50"><div class="bg-[#0f141e] w-64 h-full p-4"><div class="flex justify-between"><span class="font-bold">RQP<span class="text-red-500">trade</span> Menu</span><span onclick="closeMenu()" class="cursor-pointer">x</span></div><div class="mt-6 space-y-4 text-sm"><div onclick="openDeposit();closeMenu()" class="flex gap-3 cursor-pointer">⬇️ Deposit</div><div onclick="openWithdraw();closeMenu()" class="flex gap-3 cursor-pointer">⬆️ Withdraw</div><div class="flex gap-3 opacity-80">🕒 History</div><div class="flex gap-3 opacity-80">📄 Reports</div><div class="flex gap-3 opacity-80">📖 How to Trade</div><div class="flex gap-3 opacity-80">✨ Refer & Earn</div><div class="flex gap-3 opacity-80">👤 Account</div><div class="flex gap-3 opacity-80">💬 Live Chat</div><div class="flex gap-3 opacity-80">🌐 Language</div><div class="flex gap-3 opacity-80">☀️ Light theme</div><div class="mt-20 text-xs"><p class="opacity-50">Support</p><p class="text-[11px]">support@rqptrade.com</p></div><div onclick="logout()" class="mt-6 text-red-400 flex gap-2 cursor-pointer">↪ Log Out</div></div></div></div>
-
-<div id="depositModal" class="hidden fixed inset-0 bg-black/80 z-[60] flex items-center justify-center p-4"><div class="bg-[#141a26] w-full max-w-sm rounded-2xl p-5"><div class="flex justify-between"><h3>Deposit funds<br><span class="text-[10px] opacity-60">MPESA</span></h3><span onclick="closeDeposit()">X</span></div><p class="text-xs mt-3">AMOUNT (USD)</p><p class="text-2xl font-bold">$<span id="depAmount">0</span></p><div class="grid grid-cols-6 gap-2 mt-2 text-[10px]"><button onclick="setAmt(1)" class="bg-[#1a2332] py-2 rounded">$1</button><button onclick="setAmt(10)" class="bg-[#1a2332] py-2 rounded">$10</button><button onclick="setAmt(25)" class="bg-[#1a2332] py-2 rounded">$25</button><button onclick="setAmt(50)" class="bg-[#1a2332] py-2 rounded">$50</button><button onclick="setAmt(100)" class="bg-[#1a2332] py-2 rounded">$100</button><button onclick="setAmt(250)" class="bg-[#1a2332] py-2 rounded">$250</button></div><p class="text-[10px] mt-3">M-PESA: 0703689230</p><button onclick="doDeposit()" id="depBtn" class="w-full bg-red-600 mt-4 py-3 rounded-full text-sm">Deposit $0.00</button></div></div>
-
-<div id="withdrawModal" class="hidden fixed inset-0 bg-black/80 z-[60] flex items-center justify-center p-4"><div class="bg-[#141a26] w-full max-w-sm rounded-2xl p-5"><h3>Withdraw</h3><p class="text-xs opacity-60">Available: $<span id="wBal">0</span></p><input id="wAmt" type="number" placeholder="Amount" class="w-full mt-3 p-2 rounded text-sm"><button onclick="doWithdraw()" class="w-full bg-red-600 mt-3 py-2 rounded-full text-sm">Withdraw to MPESA</button><button onclick="closeWithdraw()" class="w-full mt-2 text-xs">Close</button></div></div>
+<!-- Deposit Modal -->
+<div class="modal" id="depositModal">
+  <div class="modal-box">
+    <div style="display:flex;justify-content:space-between"><h3>Deposit funds</h3><span onclick="closeDeposit()" style="cursor:pointer">X</span></div>
+    <p style="font-size:12px;color:#aaa">Enter MPESA number to receive STK push</p>
+    <input type="tel" id="phoneInput" placeholder="254712345678" value="254">
+    <input type="number" id="amountInput" value="50" min="1">
+    <button class="btn-red" id="depositBtn" onclick="realDeposit()">Deposit $50.00</button>
+    <div id="status" style="margin-top:10px;font-size:12px;color:#0f0"></div>
+  </div>
+</div>
 
 <script>
-let bal=Number(localStorage.getItem('rqp_bal')||0);
-function show(id){['landing','login','signup','loading','trade'].forEach(x=>document.getElementById(x).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');if(id==='trade')initChart();}
-function doLogin(){let email=document.getElementById('loginEmail').value||'Dennis';let name=email.split('@')[0];localStorage.setItem('rqp_name',name);document.getElementById('welcomeName').innerText=name;show('loading');setTimeout(()=>{document.getElementById('bal').innerText=bal.toFixed(2);show('trade');},2500);}
-function doSignup(){let name=document.getElementById('suName').value||'Dennis';localStorage.setItem('rqp_name',name);document.getElementById('welcomeName').innerText=name;show('loading');setTimeout(()=>show('trade'),2500);}
-function openMenu(){document.getElementById('menu').classList.remove('hidden')}function closeMenu(){document.getElementById('menu').classList.add('hidden')}
-function logout(){localStorage.removeItem('rqp_name');show('login');closeMenu();}
-function openDeposit(){document.getElementById('depositModal').classList.remove('hidden')}function closeDeposit(){document.getElementById('depositModal').classList.add('hidden')}
-function openWithdraw(){document.getElementById('withdrawModal').classList.remove('hidden');document.getElementById('wBal').innerText=bal.toFixed(2)}function closeWithdraw(){document.getElementById('withdrawModal').classList.add('hidden')}
-let amt=0;function setAmt(v){amt=v;document.getElementById('depAmount').innerText=v;document.getElementById('depBtn').innerText='Deposit $'+v+'.00'}
-async function doDeposit(){if(!amt)return alert('Pick amount');let btn=document.getElementById('depBtn');btn.innerText='Sending STK to 0703689230...';try{let r=await fetch('/api/mpesa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:amt,phone:'254703689230'})});let d=await r.json();bal+=amt;localStorage.setItem('rqp_bal',bal);document.getElementById('bal').innerText=bal.toFixed(2);alert(d.success?'✅ STK sent! $'+amt+' added':'✅ $'+amt+' added (test)');closeDeposit();}catch(e){bal+=amt;localStorage.setItem('rqp_bal',bal);document.getElementById('bal').innerText=bal.toFixed(2);alert('✅ $'+amt+' added');closeDeposit()}btn.innerText='Deposit $'+amt+'.00'}
-function doWithdraw(){let w=Number(document.getElementById('wAmt').value);if(w<5)return alert('Min $5');if(w>bal)return alert('No funds');bal-=w;localStorage.setItem('rqp_bal',bal);document.getElementById('bal').innerText=bal.toFixed(2);alert('Withdraw $'+w+' to 0703689230 processing');closeWithdraw();}
-function trade(s){let stake=Number(document.getElementById('stake').value||10);if(bal<stake)return alert('Deposit first!');let last=Math.floor(Math.random()*10);let win=(s=='Even'&&last%2==0)||(s=='Odd'&&last%2==1);if(win){bal+=stake*0.95;alert(s+' WIN! Digit '+last)}else{bal-=stake;alert(s+' LOSS! Digit '+last)}localStorage.setItem('rqp_bal',bal);document.getElementById('bal').innerText=bal.toFixed(2);}
-function initChart(){const c=document.getElementById('chart'),ctx=c.getContext('2d');c.width=c.offsetWidth;c.height=200;let prices=Array(60).fill(9450).map((v,i)=>v+Math.sin(i/5)*2);let digits=document.getElementById('digits');digits.innerHTML='';for(let i=0;i<10;i++){let d=document.createElement('div');d.className='bg-[#1a2332] py-1 rounded text-center text-[10px]';d.id='digit-'+i;d.innerHTML=`${i}<br><span class="text-[8px] opacity-60">${(8+Math.random()*6).toFixed(1)}%</span>`;digits.appendChild(d);}function draw(){ctx.clearRect(0,0,c.width,c.height);ctx.beginPath();ctx.strokeStyle='#ef4444';ctx.lineWidth=1.2;prices.forEach((p,i)=>{let x=i*(c.width/60),y=100-(p-9445)*15;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.stroke();let last=prices[prices.length-1]+(Math.random()-0.5)*1.5;prices.push(last);prices.shift();document.getElementById('livePrice').innerText=last.toFixed(3);document.getElementById('volPrice').innerText=last.toFixed(2)+' -0.00 (-0.00%)';let digit=String(Math.floor(last*1000)%10);document.querySelectorAll('[id^=digit-]').forEach(el=>el.classList.remove('bg-red-600'));let active=document.getElementById('digit-'+digit);if(active)active.classList.add('bg-red-600');requestAnimationFrame(draw)}draw();}
-show('landing');
-</script></body></html>
+let balance = 70.50;
+function openDeposit(){ document.getElementById('depositModal').classList.add('active'); }
+function closeDeposit(){ document.getElementById('depositModal').classList.remove('active'); }
+
+async function realDeposit(){
+  let phone = document.getElementById('phoneInput').value.trim();
+  let amount = document.getElementById('amountInput').value.trim() || 50;
+  
+  if(!phone || phone.length < 9){ alert('Enter valid phone 2547XXXXXXXX'); return; }
+  phone = phone.replace(/\D/g,'');
+  if(phone.startsWith('0')) phone = '254' + phone.slice(1);
+  if(phone.length === 9) phone = '254' + phone;
+  
+  const btn = document.getElementById('depositBtn');
+  const status = document.getElementById('status');
+  const oldText = btn.innerText;
+  btn.innerText = 'Sending STK... Wait';
+  btn.disabled = true;
+  status.innerText = 'Calling Safaricom...';
+  
+  try{
+    const res = await fetch('/api/mpesa', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ phone: phone, amount: parseInt(amount) })
+    });
+    const data = await res.json();
+    console.log('REAL MPESA:', data);
+    
+    if(data.ResponseCode === '0'){
+      status.innerText = '✅ STK Sent to ' + phone;
+      alert('✅ REAL STK PUSH SENT!\n\nCheck phone ' + phone + '\nEnter MPESA PIN\n\nWe will add balance after you pay.');
+      closeDeposit();
+    } else {
+      status.innerText = '❌ Failed';
+      alert('MPESA Error:\n' + JSON.stringify(data, null, 2));
+    }
+  }catch(e){
+    status.innerText = 'Error: ' + e.message;
+    alert('Network Error: ' + e.message);
+  }finally{
+    btn.innerText = oldText;
+    btn.disabled = false;
+  }
+}
+
+// Update balance display when MPESA callback confirms (you need to implement polling later)
+function addRealBalance(amt){
+  balance += parseFloat(amt);
+  document.getElementById('balDisplay').innerText = '$' + balance.toFixed(2);
+  document.getElementById('mainBal').innerText = '$' + balance.toFixed(2);
+}
+</script>
+
+</body>
+</html>

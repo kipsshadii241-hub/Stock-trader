@@ -1,14 +1,9 @@
+<script>
 async function depositFunds(){
-  const amountInput = document.querySelector('input[type="number"]') || document.getElementById('amount');
+  const amountInput = document.querySelector('input[type="number"]');
   const amount = amountInput ? amountInput.value : 10;
   const phone = "254703689230";
-  
   if(!amount) return alert('Enter amount');
-  
-  // Show loading
-  const btn = document.querySelector('button');
-  if(btn) btn.innerText = 'Sending STK...';
-
   try{
     const res = await fetch('/api/mpesa',{
       method:'POST',
@@ -16,15 +11,13 @@ async function depositFunds(){
       body:JSON.stringify({amount:amount, phone:phone})
     });
     const data = await res.json();
-    
     if(data.success){
-      alert('✅ STK PUSH SENT to '+phone+'! Check phone and enter PIN');
+      alert('✅ STK PUSH SENT to '+phone+'! Check phone and enter PIN!');
     }else{
       alert('❌ Failed: '+(data.error||'Try again'));
     }
   }catch(err){
     alert('Error: '+err.message);
-  } finally {
-    if(btn) btn.innerText = 'Deposit';
   }
 }
+</script>

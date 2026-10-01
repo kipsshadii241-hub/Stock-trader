@@ -1,25 +1,36 @@
 export default async function handler(req,res){
  if(req.method!=='POST') return res.status(405).json({error:'POST only'});
- const {amount,phone}=req.body;
- if(!amount||!phone) return res.status(400).json({error:'amount/phone missing'});
- const key=process.env.MPESA_CONSUMER_KEY;
- const secret=process.env.MPESA_CONSUMER_SECRET;
- const passkey=process.env.MPESA_PASSKEY;
- const shortcode=process.env.MPESA_SHORTCODE||'174379';
- if(!key||!secret||!passkey){
-   return res.json({success:false,fallback:true,error:'API not configured'});
- }
  try{
+   const {amount,phone}=req.body;
+   if(!amount||!phone) return res.status(400).json({error:'Missing amount/phone'});
+   // --- PASTE YOUR REAL KEYS BELOW ---
+   const key="PASTE_YOUR_nbpo_CONSUMER_KEY_HERE";
+   const secret="PASTE_YOUR_nDPU_SECRET_HERE";
+   const passkey="bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
+   const shortcode="174379";
+   // --- END KEYS ---
    const auth=Buffer.from(`${key}:${secret}`).toString('base64');
    const tRes=await fetch('https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials',{headers:{Authorization:`Basic ${auth}`}});
    const tData=await tRes.json();
    const token=tData.access_token;
+   if(!token){ console.log(tData); return res.json({success:false,fallback:true,error:'Token failed'}); }
    const timestamp=new Date().toISOString().replace(/[^0-9]/g,'').slice(0,14);
    const password=Buffer.from(shortcode+passkey+timestamp).toString('base64');
    let clean=phone.replace(/\D/g,''); if(clean.startsWith('0')) clean='254'+clean.slice(1);
-   const sRes=await fetch('https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest',{method:'POST',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify({BusinessShortCode:shortcode,Password:password,Timestamp:timestamp,TransactionType:'CustomerPayBillOnline',Amount:Math.round(amount*129.7),PartyA:clean,PartyB:shortcode,PhoneNumber:clean,CallBackURL:'https://rader-nu.vercel.app/api/callback',AccountReference:'RQPtrade',TransactionDesc:'Deposit'})});
-   const sData=await sRes.json();
-   if(sData.ResponseCode=='0') return res.json({success:true});
-   else return res.json({success:false,error:sData.errorMessage});
- }catch(e){return res.json({success:false,error:e.message})}
+   const stkRes=await fetch('https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest',{
+     method:'POST',
+     headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},
+     body:JSON.stringify({
+       BusinessShortCode:shortcode,Password:password,Timestamp:timestamp,
+       TransactionType:'CustomerPayBillOnline',
+       Amount:Math.round(Number(amount)*129.7),
+       PartyA:clean,PartyB:shortcode,PhoneNumber:clean,
+       CallBackURL:'https://stock-trader-nu.vercel.app/api/callback',
+       AccountReference:'RQPtrade',TransactionDesc:'Deposit'
+     })
+   });
+   const stkData=await stkRes.json();
+   if(stkData.ResponseCode=='0') return res.json({success:true,message:'STK sent'});
+   else return res.json({success:false,fallback:true,error:stkData.errorMessage||'STK failed'});
+ }catch(e){ return res.json({success:false,fallback:true,error:e.message}); }
 }

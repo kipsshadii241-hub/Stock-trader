@@ -1,88 +1,81 @@
-// api/mpesa.js - FINAL - Never crashes, always returns JSON
+// api/mpesa.js - REAL Daraja, NO FAKE
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({error:'POST only'});
   
-  if (req.method === 'GET') {
-    return res.status(200).json({ status: 'MPESA API Running', time: new Date().toISOString() });
-  }
-  
-  if (req.method !== 'POST') {
-    return res.status(200).json({ success: false, error: 'POST only' });
-  }
-
   try {
-    const { amount, phone } = req.body || {};
-    if (!amount) return res.status(200).json({ success: false, error: 'No amount' });
+    const { phone, amount } = req.body;
+    console.log('MPESA REQUEST:', phone, amount);
     
-    let cleanPhone = (phone || '254703689230').replace(/\D/g, '');
-    if (cleanPhone.startsWith('0')) cleanPhone = '254' + cleanPhone.slice(1);
-    if (cleanPhone.startsWith('7')) cleanPhone = '254' + cleanPhone;
-
-    // TEST MODE - Always succeed so balance adds
-    // Real STK will work once you add ENV keys in Vercel
-    const MPESA_KEY = process.env.MPESA_CONSUMER_KEY;
-    const MPESA_SECRET = process.env.MPESA_CONSUMER_SECRET;
-
-    if (!MPESA_KEY || !MPESA_SECRET) {
-      console.log('No keys - using TEST MODE');
-      return res.status(200).json({ 
-        success: true, 
-        message: 'TEST MODE - Deposit added',
-        testMode: true,
-        phone: cleanPhone,
-        amount: amount
-      });
+    const consumerKey = process.env.MPESA_CONSUMER_KEY;
+    const consumerSecret = process.env.MPESA_CONSUMER_SECRET;
+    const passkey = process.env.MPESA_PASSKEY;
+    const shortcode = process.env.MPESA_SHORTCODE || '174379';
+    
+    // CHECK ENV
+    if(!consumerKey || !consumerSecret || !passkey){
+      console.error('ENV MISSING:', {hasKey:!!consumerKey, hasSecret:!!consumerSecret, hasPasskey:!!passkey});
+      return res.status(500).json({error:'MPESA keys missing in Vercel Env'});
     }
 
-    // REAL STK (when keys exist)
-    const auth = Buffer.from(`${MPESA_KEY}:${MPESA_SECRET}`).toString('base64');
-    const tokenRes = await fetch('https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials', {
+    // Phone format
+    let cleanPhone = phone.toString().replace(/\D/g,'');
+    if(cleanPhone.startsWith('0')) cleanPhone = '254'+cleanPhone.slice(1);
+    if(!cleanPhone.startsWith('254')) cleanPhone = '254'+cleanPhone;
+    
+    // 1. Token
+    const auth = Buffer.from(`${consumerKey}:${consumerSecret}`).toString('base64');
+    const tokenResponse = await fetch('https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials', {
       headers: { Authorization: `Basic ${auth}` }
     });
-    const tokenData = await tokenRes.json();
-    const token = tokenData.access_token;
+    const tokenJson = await tokenResponse.json();
+    console.log('TOKEN RESPONSE:', tokenJson);
     
-    if (!token) {
-      return res.status(200).json({ success: true, message: 'Token fail - using test mode', testMode: true });
+    if(!tokenJson.access_token){
+      return res.status(500).json({error:'Token failed', details: tokenJson});
     }
 
-    const passkey = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
-    const shortcode = "174379";
-    const timestamp = new Date().toISOString().replace(/[^0-9]/g, '').slice(0, 14);
-    const password = Buffer.from(shortcode + passkey + timestamp).toString('base64');
+    // 2. Password
+    const timestamp = new Date().toISOString().replace(/[^0-9]/g,'').slice(0,-3);
+    // timestamp format: YYYYMMDDHHmmss
+    const timestamp2 = new Date().toLocaleString('en-KE', {timeZone:'Africa/Nairobi', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false}).replace(/[^0-9]/g,'');
+    // fallback simple
+    const finalTimestamp = timestamp.length===14 ? timestamp : timestamp2;
+    const password = Buffer.from(`${shortcode}${passkey}${finalTimestamp}`).toString('base64');
 
-    const stkRes = await fetch('https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest', {
+    // 3. STK Push REAL
+    const payload = {
+      BusinessShortCode: shortcode,
+      Password: password,
+      Timestamp: finalTimestamp,
+      TransactionType: 'CustomerPayBillOnline',
+      Amount: parseInt(amount) || 1,
+      PartyA: cleanPhone,
+      PartyB: shortcode,
+      PhoneNumber: cleanPhone,
+      CallBackURL: 'https://stock-trader-nu.vercel.app/api/callback',
+      AccountReference: 'StockTrader',
+      TransactionDesc: 'Deposit'
+    };
+    
+    console.log('STK PAYLOAD:', payload);
+
+    const stkResponse = await fetch('https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        BusinessShortCode: shortcode,
-        Password: password,
-        Timestamp: timestamp,
-        TransactionType: 'CustomerPayBillOnline',
-        Amount: Math.round(Number(amount) * 130),
-        PartyA: cleanPhone,
-        PartyB: shortcode,
-        PhoneNumber: cleanPhone,
-        CallBackURL: 'https://stock-trader-nu.vercel.app/api/callback',
-        AccountReference: 'RQP',
-        TransactionDesc: 'Deposit'
-      })
+      headers: {
+        Authorization: `Bearer ${tokenJson.access_token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
     });
     
-    const stkData = await stkRes.json();
-    if (stkData.ResponseCode === '0') {
-      return res.status(200).json({ success: true, message: 'STK SENT' });
-    } else {
-      // Even if STK fails, allow test deposit so you can trade
-      return res.status(200).json({ success: true, message: 'STK failed but test deposit added', testMode: true, stkError: stkData.errorMessage });
-    }
+    const stkData = await stkResponse.json();
+    console.log('STK RESPONSE:', stkData);
+    
+    // Return REAL Safaricom response, not fake
+    return res.status(stkResponse.status).json(stkData);
 
-  } catch (e) {
-    // CRITICAL - Always return JSON, never crash
-    console.error(e);
-    return res.status(200).json({ success: true, message: 'Error but adding for test', testMode: true, error: e.message });
+  } catch (err) {
+    console.error('MPESA CRASH:', err);
+    return res.status(500).json({error: err.message, stack: err.stack});
   }
 }

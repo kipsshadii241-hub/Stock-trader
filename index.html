@@ -2,52 +2,126 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>KQbinary V3</title>
+<title>RQPtrade - Stock Trader Kenya</title>
 <style>
-body{background:#0f0f0f;color:#fff;font-family:Arial;padding:15px}
-input{width:100%;padding:16px;background:#222;color:#fff;border:1px solid #555;border-radius:8px;font-size:16px}
-button{width:100%;padding:16px;background:orange;color:#000;font-weight:bold;border:none;border-radius:8px;font-size:16px;margin-top:10px}
-#status{padding:12px;background:#222;border-radius:8px;margin:12px 0;text-align:center;font-weight:bold}
-.live{background:#003300;color:#0f0;border:1px solid #0f0}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#080b12;color:#fff}
+.header{display:flex;justify-content:space-between;padding:16px;background:#0c0f1a;border-bottom:1px solid #1e2436}
+.logo{font-weight:800;font-size:20px}.logo b{color:#ff3b3b}
+.btn{background:#ff3b3b;color:#fff;border:none;padding:10px 18px;border-radius:8px;font-weight:700}
+.page{display:none;padding:20px}.active{display:block}
+.card{background:#11141f;border:1px solid #1e2436;border-radius:12px;padding:16px}
+input{width:100%;background:#151a27;border:1px solid #2a324a;color:#fff;padding:13px;border-radius:10px;margin:8px 0}
+.badge{display:inline-block;background:rgba(255,59,59,.15);border:1px solid rgba(255,59,59,.3);color:#ff7b7b;padding:6px 12px;border-radius:20px;font-size:11px;margin-bottom:12px}
+.grid10{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin-top:12px}
+.d{height:36px;background:#1a1f2e;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.d.active{background:#ff3b3b}
+.tick{font-size:28px;font-weight:800;color:#ff3b3b;text-align:center;padding:20px 0;font-family:monospace}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.even{padding:14px;border-radius:10px;background:#11261a;border:1px solid #1e7a3a;text-align:center}
+.odd{padding:14px;border-radius:10px;background:#2a1616;border:1px solid #a33;text-align:center}
 </style>
 </head>
 <body>
-<h2 style="color:orange">KQbinary V3 - Kenya</h2>
-<div id="status">PASTE TOKEN TO CONNECT</div>
-Balance: <b id="bal">$ --</b><br>
-Tick R_100: <b id="tick">--</b>
-<input id="token" placeholder="Paste your pat_... token here">
-<button onclick="connect()">SAVE & CONNECT LIVE</button>
+<div class="header">
+<div class="logo">RQP<span style="color:#ff3b3b">trade</span></div>
+<button class="btn" onclick="show('register')">Open account</button>
+</div>
+
+<!-- LANDING -->
+<div id="landing" class="page active">
+<div class="badge">● Markets available around the clock</div>
+<h1 style="font-size:42px;line-height:1.1;font-weight:800">Trade with a clearer<br>point of view.</h1>
+<p style="color:#8a91a8;margin:14px 0;max-width:400px">Explore synthetic markets, define your risk, and manage each contract from a professional trading workspace.</p>
+<div style="display:flex;gap:10px;margin:20px 0">
+<button class="btn" onclick="show('trade')">Start trading →</button>
+<button style="background:transparent;border:1px solid #2a324a;color:#fff;padding:10px 18px;border-radius:8px" onclick="show('register')">Register</button>
+</div>
+<div style="margin-top:30px;display:flex;gap:16px;color:#8a91a8;font-size:12px">
+<span>✓ Defined maximum loss</span><span>✓ Demo access</span><span>✓ Mobile-ready</span>
+</div>
+<div class="card" style="margin-top:30px">
+<div class="tick" id="priceL">9450.58</div>
+<div style="color:#666;font-size:11px;text-align:center">Volatility 10 (1s) Index • Live synthetic markets</div>
+</div>
+</div>
+
+<!-- REGISTER -->
+<div id="register" class="page">
+<h2>Create account</h2><p style="color:#8a91a8;font-size:13px;margin-bottom:16px">Fill in your details to get started</p>
+<input id="fullname" placeholder="Full Name - John Doe" value="Kipkoech">
+<input id="email" placeholder="Email" value="kipsshadii241@gmail.com">
+<div style="background:#ff3b3b;padding:12px;border-radius:10px;margin:8px 0;font-size:13px">KE Kenya</div>
+<div style="display:flex;gap:8px"><div style="background:#151a27;border:1px solid #2a324a;padding:13px;border-radius:10px">+254</div><input id="phone" placeholder="712345678" value="712681370" style="flex:1"></div>
+<input type="password" id="pass" placeholder="Min 8 characters">
+<input type="password" placeholder="Repeat your password">
+<label style="font-size:12px"><input type="checkbox" checked> I agree to Terms and Privacy</label>
+<button class="btn" style="width:100%;margin-top:16px" onclick="show('trade')">Create Account →</button>
+<p style="text-align:center;font-size:13px;margin-top:12px;color:#8a91a8">Already have? <span style="color:#ff3b3b" onclick="show('login')">Sign in</span></p>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="page">
+<h2>Welcome back</h2><p style="color:#8a91a8;font-size:13px;margin-bottom:16px">Sign in to continue trading</p>
+<input placeholder="you@example.com">
+<input type="password" placeholder="Your password">
+<button class="btn" style="width:100%;margin-top:12px" onclick="show('trade')">Sign in →</button>
+<p style="text-align:center;font-size:13px;margin-top:12px;color:#8a91a8">No account? <span style="color:#ff3b3b" onclick="show('register')">Create one</span></p>
+</div>
+
+<!-- TRADE TERMINAL - Even/Odd like video -->
+<div id="trade" class="page">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+<div style="display:flex;gap:8px;font-size:11px"><span style="background:#151a27;padding:6px 10px;border-radius:6px">Matches/Differs</span><span style="background:#ff3b3b;padding:6px 10px;border-radius:6px">Even/Odd</span><span style="background:#151a27;padding:6px 10px;border-radius:6px">Over/Under</span></div>
+<span style="background:#151a27;padding:6px 10px;border-radius:6px;font-size:12px">$0.00 <b style="background:#ff3b3b;padding:4px 8px;border-radius:4px;margin-left:6px" onclick="show('deposit')">Deposit</b></span>
+</div>
+<div class="card">
+<div style="display:flex;justify-content:space-between;font-size:11px"><span>Volatility 10 (1s) Index</span><span id="price2" style="color:#4ade80">9450.58</span></div>
+<div class="tick" id="price">9450.583</div>
+<div class="grid10" id="digits"></div>
+<div class="two">
+<div class="even" onclick="trade('Even')"><b>Even</b><br>50.20%<br>$19.52</div>
+<div class="odd" onclick="trade('Odd')"><b>Odd</b><br>49.80%<br>$19.52</div>
+</div>
+<div style="display:flex;gap:8px;margin-top:12px;font-size:11px">
+<div style="flex:1;background:#151a27;padding:8px;border-radius:6px">DURATION<br><b>2 ticks</b></div>
+<div style="flex:1;background:#151a27;padding:8px;border-radius:6px">STAKE<br><b>$10</b></div>
+<div style="flex:1;background:#151a27;padding:8px;border-radius:6px">TARGET<br><b>200</b></div>
+</div>
+<div id="log" style="margin-top:12px;font-size:11px;color:#4ade80"></div>
+</div>
+</div>
+
+<!-- DEPOSIT -->
+<div id="deposit" class="page">
+<h2>Deposit Funds</h2><p style="color:#8a91a8;font-size:13px;margin-bottom:16px">Choose payment method</p>
+<div class="card" style="margin-bottom:8px" onclick="alert('M-Pesa STK to 0712681370 - Coming next!')"> <b>M-PESA</b><br><span style="font-size:11px;color:#8a91a8">Instant mobile money</span></div>
+<div class="card" style="margin-bottom:8px"> <b>USDT (TRC20)</b><br><span style="font-size:11px;color:#8a91a8">Cryptocurrency</span></div>
+<div class="card" style="margin-bottom:8px"> <b>Worldcoin (WLD)</b><br><span style="font-size:11px;color:#8a91a8">Cryptocurrency</span></div>
+<div class="card"> <b>P2P Marketplace</b><br><span style="font-size:11px;color:#8a91a8">Buy from approved merchants</span></div>
+<button style="margin-top:16px;background:transparent;border:1px solid #2a324a;color:#fff;padding:10px 18px;border-radius:8px" onclick="show('trade')">← Back to trading</button>
+</div>
+
 <script>
-let ws;
-function connect(){
- let t=document.getElementById('token').value.trim();
- if(!t){alert('Paste token');return}
- localStorage.setItem('deriv_token',t);
- start(t);
+function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active')}
+let price=9450.58;
+function updateDigits(){
+let dCont=document.getElementById('digits'); dCont.innerHTML='';
+let last=Math.floor(price).toString().slice(-1);
+for(let i=0;i<10;i++){dCont.innerHTML+=`<div class="d ${i==last?'active':''}">${i}<br><span style="font-size:8px">${(8+Math.random()*5).toFixed(1)}%</span></div>`}
 }
-function start(token){
- document.getElementById('status').innerHTML='CONNECTING...';
- ws=new WebSocket('wss://ws.derivws.com/websockets/v3?app_id=1089');
- ws.onopen=()=>{ws.send(JSON.stringify({authorize:token}))};
- ws.onmessage=(e)=>{
-  let d=JSON.parse(e.data);
-  if(d.error){document.getElementById('status').innerHTML='ERROR: '+d.error.message;return}
-  if(d.authorize){
-   document.getElementById('status').innerHTML='LIVE '+d.authorize.loginid+' CONNECTED ✅';
-   document.getElementById('status').className='live';
-   ws.send(JSON.stringify({balance:1,subscribe:1}));
-   ws.send(JSON.stringify({ticks:'R_100',subscribe:1}));
-  }
-  if(d.balance)document.getElementById('bal').innerHTML='$ '+d.balance.balance;
-  if(d.tick)document.getElementById('tick').innerHTML=d.tick.quote;
- };
- ws.onclose=()=>{document.getElementById('status').innerHTML='RECONNECTING...';setTimeout(()=>start(token),3000)}
+setInterval(()=>{
+price+=(Math.random()-0.5)*0.9;
+document.getElementById('price').innerText=price.toFixed(3);
+document.getElementById('price2').innerText=price.toFixed(2);
+document.getElementById('priceL').innerText=price.toFixed(2);
+updateDigits();
+},1000);
+function trade(type){
+document.getElementById('log').innerText=`✓ Placed ${type} trade at ${price.toFixed(3)} - Stake $10 - Waiting result...`;
+setTimeout(()=>{let win=Math.random()>0.5;document.getElementById('log').innerText=win?`✓ WIN! ${type} - +$19.52`:`✗ LOSS! ${type} - -$10`;},2000);
 }
-window.onload=()=>{
- let t=localStorage.getItem('deriv_token');
- if(t){document.getElementById('token').value=t;start(t)}
-}
+updateDigits();
 </script>
 </body>
 </html>

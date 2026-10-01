@@ -1,70 +1,28 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>RQP Trade</title><style>:root{--red:#ff2e2e;--bg:#0a0e1a;--card:#131a2a;--br:#1e2a44;--txt:#7a859e}*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui,sans-serif}body{background:var(--bg);color:#fff;overflow-x:hidden}.top{height:48px;background:#0f1422;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid var(--br);position:sticky;top:0;z-index:20}.tabs{display:flex;gap:6px;padding:8px;background:#0f1422;overflow:auto}.tab{padding:7px 12px;border-radius:8px;background:#1a2235;color:var(--txt);font-size:11px;border:none;white-space:nowrap;cursor:pointer}.tab.active{background:var(--red);color:#fff}.chartWrap{background:var(--card);margin:8px;border-radius:12px;padding:10px;border:1px solid var(--br)}.digits{display:flex;justify-content:space-between;margin:8px 0}.digit{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;background:#1a2235;border:1px solid var(--br);cursor:pointer}.digit.active{background:var(--red);color:#fff;border-color:var(--red)}.grid10{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin:8px 0}.gbox{background:#1a2235;padding:8px 0;text-align:center;border-radius:8px;font-size:12px;cursor:pointer;border:1px solid var(--br)}.gbox.active{background:var(--red);border-color:var(--red)}.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.box{background:#1a2235;padding:10px;border-radius:10px;text-align:center;font-size:11px;border:1px solid var(--br)}.btnTrade{padding:12px;border-radius:12px;border:none;color:#fff;font-weight:800;width:100%;cursor:pointer;font-size:12px}.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}.modal.open{display:flex}.modalBox{background:#162040;width:100%;max-width:380px;border-radius:16px;padding:18px;border:1px solid var(--br)}#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#162040;border:1px solid var(--red);padding:10px 18px;border-radius:10px;font-size:12px;z-index:200;display:none}</style></head><body>
+<div class="top"><div style="display:flex;gap:10px;align-items:center"><span id="hamburger" style="font-size:20px;cursor:pointer">☰</span><b>RQP<span style="color:var(--red)">trade</span> <small style="background:var(--red);padding:2px 6px;border-radius:10px;font-size:9px">Real</small></b></div><div style="display:flex;gap:10px;align-items:center"><div id="bal" style="font-size:12px;font-weight:700">$0.00</div><button id="depTop" style="background:var(--red);color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer">Deposit</button></div></div>
+<div class="tabs"><button class="tab" id="tabMatch">Matches/Differs</button><button class="tab active" id="tabEven">Even/Odd</button><button class="tab" id="tabOver">Over/Under</button></div>
+<div class="chartWrap"><div style="display:flex;justify-content:space-between"><b style="font-size:13px">Volatility 10 (1s) Index</b><span style="background:#1a2235;padding:3px 8px;border-radius:6px;font-size:10px">50%</span></div><div id="vPrice" style="font-size:11px;color:var(--txt);margin:4px 0">9449.58 -0.38 (-10.05%)</div><div style="height:120px;position:relative;background:#0a0e1a;border-radius:10px;overflow:hidden;margin:6px 0"><svg width="100%" height="100%"><path id="cPath" d="M0 60 L30 55 L60 80 L90 30 L120 50 L150 70 L180 40 L210 60 L240 20 L280 50 L320 60" fill="none" stroke="#ff3b3b" stroke-width="1.8"/></svg><div id="cPrice" style="position:absolute;right:8px;top:42%;background:#fff;color:#000;padding:3px 7px;border-radius:6px;font-size:11px;font-weight:800">9449.188</div></div><div class="digits" id="digits"></div><div style="display:flex;justify-content:space-between;font-size:8px;color:var(--txt);margin-bottom:8px"><span>12.0%</span><span>9.5%</span><span>10.2%</span><span>10.6%</span><span>9.3%</span><span>10.1%</span><span>8.8%</span><span>10.1%</span></div><div style="display:grid;grid-template-columns:1fr 1fr;background:#0a0e1a;border-radius:10px;padding:3px;margin:8px 0"><button id="autoBtn" style="background:var(--red);color:#fff;border:none;padding:8px;border-radius:8px;font-size:11px;font-weight:700">AUTO</button><button id="manualBtn" style="background:transparent;color:var(--txt);border:none;padding:8px;font-size:11px">MANUAL</button></div><div style="display:flex;justify-content:space-between;font-size:10px;color:var(--txt)"><span>DURATION</span><span id="durLabel">2 ticks</span></div><div class="grid10" id="durGrid"></div><div class="row2"><div class="box"><div style="color:var(--txt);font-size:9px">STAKE</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px"><span id="stakeMinus" style="width:24px;height:24px;background:#0a0e1a;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer">−</span><b>$<span id="stakeVal">10</span></b><span id="stakePlus" style="width:24px;height:24px;background:#0a0e1a;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer">+</span></div></div><div class="box"><div style="color:var(--txt);font-size:9px">SESSION P/L</div><div id="pnl" style="margin-top:4px;font-weight:700">+0.00</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;font-size:9px"><div class="box" id="targetBox">◉ TARGET<br><b>$ 280</b></div><div class="box" id="stopBox" style="color:#ff6b6b">◍ STOP LOSS<br><b>$ 999</b></div><div class="box" id="multBox">⚙ MULT<br><b>x 2</b></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px"><button class="btnTrade" id="evenBtn" style="background:#1a2235;border:1px solid #2a3a5a">Even <span style="float:right" id="evenPrice">$1.95</span><br><small style="font-size:9px;color:var(--txt)">52.01%</small></button><button class="btnTrade" id="oddBtn" style="background:#1a2235;border:1px solid var(--red)">Odd <span style="float:right" id="oddPrice">$1.95</span><br><small style="font-size:9px;color:var(--txt)">50.05%</small></button></div><div id="tradeLog" style="text-align:center;font-size:12px;margin-top:10px;height:18px;color:#22c55e"></div></div>
+<div id="menu" class="modal" style="justify-content:flex-start;align-items:stretch"><div style="background:#0f172a;width:82%;height:100%;padding:20px"><div style="display:flex;justify-content:space-between"><b>RQP<span style="color:var(--red)">trade</span> Menu</b><span id="closeMenu" style="cursor:pointer">✕</span></div><div style="margin-top:24px;display:flex;flex-direction:column;gap:18px;font-size:14px;color:#cbd5e1"><div style="cursor:pointer">⬇ Deposit</div><div style="cursor:pointer">⬆ Withdraw</div><div>🕒 History</div><div>📄 Reports</div><div>📖 How to Trade</div><div>✨ Refer & Earn</div><div>👤 Account</div><div>💬 Live Chat</div><div>🌐 Language</div><div>☀ Light theme</div></div><div style="margin-top:50px;border-top:1px solid var(--br);padding-top:14px;font-size:11px;color:var(--txt)">Support<br>support@rqptrade.com<br><br><span style="color:var(--red);cursor:pointer">↪ Log Out</span></div></div></div>
+<div id="depModal" class="modal"><div class="modalBox"><div style="display:flex;justify-content:space-between"><b>Deposit funds</b><span id="closeDep" style="cursor:pointer">✕</span></div><small style="color:var(--txt)">Choose payment method</small><div style="background:#1e2b47;padding:14px;border-radius:12px;margin:10px 0;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--br);cursor:pointer" id="mpesaOpt"><div style="display:flex;gap:12px;align-items:center"><div style="background:#00a651;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800">M</div><div><b>MPESA</b><br><small style="color:var(--txt)">Instant mobile money</small></div></div><span>›</span></div><div style="background:#1e2b47;padding:14px;border-radius:12px;display:flex;justify-content:space-between;border:1px solid var(--br)"><div><b>USDT (TRC20)</b><br><small style="color:var(--txt)">Cryptocurrency</small></div><span>›</span></div></div></div>
+<div id="toast"></div>
 <script>
-// FIX ALL TAPS - KEEP SAME DESIGN
-let stake=10, dur=2, selDigit=9, bal=0, price=9448.49;
-function toast(m){let l=document.getElementById('log')||document.createElement('div');l.id='log';l.style.cssText='position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#162040;padding:10px 16px;border-radius:8px;border:1px solid #ff2e2e;z-index:999;font-size:12px';l.innerText=m;document.body.appendChild(l);setTimeout(()=>l.remove(),2500)}
-
-// 1. MENU hamburger
-document.querySelectorAll('span').forEach(s=>{if(s.textContent==='☰')s.onclick=()=>document.getElementById('menu').style.display='flex'});
-
-// 2. TABS Matches/Differs Even/Odd Over/Under
-document.querySelectorAll('.tab, button').forEach(b=>{
-  if(['Matches/Differs','Even/Odd','Over/Under'].includes(b.textContent.trim())){
-    b.onclick=function(){document.querySelectorAll('.tab').forEach(t=>{t.classList.remove('active');t.style.background='#1a2235'});this.classList.add('active');this.style.background='#ff2e2e';toast(this.textContent+' active')};
-  }
-});
-
-// 3. DIGITS 0-9 circles
-document.querySelectorAll('.digit, div').forEach(d=>{
-  if(/^[0-9]$/.test(d.textContent.trim()) && d.className.includes('digit') || (d.textContent.trim().length===1 && !isNaN(d.textContent))){
-    let txt=d.textContent.trim();
-    if(txt.length===1 && d.offsetWidth<40){
-      d.style.cursor='pointer';
-      d.onclick=function(){document.querySelectorAll('.digit').forEach(x=>{x.classList.remove('active');x.style.background='#1a2235'});this.classList.add('active');this.style.background='#ff2e2e';selDigit=parseInt(txt);toast('Digit '+txt+' selected')};
-    }
-  }
-});
-// Fix for your screenshot digit circles
-let circles=document.querySelectorAll('.digits div, div[style*="border-radius:50%"]');
-circles.forEach(c=>{if(/^[0-9]$/.test(c.textContent.trim().charAt(0))){c.style.cursor='pointer';c.onclick=function(){document.querySelectorAll('.digit').forEach(x=>x.style.background='#1a2235');this.style.background='#ff2e2e';selDigit=parseInt(this.textContent);}}});
-
-// 4. DURATION 1-10
-document.querySelectorAll('.gbox, .grid10 div').forEach(b=>{
-  let n=parseInt(b.textContent);
-  if(n>=1 && n<=10){b.style.cursor='pointer';b.onclick=function(){document.querySelectorAll('.gbox').forEach(x=>{x.classList.remove('active');x.style.background='#1a2235'});this.classList.add('active');this.style.background='#ff2e2e';dur=n;toast(n+' ticks')};}
-});
-
-// 5. AUTO / MANUAL
-let autoBtn=document.evaluate("//button[contains(text(),'AUTO')]",document,null,9,null).singleNodeValue;
-let manualBtn=document.evaluate("//button[contains(text(),'MANUAL')]",document,null,9,null).singleNodeValue;
-if(autoBtn)autoBtn.onclick=function(){this.style.background='#ff2e2e';if(manualBtn)manualBtn.style.background='transparent';toast('AUTO on');};
-if(manualBtn)manualBtn.onclick=function(){this.style.background='#ff2e2e';if(autoBtn)autoBtn.style.background='transparent';toast('MANUAL on');};
-
-// 6. STAKE - +
-let stakeMinus=document.evaluate("//span[text()='−' or text()='-']",document,null,9,null).singleNodeValue;
-let stakePlus=document.evaluate("//span[text()='+']",document,null,9,null).singleNodeValue;
-function updateStake(){let el=document.getElementById('stake');if(el)el.innerText=stake;let ev=document.evaluate("//button[contains(text(),'Even')]",document,null,9,null).singleNodeValue;if(ev)ev.innerHTML=`Even <span style="float:right">$${(stake*0.195).toFixed(2)}</span><br><small>52.01%</small>`;let od=document.evaluate("//button[contains(text(),'Odd')]",document,null,9,null).singleNodeValue;if(od)od.innerHTML=`Odd <span style="float:right">$${(stake*0.195).toFixed(2)}</span><br><small>50.05%</small>`;}
-if(stakeMinus)stakeMinus.onclick=()=>{stake=Math.max(1,stake-1);updateStake()};
-if(stakePlus)stakePlus.onclick=()=>{stake++;updateStake()};
-
-// 7. EVEN / ODD TRADE BUTTONS
-document.querySelectorAll('button').forEach(b=>{
-  if(b.textContent.includes('Even') && b.textContent.includes('$')){b.onclick=()=>{let last=Math.floor(price)%10;let win=last%2===0;toast((win?'✓ WIN Even last '+last+' +$'+(stake*0.95).toFixed(2):'✗ LOSS Even last '+last+' -$'+stake));if(win)bal+=stake*0.95;else bal-=stake;document.getElementById('bal').innerText='$'+bal.toFixed(2)}};
-  if(b.textContent.includes('Odd') && b.textContent.includes('$')){b.onclick=()=>{let last=Math.floor(price)%10;let win=last%2!==0;toast((win?'✓ WIN Odd last '+last+' +$'+(stake*0.95).toFixed(2):'✗ LOSS Odd last '+last+' -$'+stake));if(win)bal+=stake*0.95;else bal-=stake;document.getElementById('bal').innerText='$'+bal.toFixed(2)}};
-});
-
-// 8. DEPOSIT BUTTON
-let depBtn=document.evaluate("//button[contains(text(),'Deposit')]",document,null,9,null).singleNodeValue;
-if(depBtn)depBtn.onclick=()=>{let m=document.getElementById('depModal');if(m)m.classList.add('open');else toast('Deposit: M-Pesa / USDT / Worldcoin / P2P')};
-
-// 9. TARGET STOP MULT - tap to edit
-document.querySelectorAll('.box').forEach(b=>{
-  if(b.textContent.includes('TARGET')||b.textContent.includes('STOP')||b.textContent.includes('MULT')){b.style.cursor='pointer';b.onclick=()=>{let v=prompt('Enter new value for '+b.textContent.split('\n')[0], b.querySelector('b')?.innerText);if(v&&b.querySelector('b'))b.querySelector('b').innerText=v};}
-});
-
-// 10. Live Chat / AI / Positions
-let lc=document.evaluate("//div[contains(text(),'Live Chat')]",document,null,9,null).singleNodeValue;if(lc)lc.onclick=()=>toast('Live Chat: support@rqptrade.com');
-let ai=document.evaluate("//div[contains(text(),'AI')]",document,null,9,null).singleNodeValue;if(ai)ai.onclick=()=>{let m=document.getElementById('scanModal');if(m)m.style.display='flex';else toast('Entry Scanner: Deep Scan for Best Market')};
-let pos=document.evaluate("//div[contains(text(),'Positions')]",document,null,9,null).singleNodeValue;if(pos)pos.onclick=()=>toast('No open positions - Session P/L +0.00');
-
-console.log('V6 TAP FIX LOADED - All buttons working');
-</script>
+let stake=10, dur=2, selDigit=9, bal=0, price=9449.58;
+function showToast(m){let t=document.getElementById('toast');t.innerText=m;t.style.display='block';setTimeout(()=>t.style.display='none',2500)}
+function render(){let d=document.getElementById('digits');d.innerHTML='';for(let i=0;i<10;i++){let e=document.createElement('div');e.className='digit'+(i===selDigit?' active':'');e.innerText=i;e.onclick=()=>{selDigit=i;render();showToast('Digit '+i+' selected')};d.appendChild(e)}let g=document.getElementById('durGrid');g.innerHTML='';for(let i=1;i<=10;i++){let e=document.createElement('div');e.className='gbox'+(i===dur?' active':'');e.innerText=i;e.onclick=()=>{dur=i;document.getElementById('durLabel').innerText=i+' ticks';render();showToast(i+' ticks')};g.appendChild(e)}document.getElementById('stakeVal').innerText=stake;document.getElementById('evenPrice').innerText='$'+(stake*0.195).toFixed(2);document.getElementById('oddPrice').innerText='$'+(stake*0.195).toFixed(2)}
+render();
+document.getElementById('hamburger').onclick=()=>document.getElementById('menu').classList.add('open');
+document.getElementById('closeMenu').onclick=()=>document.getElementById('menu').classList.remove('open');
+document.getElementById('depTop').onclick=()=>document.getElementById('depModal').classList.add('open');
+document.getElementById('closeDep').onclick=()=>document.getElementById('depModal').classList.remove('open');
+document.getElementById('mpesaOpt').onclick=()=>{showToast('M-Pesa STK Push to +2547****370 - KES '+(stake*129.7).toFixed(0));setTimeout(()=>{bal+=stake;document.getElementById('bal').innerText='$'+bal.toFixed(2);document.getElementById('depModal').classList.remove('open');showToast('✓ Deposit $'+stake+' credited!')},1500)};
+document.getElementById('stakeMinus').onclick=()=>{stake=Math.max(1,stake-1);render()};
+document.getElementById('stakePlus').onclick=()=>{stake++;render()};
+document.getElementById('autoBtn').onclick=function(){this.style.background='#ff2e2e';document.getElementById('manualBtn').style.background='transparent';showToast('AUTO on')};
+document.getElementById('manualBtn').onclick=function(){this.style.background='#ff2e2e';document.getElementById('autoBtn').style.background='transparent';showToast('MANUAL on')};
+document.getElementById('evenBtn').onclick=()=>{let last=Math.floor(price)%10;let win=last%2===0;let msg=(win?'✓ WIN Even last '+last+' +$'+(stake*0.95).toFixed(2):'✗ LOSS Even last '+last+' -$'+stake);document.getElementById('tradeLog').innerText=msg;if(win)bal+=stake*0.95;else bal-=stake;document.getElementById('bal').innerText='$'+bal.toFixed(2);document.getElementById('pnl').innerText=(bal>=0?'+':'')+bal.toFixed(2)};
+document.getElementById('oddBtn').onclick=()=>{let last=Math.floor(price)%10;let win=last%2!==0;let msg=(win?'✓ WIN Odd last '+last+' +$'+(stake*0.95).toFixed(2):'✗ LOSS Odd last '+last+' -$'+stake);document.getElementById('tradeLog').innerText=msg;if(win)bal+=stake*0.95;else bal-=stake;document.getElementById('bal').innerText='$'+bal.toFixed(2);document.getElementById('pnl').innerText=(bal>=0?'+':'')+bal.toFixed(2)};
+document.getElementById('tabMatch').onclick=function(){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));this.classList.add('active');showToast('Matches/Differs')};
+document.getElementById('tabEven').onclick=function(){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));this.classList.add('active');showToast('Even/Odd')};
+document.getElementById('tabOver').onclick=function(){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));this.classList.add('active');showToast('Over/Under')};
+setInterval(()=>{price+=(Math.random()-0.5)*0.8;document.getElementById('vPrice').innerText=price.toFixed(2)+' -0.38 (-10.05%)';document.getElementById('cPrice').innerText=price.toFixed(3)},900);
+</script></body></html>

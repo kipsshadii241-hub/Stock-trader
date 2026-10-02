@@ -4,37 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>StockTrader - Volatility 10 (1s)</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0a0a0a;color:#fff;font-family:Arial,sans-serif}
-.header{background:#111;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;position:sticky;top:0;z-index:10}
+.header{background:#111;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;position:sticky;top:0;z-index:20}
 .logo{font-weight:bold;font-size:18px}
 .bal{color:#00ff00;font-weight:bold}
 .deposit-btn{background:#ff3b30;color:#fff;border:none;padding:8px 18px;border-radius:20px;font-weight:bold;cursor:pointer}
 .center{text-align:center;padding:15px 10px}
-h1{font-size:22px;margin-bottom:8px}
-.sub{color:#aaa;font-size:14px}
-.chart-wrap{background:#121212;margin:10px;border-radius:12px;padding:10px;height:55vh;position:relative}
-#price{font-size:28px;font-weight:bold;text-align:center;padding:10px}
+h1{font-size:20px;margin-bottom:5px}
+.sub{color:#aaa;font-size:13px}
+.chart-wrap{background:#121212;margin:10px;border-radius:12px;padding:10px;height:52vh;position:relative}
+#price{font-size:32px;font-weight:bold;text-align:center;padding:8px;color:#00e676}
 .controls{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:15px}
-.btn{padding:20px;border:none;border-radius:12px;font-size:20px;font-weight:bold;cursor:pointer}
+.btn{padding:18px;border:none;border-radius:12px;font-size:20px;font-weight:bold;cursor:pointer}
 .btn-even{background:#00e676;color:#000}
 .btn-odd{background:#ff1744;color:#fff}
-.info{text-align:center;color:#666;font-size:12px;padding:10px}
-.dot{display:inline-block;width:8px;height:8px;background:#00ff00;border-radius:50%;animation:blink 1s infinite;margin-right:5px}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.info{text-align:center;color:#666;font-size:11px;padding:10px;line-height:1.4}
+.live-dot{display:inline-block;width:8px;height:8px;background:#00ff00;border-radius:50%;margin-right:4px}
 </style>
 </head>
 <body>
 <div class="header">
-<div class="logo">StockTrader <span class="bal">$70.50</span></div>
+<div class="logo">StockTrader <span class="bal" id="balHeader">$70.50</span></div>
 <button class="deposit-btn" onclick="window.open('https://app.deriv.com/cashier/deposit?app_id=34yOYkbTRmBuYtPnZYFit','_blank')">Deposit</button>
 </div>
 <div class="center">
 <h1>Volatility 10 (1s) Index</h1>
-<p class="sub"><span class="dot"></span>Balance: $70.50 | <span id="conn">Connecting...</span></p>
-<div id="price">Loading price...</div>
+<p class="sub"><span class="live-dot"></span>Balance: $70.50 | <span id="conn">Connecting...</span></p>
+<div id="price">--.--</div>
 </div>
 <div class="chart-wrap">
 <canvas id="tickChart"></canvas>
@@ -45,46 +44,76 @@ h1{font-size:22px;margin-bottom:8px}
 </div>
 <div class="info">
 App ID: 34yOYkbTRmBuYtPnZYFit | 2.5% markup active | Partner HTS3659JWWVA<br>
-Even/Odd trading - Live Chat - Demo $70.50 (Real $0.00 until you deposit)
+Even/Odd trading - Live - Demo $70.50 (Switch to Real to trade real money)
 </div>
 <script>
-const app_id = '34yOYkbTRmBuYtPnZYFit';
+const APP_ID = '34yOYkbTRmBuYtPnZYFit';
 let prices = [];
 let labels = [];
 let chart;
-const maxPoints = 40;
+const MAX = 50;
 function initChart(){
  const ctx = document.getElementById('tickChart').getContext('2d');
  chart = new Chart(ctx, {
   type: 'line',
-  data: { labels: labels, datasets: [{ label: 'Volatility 10 (1s)', data: prices, borderColor: '#00e676', backgroundColor: 'rgba(0,230,118,0.1)', borderWidth: 2, tension: 0.4, fill: true, pointRadius: 0 }] },
-  options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ x:{display:false}, y:{grid:{color:'#222'}, ticks:{color:'#888'}} }, animation:false }
+  data: {
+   labels: labels,
+   datasets: [{ data: prices, borderColor: '#00e676', backgroundColor: 'rgba(0,230,118,0.12)', borderWidth: 2, tension: 0.3, fill: true, pointRadius: 0 }]
+  },
+  options: {
+   responsive: true, maintainAspectRatio: false,
+   plugins: { legend: { display: false } },
+   scales: { x: { display: false }, y: { grid: { color: '#222' }, ticks: { color: '#888', maxTicksLimit: 6 } } },
+   animation: false
+  }
  });
 }
-function connect(){
- const ws = new WebSocket('wss://ws.derivws.com/websockets/v3?app_id='+app_id);
- ws.onopen = () => {
-  document.getElementById('conn').textContent = 'Live';
-  ws.send(JSON.stringify({ticks: 'R_10', subscribe: 1}));
- };
- ws.onmessage = (msg) => {
-  const data = JSON.parse(msg.data);
-  if(data.tick){
-   const price = data.tick.quote;
-   document.getElementById('price').textContent = '$' + price.toFixed(4);
-   prices.push(price);
-   labels.push('');
-   if(prices.length > maxPoints){ prices.shift(); labels.shift(); }
-   if(chart) chart.update();
-  }
- };
- ws.onerror = () => { document.getElementById('conn').textContent = 'Reconnecting...'; setTimeout(connect,2000); };
+function connectWS(){
+ const urls = ['wss://ws.binaryws.com/websockets/v3?app_id='+APP_ID, 'wss://ws.derivws.com/websockets/v3?app_id='+APP_ID];
+ let urlIndex = 0;
+ function tryConnect(){
+  const ws = new WebSocket(urls[urlIndex]);
+  ws.onopen = () => {
+   document.getElementById('conn').textContent = 'Live';
+   document.getElementById('conn').style.color = '#0f0';
+   ws.send(JSON.stringify({ ticks_history: 'R_10', count: 50, end: 'latest', style: 'ticks' }));
+   ws.send(JSON.stringify({ ticks: 'R_10', subscribe: 1 }));
+  };
+  ws.onmessage = (msg) => {
+   const data = JSON.parse(msg.data);
+   if(data.history && data.history.prices){
+    prices = data.history.prices.map(p=>parseFloat(p));
+    labels = prices.map(()=>'' );
+    if(chart){ chart.data.labels = labels; chart.data.datasets[0].data = prices; chart.update(); }
+    const last = prices[prices.length-1];
+    if(last) document.getElementById('price').textContent = last.toFixed(4);
+   }
+   if(data.tick){
+    const p = parseFloat(data.tick.quote);
+    document.getElementById('price').textContent = p.toFixed(4);
+    prices.push(p); labels.push('');
+    if(prices.length > MAX){ prices.shift(); labels.shift(); }
+    if(chart){ chart.data.labels = labels; chart.data.datasets[0].data = prices; chart.update(); }
+   }
+  };
+  ws.onclose = () => {
+   document.getElementById('conn').textContent = 'Reconnecting...';
+   document.getElementById('conn').style.color = '#ff0';
+   urlIndex = (urlIndex+1)%urls.length;
+   setTimeout(tryConnect, 1500);
+  };
+  ws.onerror = () => { ws.close(); };
+ }
+ tryConnect();
 }
 function placeTrade(type){
- alert('Demo Trade: '+type.toUpperCase()+'\n\nIn REAL account this would place trade with 2.5% markup to your wallet HTS3659JWWVA\n\nSwitch to REAL account to trade real money!');
+ const p = document.getElementById('price').textContent;
+ const lastDigit = Math.floor(parseFloat(p)*10000)%10;
+ const isEven = lastDigit%2===0;
+ alert('Trade: '+type.toUpperCase()+'\nPrice: '+p+'\nLast digit: '+lastDigit+' ('+(isEven?'Even':'Odd')+')\n\nDEMO MODE - No real money used.\n\nFor REAL trading:\n1. Click Deposit\n2. Switch to Real account\n3. Your 2.5% markup goes to HTS3659JWWVA');
 }
 initChart();
-connect();
+connectWS();
 </script>
 </body>
 </html>

@@ -1,119 +1,112 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StockTrader - Volatility 10 (1s)</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StockTrader PRO - TNN Style</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a0a;color:#fff;font-family:Arial,sans-serif}
-.header{background:#111;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;position:sticky;top:0;z-index:20}
-.logo{font-weight:bold;font-size:18px}
-.bal{color:#00ff00;font-weight:bold}
-.deposit-btn{background:#ff3b30;color:#fff;border:none;padding:8px 18px;border-radius:20px;font-weight:bold;cursor:pointer}
-.center{text-align:center;padding:15px 10px}
-h1{font-size:20px;margin-bottom:5px}
-.sub{color:#aaa;font-size:13px}
-.chart-wrap{background:#121212;margin:10px;border-radius:12px;padding:10px;height:52vh;position:relative}
-#price{font-size:32px;font-weight:bold;text-align:center;padding:8px;color:#00e676}
-.controls{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:15px}
-.btn{padding:18px;border:none;border-radius:12px;font-size:20px;font-weight:bold;cursor:pointer}
-.btn-even{background:#00e676;color:#000}
-.btn-odd{background:#ff1744;color:#fff}
-.info{text-align:center;color:#666;font-size:11px;padding:10px;line-height:1.4}
-.live-dot{display:inline-block;width:8px;height:8px;background:#00ff00;border-radius:50%;margin-right:4px}
+body{margin:0;background:#080a0e;color:#fff;font-family:Inter,Arial}
+.top{display:flex;justify-content:space-between;padding:12px 20px;background:#12151c;border-bottom:1px solid #222}
+.live{color:#00ff88;font-weight:bold}
+.card{background:#12151c;border-radius:16px;margin:12px;padding:16px;border:1px solid #222}
+.price{font-size:42px;font-weight:800;color:#00ff88}
+.canvas{width:100%;height:160px;background:#0a0c10;border-radius:12px;margin:10px 0}
+.row{display:flex;gap:8px;margin:8px 0}
+.btn{flex:1;padding:16px;border-radius:12px;border:none;font-weight:800;font-size:16px;cursor:pointer}
+.rise{background:#00c853;color:#fff} .fall{background:#ff3d00;color:#fff}
+.even{background:#2962ff;color:#fff} .odd{background:#aa00ff;color:#fff}
+input{width:100%;padding:12px;border-radius:10px;background:#0a0c10;border:1px solid #333;color:#fff;margin:6px 0}
+.digits{display:flex;gap:4px;flex-wrap:wrap}
+.d{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:#1e222e;border-radius:8px;font-weight:bold}
+.d.e{color:#00ff88;border:1px solid #00ff88} .d.o{color:#ff4444;border:1px solid #ff4444}
 </style>
 </head>
 <body>
-<div class="header">
-<div class="logo">StockTrader <span class="bal" id="balHeader">$70.50</span></div>
-<button class="deposit-btn" onclick="window.open('https://app.deriv.com/cashier/deposit?app_id=34yOYkbTRmBuYtPnZYFit','_blank')">Deposit</button>
+<div class="top">
+<div><b>StockTrader</b> <span id="pHead">--.--</span> <span class="live">● LIVE</span></div>
+<div>Demo: <span id="bal">$70.50</span></div>
 </div>
-<div class="center">
-<h1>Volatility 10 (1s) Index</h1>
-<p class="sub"><span class="live-dot"></span>Balance: $70.50 | <span id="conn">Connecting...</span></p>
-<div id="price">--.--</div>
+
+<div class="card">
+<div style="display:flex;justify-content:space-between">
+<span id="status">Connecting...</span>
+<span id="mkt">Vol 50 (1s) - 1HZ50V</span>
 </div>
-<div class="chart-wrap">
-<canvas id="tickChart"></canvas>
+<div class="price" id="price">--.--</div>
+<canvas id="chart" class="canvas"></canvas>
+<div class="digits" id="digitBar"></div>
+<div>Last: <b id="last">-</b> | Tick: <span id="tickCount">0</span></div>
 </div>
-<div class="controls">
-<button class="btn btn-even" onclick="placeTrade('even')">Even</button>
-<button class="btn btn-odd" onclick="placeTrade('odd')">Odd</button>
+
+<div class="card">
+<label>Stake ($)</label><input id="stake" type="number" value="10">
+<div style="display:flex;justify-content:space-between;font-size:13px;color:#aaa">
+<span>Payout if win:</span><span id="payout" style="color:#00ff88;font-weight:bold">$19.50</span>
 </div>
-<div class="info">
-App ID: 34yOYkbTRmBuYtPnZYFit | 2.5% markup active | Partner HTS3659JWWVA<br>
-Even/Odd trading - Live - Demo $70.50 (Switch to Real to trade real money)
+<div class="row"><button class="btn rise" onclick="doTrade('Rise')">RISE ↑</button><button class="btn fall" onclick="doTrade('Fall')">FALL ↓</button></div>
+<div class="row"><button class="btn even" onclick="doTrade('Even')">EVEN</button><button class="btn odd" onclick="doTrade('Odd')">ODD</button></div>
 </div>
+
+<div class="card" style="font-size:12px;color:#666">
+App ID: 34yOYkbTRmBuYtPnZYFit | 2.5% markup | Partner HTS3659JWWVA | TNNBinary style LIVE
+<br>Market: Synthetic Indices 24/7 | Expiry: 1s-5s | Fixed risk: Lose only stake
+</div>
+
 <script>
-const APP_ID = '34yOYkbTRmBuYtPnZYFit';
-let prices = [];
-let labels = [];
-let chart;
-const MAX = 50;
-function initChart(){
- const ctx = document.getElementById('tickChart').getContext('2d');
- chart = new Chart(ctx, {
-  type: 'line',
-  data: {
-   labels: labels,
-   datasets: [{ data: prices, borderColor: '#00e676', backgroundColor: 'rgba(0,230,118,0.12)', borderWidth: 2, tension: 0.3, fill: true, pointRadius: 0 }]
-  },
-  options: {
-   responsive: true, maintainAspectRatio: false,
-   plugins: { legend: { display: false } },
-   scales: { x: { display: false }, y: { grid: { color: '#222' }, ticks: { color: '#888', maxTicksLimit: 6 } } },
-   animation: false
-  }
+const APP_ID='34yOYkbTRmBuYtPnZYFit', SYMBOL='1HZ50V';
+let ws, prices=[], lastPrice=0, ticks=0, balance=70.50;
+const ctx=document.getElementById('chart').getContext('2d');
+function drawChart(){
+ ctx.clearRect(0,0,300,160);
+ if(prices.length<2) return;
+ ctx.beginPath(); ctx.strokeStyle='#00ff88'; ctx.lineWidth=2;
+ const min=Math.min(...prices), max=Math.max(...prices), range=max-min||1;
+ prices.forEach((p,i)=>{
+  const x=(i/prices.length)*300;
+  const y=150-((p-min)/range)*140;
+  if(i==0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
  });
+ ctx.stroke();
 }
-function connectWS(){
- const urls = ['wss://ws.binaryws.com/websockets/v3?app_id='+APP_ID, 'wss://ws.derivws.com/websockets/v3?app_id='+APP_ID];
- let urlIndex = 0;
- function tryConnect(){
-  const ws = new WebSocket(urls[urlIndex]);
-  ws.onopen = () => {
-   document.getElementById('conn').textContent = 'Live';
-   document.getElementById('conn').style.color = '#0f0';
-   ws.send(JSON.stringify({ ticks_history: 'R_10', count: 50, end: 'latest', style: 'ticks' }));
-   ws.send(JSON.stringify({ ticks: 'R_10', subscribe: 1 }));
-  };
-  ws.onmessage = (msg) => {
-   const data = JSON.parse(msg.data);
-   if(data.history && data.history.prices){
-    prices = data.history.prices.map(p=>parseFloat(p));
-    labels = prices.map(()=>'' );
-    if(chart){ chart.data.labels = labels; chart.data.datasets[0].data = prices; chart.update(); }
-    const last = prices[prices.length-1];
-    if(last) document.getElementById('price').textContent = last.toFixed(4);
-   }
-   if(data.tick){
-    const p = parseFloat(data.tick.quote);
-    document.getElementById('price').textContent = p.toFixed(4);
-    prices.push(p); labels.push('');
-    if(prices.length > MAX){ prices.shift(); labels.shift(); }
-    if(chart){ chart.data.labels = labels; chart.data.datasets[0].data = prices; chart.update(); }
-   }
-  };
-  ws.onclose = () => {
-   document.getElementById('conn').textContent = 'Reconnecting...';
-   document.getElementById('conn').style.color = '#ff0';
-   urlIndex = (urlIndex+1)%urls.length;
-   setTimeout(tryConnect, 1500);
-  };
-  ws.onerror = () => { ws.close(); };
- }
- tryConnect();
+function connect(){
+ document.getElementById('status').innerText='Connecting Deriv...';
+ ws=new WebSocket('wss://ws.derivws.com/websockets/v3?app_id='+APP_ID);
+ ws.onopen=()=>ws.send(JSON.stringify({ticks:SYMBOL}));
+ ws.onmessage=e=>{
+  const d=JSON.parse(e.data);
+  if(d.tick){
+   lastPrice=d.tick.quote; ticks++;
+   prices.push(lastPrice); if(prices.length>50) prices.shift();
+   document.getElementById('price').innerText=lastPrice.toFixed(3);
+   document.getElementById('pHead').innerText='$'+lastPrice.toFixed(2);
+   document.getElementById('last').innerText=String(lastPrice).slice(-1);
+   document.getElementById('tickCount').innerText=ticks;
+   document.getElementById('status').innerText='● LIVE '+new Date().toLocaleTimeString();
+   document.getElementById('status').style.color='#00ff88';
+   const digit=parseInt(String(lastPrice).slice(-1));
+   const bar=document.getElementById('digitBar');
+   const el=document.createElement('div'); el.className='d '+(digit%2==0?'e':'o'); el.innerText=digit;
+   bar.prepend(el); if(bar.children.length>15) bar.removeChild(bar.lastChild);
+   drawChart();
+   const stake=parseFloat(document.getElementById('stake').value)||10;
+   document.getElementById('payout').innerText='$'+(stake*1.95).toFixed(2);
+  }
+ };
+ ws.onclose=()=>{document.getElementById('status').innerText='Reconnecting...'; setTimeout(connect,2000);}
 }
-function placeTrade(type){
- const p = document.getElementById('price').textContent;
- const lastDigit = Math.floor(parseFloat(p)*10000)%10;
- const isEven = lastDigit%2===0;
- alert('Trade: '+type.toUpperCase()+'\nPrice: '+p+'\nLast digit: '+lastDigit+' ('+(isEven?'Even':'Odd')+')\n\nDEMO MODE - No real money used.\n\nFor REAL trading:\n1. Click Deposit\n2. Switch to Real account\n3. Your 2.5% markup goes to HTS3659JWWVA');
+function doTrade(type){
+ if(!lastPrice) return alert('Wait for LIVE price!');
+ const digit=parseInt(String(lastPrice).slice(-1));
+ let win=false;
+ if(type=='Even') win=digit%2==0;
+ if(type=='Odd') win=digit%2==1;
+ if(type=='Rise') win=Math.random()>0.5; // demo for Rise/Fall - real uses contract buy
+ if(type=='Fall') win=Math.random()>0.5;
+ const stake=parseFloat(document.getElementById('stake').value)||10;
+ if(win){ balance+=stake*0.95; alert(type+' WIN! +$'+(stake*0.95).toFixed(2)+' Digit: '+digit); }
+ else { balance-=stake; alert(type+' LOSS! -$'+stake+' Digit: '+digit); }
+ document.getElementById('bal').innerText='$'+balance.toFixed(2);
 }
-initChart();
-connectWS();
+connect();
 </script>
 </body>
 </html>

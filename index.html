@@ -1,112 +1,42 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>StockTrader PRO - TNN Style</title>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TNN - StockTrader PRO</title>
 <style>
-body{margin:0;background:#080a0e;color:#fff;font-family:Inter,Arial}
-.top{display:flex;justify-content:space-between;padding:12px 20px;background:#12151c;border-bottom:1px solid #222}
-.live{color:#00ff88;font-weight:bold}
-.card{background:#12151c;border-radius:16px;margin:12px;padding:16px;border:1px solid #222}
-.price{font-size:42px;font-weight:800;color:#00ff88}
-.canvas{width:100%;height:160px;background:#0a0c10;border-radius:12px;margin:10px 0}
-.row{display:flex;gap:8px;margin:8px 0}
-.btn{flex:1;padding:16px;border-radius:12px;border:none;font-weight:800;font-size:16px;cursor:pointer}
-.rise{background:#00c853;color:#fff} .fall{background:#ff3d00;color:#fff}
-.even{background:#2962ff;color:#fff} .odd{background:#aa00ff;color:#fff}
-input{width:100%;padding:12px;border-radius:10px;background:#0a0c10;border:1px solid #333;color:#fff;margin:6px 0}
-.digits{display:flex;gap:4px;flex-wrap:wrap}
-.d{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:#1e222e;border-radius:8px;font-weight:bold}
-.d.e{color:#00ff88;border:1px solid #00ff88} .d.o{color:#ff4444;border:1px solid #ff4444}
-</style>
-</head>
-<body>
-<div class="top">
-<div><b>StockTrader</b> <span id="pHead">--.--</span> <span class="live">● LIVE</span></div>
-<div>Demo: <span id="bal">$70.50</span></div>
-</div>
-
-<div class="card">
-<div style="display:flex;justify-content:space-between">
-<span id="status">Connecting...</span>
-<span id="mkt">Vol 50 (1s) - 1HZ50V</span>
-</div>
-<div class="price" id="price">--.--</div>
-<canvas id="chart" class="canvas"></canvas>
-<div class="digits" id="digitBar"></div>
-<div>Last: <b id="last">-</b> | Tick: <span id="tickCount">0</span></div>
-</div>
-
-<div class="card">
-<label>Stake ($)</label><input id="stake" type="number" value="10">
-<div style="display:flex;justify-content:space-between;font-size:13px;color:#aaa">
-<span>Payout if win:</span><span id="payout" style="color:#00ff88;font-weight:bold">$19.50</span>
-</div>
-<div class="row"><button class="btn rise" onclick="doTrade('Rise')">RISE ↑</button><button class="btn fall" onclick="doTrade('Fall')">FALL ↓</button></div>
-<div class="row"><button class="btn even" onclick="doTrade('Even')">EVEN</button><button class="btn odd" onclick="doTrade('Odd')">ODD</button></div>
-</div>
-
-<div class="card" style="font-size:12px;color:#666">
-App ID: 34yOYkbTRmBuYtPnZYFit | 2.5% markup | Partner HTS3659JWWVA | TNNBinary style LIVE
-<br>Market: Synthetic Indices 24/7 | Expiry: 1s-5s | Fixed risk: Lose only stake
-</div>
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
+body{background:#05070a;color:#fff}
+.header{display:flex;justify-content:space-between;padding:10px 14px;background:#0e1218;border-bottom:1px solid #1e2732}
+.bal-box{background:#1a2332;padding:6px 10px;border-radius:20px;font-size:14px;font-weight:700}
+.dep{background:#00e5ff;color:#000;padding:6px 14px;border-radius:20px;font-weight:800;border:none}
+.tabs{display:flex;gap:8px;padding:10px 14px;background:#0e1218}
+.tab{padding:6px 14px;border-radius:20px;background:#1a2332;font-size:13px}.tab.active{background:#00e5ff;color:#000;font-weight:700}
+.market-head{display:flex;justify-content:space-between;padding:12px 14px}
+.price-big{font-size:16px;font-weight:800}
+.chart-wrap{background:#0e1218;margin:0 10px;border-radius:12px;padding:8px;border:1px solid #1e2732}
+#mainChart{width:100%;height:180px}
+.digit-row{display:flex;justify-content:space-between;padding:10px;gap:4px}
+.d-circle{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;background:#1a2332;margin:0 auto 3px;border:1.5px solid #2a3545}
+.d-circle.active{background:#00e5ff;color:#000;box-shadow:0 0 10px #00e5ff}
+.d-perc{font-size:9px;color:#7a8ba3;text-align:center}
+.s-btn{background:#1a2332;border:1px solid #2a3545;color:#fff;padding:6px 12px;border-radius:20px;font-size:12px}.s-btn.active{background:#00e5ff;color:#000}
+.t-btn{flex:1;padding:14px;border-radius:12px;border:none;font-weight:900;color:#fff}.t-even{background:#00c853}.t-odd{background:#aa00ff}
+.trade-row{display:flex;gap:10px;padding:12px 10px}.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#0e1218;border-top:1px solid #1e2732;display:flex;justify-content:space-around;padding:10px 0 18px}
+</style></head><body>
+<div class="header"><div>TNNbinary ● <span id="hdrBal">$70.50</span></div><div><span class="bal-box" id="balTop">$70.50</span> <button class="dep">Deposit</button></div></div>
+<div class="tabs"><div class="tab">Matches/Differs</div><div class="tab active">Even/Odd</div><div class="tab">Over/Under</div></div>
+<div class="market-head"><div>Volatility 10 (1s) Index<br><small id="status" style="color:#00ff88">● LIVE</small></div><div class="price-big" id="priceBig">9450.83</div></div>
+<div class="chart-wrap"><canvas id="mainChart" width="350" height="180"></canvas></div>
+<div class="digit-row" id="digitRow"></div>
+<div style="padding:10px"><span>STAKE <b id="stakeDisplay">$ 10</b></span></div>
+<div style="display:flex;gap:6px;padding:0 10px"><button class="s-btn" onclick="setStake(1)">$1</button><button class="s-btn" onclick="setStake(5)">$5</button><button class="s-btn active" onclick="setStake(10)">$10</button><button class="s-btn" onclick="setStake(25)">$25</button><button class="s-btn" onclick="setStake(50)">$50</button></div>
+<div class="trade-row"><button class="t-btn t-even" onclick="trade('Even')">Even<br><small id="evenPay">95.20% $19.52</small></button><button class="t-btn t-odd" onclick="trade('Odd')">Odd<br><small id="oddPay">95.20% $19.52</small></button></div>
+<div class="bottom-nav"><div>Live Chat</div><div style="background:#0e1218;border:2px solid #00e5ff;border-radius:50%;width:46px;height:46px;display:flex;align-items:center;justify-content:center">🤖</div><div>Positions</div></div>
 <script>
-const APP_ID='34yOYkbTRmBuYtPnZYFit', SYMBOL='1HZ50V';
-let ws, prices=[], lastPrice=0, ticks=0, balance=70.50;
-const ctx=document.getElementById('chart').getContext('2d');
-function drawChart(){
- ctx.clearRect(0,0,300,160);
- if(prices.length<2) return;
- ctx.beginPath(); ctx.strokeStyle='#00ff88'; ctx.lineWidth=2;
- const min=Math.min(...prices), max=Math.max(...prices), range=max-min||1;
- prices.forEach((p,i)=>{
-  const x=(i/prices.length)*300;
-  const y=150-((p-min)/range)*140;
-  if(i==0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
- });
- ctx.stroke();
-}
-function connect(){
- document.getElementById('status').innerText='Connecting Deriv...';
- ws=new WebSocket('wss://ws.derivws.com/websockets/v3?app_id='+APP_ID);
- ws.onopen=()=>ws.send(JSON.stringify({ticks:SYMBOL}));
- ws.onmessage=e=>{
-  const d=JSON.parse(e.data);
-  if(d.tick){
-   lastPrice=d.tick.quote; ticks++;
-   prices.push(lastPrice); if(prices.length>50) prices.shift();
-   document.getElementById('price').innerText=lastPrice.toFixed(3);
-   document.getElementById('pHead').innerText='$'+lastPrice.toFixed(2);
-   document.getElementById('last').innerText=String(lastPrice).slice(-1);
-   document.getElementById('tickCount').innerText=ticks;
-   document.getElementById('status').innerText='● LIVE '+new Date().toLocaleTimeString();
-   document.getElementById('status').style.color='#00ff88';
-   const digit=parseInt(String(lastPrice).slice(-1));
-   const bar=document.getElementById('digitBar');
-   const el=document.createElement('div'); el.className='d '+(digit%2==0?'e':'o'); el.innerText=digit;
-   bar.prepend(el); if(bar.children.length>15) bar.removeChild(bar.lastChild);
-   drawChart();
-   const stake=parseFloat(document.getElementById('stake').value)||10;
-   document.getElementById('payout').innerText='$'+(stake*1.95).toFixed(2);
-  }
- };
- ws.onclose=()=>{document.getElementById('status').innerText='Reconnecting...'; setTimeout(connect,2000);}
-}
-function doTrade(type){
- if(!lastPrice) return alert('Wait for LIVE price!');
- const digit=parseInt(String(lastPrice).slice(-1));
- let win=false;
- if(type=='Even') win=digit%2==0;
- if(type=='Odd') win=digit%2==1;
- if(type=='Rise') win=Math.random()>0.5; // demo for Rise/Fall - real uses contract buy
- if(type=='Fall') win=Math.random()>0.5;
- const stake=parseFloat(document.getElementById('stake').value)||10;
- if(win){ balance+=stake*0.95; alert(type+' WIN! +$'+(stake*0.95).toFixed(2)+' Digit: '+digit); }
- else { balance-=stake; alert(type+' LOSS! -$'+stake+' Digit: '+digit); }
- document.getElementById('bal').innerText='$'+balance.toFixed(2);
-}
-connect();
-</script>
-</body>
-</html>
+const APP_ID='34yOYkbTRmBuYtPnZYFit',SYMBOL='1HZ10V';let ws,lastPrice=9450.83,stake=10,balance=70.50,prices=[],digitCounts=Array(10).fill(0),totalTicks=0,lastDigit=3;
+const canvas=document.getElementById('mainChart'),ctx=canvas.getContext('2d');
+function draw(){ctx.clearRect(0,0,400,180);if(prices.length<2)return;const w=canvas.offsetWidth,h=160;const min=Math.min(...prices),max=Math.max(...prices),rng=max-min||1;ctx.beginPath();ctx.strokeStyle='#00e5ff';ctx.lineWidth=1.5;prices.forEach((p,i)=>{const x=(i/(prices.length-1))*w;const y=h-((p-min)/rng)*(h-20)-10;if(i==0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.stroke()}
+function updateDigits(){const row=document.getElementById('digitRow');row.innerHTML='';for(let i=0;i<10;i++){const perc=totalTicks?((digitCounts[i]/totalTicks)*100).toFixed(1):(Math.random()*5+8).toFixed(1);const d=document.createElement('div');d.innerHTML=`<div class="d-circle ${i==lastDigit?'active':''}">${i}</div><div class="d-perc">${perc}%</div>`;row.appendChild(d)}}
+function setStake(v){stake=v;document.getElementById('stakeDisplay').innerText='$ '+v;const pay=(v*1.952).toFixed(2);document.getElementById('evenPay').innerText=`95.20% $${pay}`;document.getElementById('oddPay').innerText=`95.20% $${pay}`}
+function trade(type){const win=(type=='Even'&&lastDigit%2==0)||(type=='Odd'&&lastDigit%2==1);if(win){balance+=stake*0.952;alert(type+' WIN! +$'+(stake*0.952).toFixed(2)+' Digit:'+lastDigit)}else{balance-=stake;alert(type+' LOSS! -$'+stake+' Digit:'+lastDigit)}document.getElementById('hdrBal').innerText='$'+balance.toFixed(2);document.getElementById('balTop').innerText='$'+balance.toFixed(2)}
+function connect(){ws=new WebSocket('wss://ws.derivws.com/websockets/v3?app_id='+APP_ID);ws.onopen=()=>ws.send(JSON.stringify({ticks:SYMBOL}));ws.onmessage=e=>{const d=JSON.parse(e.data);if(d.tick){lastPrice=d.tick.quote;lastDigit=parseInt(String(lastPrice).slice(-1));totalTicks++;digitCounts[lastDigit]++;prices.push(lastPrice);if(prices.length>80)prices.shift();document.getElementById('priceBig').innerText=lastPrice.toFixed(2);document.getElementById('status').innerText='● LIVE '+new Date().toLocaleTimeString();draw();updateDigits()}};ws.onclose=()=>setTimeout(connect,2000)}
+setStake(10);updateDigits();connect();
+</script></body></html>

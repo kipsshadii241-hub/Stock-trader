@@ -2,154 +2,150 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>TradingPro — Demo Trading Platform</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  body { background: #0b1220; color: #e6edf7; overflow: hidden; height: 100vh; }
+  
+  /* FIX: use 100dvh for mobile browsers */
+  html, body { height: 100%; height: 100dvh; overflow: hidden; background: #0b1220; color: #e6edf7; }
 
   /* HEADER */
   header {
     height: 56px; background: #111a2e; border-bottom: 1px solid #1e2a44;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 0 18px; position: relative; z-index: 10;
+    padding: 0 14px; flex-shrink: 0; z-index: 10;
   }
-  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; }
-  .logo-dot { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 10px #22c55e; }
-  .balance-box {
-    display: flex; align-items: center; gap: 14px; font-size: 13px;
-  }
+  .logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 16px; }
+  .logo-dot { width: 9px; height: 9px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 10px #22c55e; }
+  .balance-box { display: flex; align-items: center; gap: 10px; font-size: 13px; }
   .balance-item { display: flex; flex-direction: column; align-items: flex-end; }
-  .balance-label { color: #7c8db5; font-size: 10px; text-transform: uppercase; letter-spacing: .5px; }
-  .balance-value { font-weight: 700; font-size: 15px; }
+  .balance-label { color: #7c8db5; font-size: 9px; text-transform: uppercase; letter-spacing: .5px; }
+  .balance-value { font-weight: 700; font-size: 14px; }
   .green { color: #22c55e; }
   .red { color: #ef4444; }
   .btn-reset {
     background: #1e2a44; border: 1px solid #2d3d5f; color: #cbd5e1;
-    padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer;
+    padding: 5px 10px; border-radius: 6px; font-size: 11px; cursor: pointer;
   }
-  .btn-reset:hover { background: #26365a; }
 
-  /* LAYOUT */
-  .app { display: grid; grid-template-columns: 220px 1fr 300px; height: calc(100vh - 56px); }
+  /* APP LAYOUT */
+  .app { display: flex; flex-direction: column; height: calc(100dvh - 56px); }
 
-  /* LEFT SIDEBAR */
-  .sidebar { background: #0e1729; border-right: 1px solid #1e2a44; overflow-y: auto; padding: 12px 0; }
-  .sidebar h3 { font-size: 11px; color: #6b7ea8; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px 6px; }
-  .asset {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 9px 16px; cursor: pointer; font-size: 13px; border-left: 3px solid transparent;
-  }
-  .asset:hover { background: #16223a; }
-  .asset.active { background: #16223a; border-left-color: #22c55e; }
-  .asset-name { font-weight: 600; }
-  .asset-price { font-size: 11px; color: #7c8db5; font-variant-numeric: tabular-nums; }
+  /* LEFT SIDEBAR (Desktop only) */
+  .sidebar { display: none; }
 
-  /* CENTER */
-  .center { display: flex; flex-direction: column; position: relative; }
+  /* CENTER AREA */
+  .center { flex: 1; display: flex; flex-direction: column; min-height: 0; position: relative; }
   .chart-header {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 16px; border-bottom: 1px solid #1e2a44; background: #0e1729;
+    padding: 8px 14px; border-bottom: 1px solid #1e2a44; background: #0e1729; flex-shrink: 0;
   }
-  .symbol-title { font-size: 16px; font-weight: 700; }
-  .live-price { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; margin-left: 12px; }
+  .symbol-title { font-size: 15px; font-weight: 700; }
+  .live-price { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; margin-left: 10px; }
   .timeframe { display: flex; gap: 4px; }
   .tf {
-    padding: 4px 9px; font-size: 11px; background: #16223a; border: 1px solid #24324f;
+    padding: 4px 8px; font-size: 11px; background: #16223a; border: 1px solid #24324f;
     color: #94a3b8; border-radius: 5px; cursor: pointer;
   }
   .tf.active { background: #22c55e; color: #06140a; border-color: #22c55e; font-weight: 700; }
 
-  #chartWrap { flex: 1; position: relative; }
+  #chartWrap { flex: 1; position: relative; min-height: 0; background: #0b1220; }
   canvas { display: block; width: 100%; height: 100%; }
 
   .countdown-bar {
-    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+    position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
     background: rgba(17,26,46,.92); border: 1px solid #2d3d5f; border-radius: 20px;
-    padding: 6px 16px; font-size: 13px; font-weight: 600; display: none; align-items: center; gap: 8px;
-    z-index: 5;
+    padding: 4px 14px; font-size: 12px; font-weight: 600; display: none; align-items: center; gap: 6px; z-index: 5;
   }
   .countdown-bar.show { display: flex; }
-  .pulse { width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; animation: pulse 1s infinite; }
+  .pulse { width: 7px; height: 7px; border-radius: 50%; background: #f59e0b; animation: pulse 1s infinite; }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
 
-  /* RIGHT PANEL */
-  .trade-panel { background: #0e1729; border-left: 1px solid #1e2a44; padding: 16px; overflow-y: auto; }
-  .trade-panel h3 { font-size: 11px; color: #6b7ea8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-  .field { margin-bottom: 14px; }
-  .field label { display: block; font-size: 11px; color: #7c8db5; margin-bottom: 5px; }
+  /* RIGHT PANEL (Mobile: bottom sheet) */
+  .trade-panel {
+    background: #0e1729; border-top: 1px solid #1e2a44;
+    height: 42vh; overflow-y: auto; padding: 12px 14px; flex-shrink: 0;
+    border-radius: 14px 14px 0 0;
+  }
+  .trade-panel h3 { font-size: 10px; color: #6b7ea8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .field { margin-bottom: 10px; }
+  .field label { display: block; font-size: 11px; color: #7c8db5; margin-bottom: 4px; }
   .field input, .field select {
-    width: 100%; padding: 9px 10px; background: #111a2e; border: 1px solid #24324f;
+    width: 100%; padding: 8px 10px; background: #111a2e; border: 1px solid #24324f;
     color: #e6edf7; border-radius: 6px; font-size: 14px; outline: none;
   }
-  .field input:focus, .field select:focus { border-color: #22c55e; }
+  .field input:focus { border-color: #22c55e; }
 
-  .quick-amounts { display: grid; grid-template-columns: repeat(4,1fr); gap: 5px; margin-top: 6px; }
+  .quick-amounts { display: grid; grid-template-columns: repeat(4,1fr); gap: 4px; margin-top: 5px; }
   .qa {
-    padding: 6px 0; text-align: center; font-size: 11px; background: #16223a;
+    padding: 5px 0; text-align: center; font-size: 11px; background: #16223a;
     border: 1px solid #24324f; color: #94a3b8; border-radius: 5px; cursor: pointer;
   }
-  .qa:hover { background: #1e2a44; color: #e6edf7; }
-
-  .expiry-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 5px; }
+  .expiry-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 4px; }
   .exp {
-    padding: 7px 0; text-align: center; font-size: 12px; background: #16223a;
+    padding: 6px 0; text-align: center; font-size: 12px; background: #16223a;
     border: 1px solid #24324f; color: #94a3b8; border-radius: 5px; cursor: pointer;
   }
   .exp.active { background: #22c55e; color: #06140a; border-color: #22c55e; font-weight: 700; }
 
   .payout-box {
     background: #16223a; border: 1px solid #24324f; border-radius: 6px;
-    padding: 10px; margin-bottom: 14px; font-size: 12px;
+    padding: 8px; margin-bottom: 10px; font-size: 12px;
   }
-  .payout-row { display: flex; justify-content: space-between; margin: 3px 0; }
+  .payout-row { display: flex; justify-content: space-between; margin: 2px 0; }
   .payout-row span:last-child { font-weight: 700; }
 
-  .trade-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .trade-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .btn-trade {
-    padding: 16px 0; border: none; border-radius: 8px; font-size: 15px; font-weight: 700;
+    padding: 14px 0; border: none; border-radius: 8px; font-size: 14px; font-weight: 700;
     cursor: pointer; color: #fff; transition: transform .08s;
   }
   .btn-trade:active { transform: scale(.97); }
   .btn-trade:disabled { opacity: .4; cursor: not-allowed; }
-  .btn-up { background: linear-gradient(180deg,#22c55e,#16a34a); box-shadow: 0 4px 14px rgba(34,197,94,.3); }
-  .btn-down { background: linear-gradient(180deg,#ef4444,#dc2626); box-shadow: 0 4px 14px rgba(239,68,68,.3); }
+  .btn-up { background: linear-gradient(180deg,#22c55e,#16a34a); }
+  .btn-down { background: linear-gradient(180deg,#ef4444,#dc2626); }
 
-  .open-trades { margin-top: 20px; }
+  .open-trades { margin-top: 12px; }
   .trade-item {
     background: #111a2e; border: 1px solid #24324f; border-left-width: 3px;
-    border-radius: 6px; padding: 9px 11px; margin-bottom: 7px; font-size: 12px;
+    border-radius: 6px; padding: 7px 10px; margin-bottom: 6px; font-size: 11px;
   }
   .trade-item.up { border-left-color: #22c55e; }
   .trade-item.down { border-left-color: #ef4444; }
-  .trade-top { display: flex; justify-content: space-between; margin-bottom: 4px; }
-  .trade-dir { font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: .5px; }
-  .trade-meta { color: #7c8db5; font-size: 11px; }
+  .trade-top { display: flex; justify-content: space-between; margin-bottom: 3px; }
+  .trade-dir { font-weight: 700; text-transform: uppercase; font-size: 10px; }
+  .trade-meta { color: #7c8db5; font-size: 11px; margin-bottom: 2px; }
   .trade-timer { font-variant-numeric: tabular-nums; color: #f59e0b; font-weight: 600; }
 
-  /* HISTORY */
-  .history { padding: 10px 16px; border-top: 1px solid #1e2a44; max-height: 180px; overflow-y: auto; background: #0e1729; }
-  .history-row { display: flex; justify-content: space-between; font-size: 12px; padding: 5px 0; border-bottom: 1px solid #16223a; }
+  .history { padding: 8px 14px; border-top: 1px solid #1e2a44; max-height: 100px; overflow-y: auto; background: #0e1729; flex-shrink: 0; }
+  .history-row { display: flex; justify-content: space-between; font-size: 11px; padding: 4px 0; border-bottom: 1px solid #16223a; }
   .history-row:last-child { border-bottom: none; }
 
-  /* TOAST */
-  .toast-wrap { position: fixed; top: 70px; right: 20px; z-index: 100; display: flex; flex-direction: column; gap: 8px; }
+  .toast-wrap { position: fixed; top: 65px; right: 15px; z-index: 100; display: flex; flex-direction: column; gap: 6px; }
   .toast {
     background: #16223a; border: 1px solid #2d3d5f; border-left: 4px solid #22c55e;
-    padding: 10px 16px; border-radius: 6px; font-size: 13px; min-width: 200px;
+    padding: 8px 14px; border-radius: 6px; font-size: 12px; min-width: 180px;
     animation: slideIn .25s ease; box-shadow: 0 6px 20px rgba(0,0,0,.4);
   }
   .toast.loss { border-left-color: #ef4444; }
   .toast.warn { border-left-color: #f59e0b; }
   @keyframes slideIn { from { transform: translateX(110%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-  /* MOBILE */
-  @media (max-width: 900px) {
-    .app { grid-template-columns: 1fr; }
-    .sidebar { display: none; }
-    .trade-panel { position: fixed; bottom: 0; left: 0; right: 0; height: 46vh;
-      border-left: none; border-top: 1px solid #1e2a44; z-index: 20; border-radius: 14px 14px 0 0; }
-    .center { height: 54vh; }
+  /* DESKTOP OVERRIDES */
+  @media (min-width: 900px) {
+    .app { flex-direction: row; }
+    .sidebar { display: block; width: 220px; background: #0e1729; border-right: 1px solid #1e2a44; overflow-y: auto; padding: 12px 0; flex-shrink: 0; }
+    .sidebar h3 { font-size: 11px; color: #6b7ea8; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px 6px; }
+    .asset { display: flex; justify-content: space-between; align-items: center; padding: 9px 16px; cursor: pointer; font-size: 13px; border-left: 3px solid transparent; }
+    .asset:hover { background: #16223a; }
+    .asset.active { background: #16223a; border-left-color: #22c55e; }
+    .asset-name { font-weight: 600; }
+    .asset-price { font-size: 11px; color: #7c8db5; font-variant-numeric: tabular-nums; }
+
+    .center { flex: 1; }
+    .trade-panel { width: 300px; height: auto; border-top: none; border-left: 1px solid #1e2a44; padding: 16px; flex-shrink: 0; border-radius: 0; }
+    .trade-buttons { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
@@ -167,10 +163,8 @@
 </header>
 
 <div class="app">
-  <!-- LEFT -->
   <aside class="sidebar" id="assetList"></aside>
 
-  <!-- CENTER -->
   <main class="center">
     <div class="chart-header">
       <div style="display:flex;align-items:baseline;">
@@ -187,15 +181,13 @@
       <div class="countdown-bar" id="countdown"><span class="pulse"></span><span id="cdText">0.0s</span></div>
     </div>
     <div class="history" id="history">
-      <h3 style="font-size:11px;color:#6b7ea8;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Trade History</h3>
+      <h3 style="font-size:10px;color:#6b7ea8;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Trade History</h3>
       <div id="historyList"><div style="font-size:12px;color:#4b5b7d;">No trades yet</div></div>
     </div>
   </main>
 
-  <!-- RIGHT -->
   <aside class="trade-panel">
     <h3>Place Trade</h3>
-
     <div class="field">
       <label>Amount (USD)</label>
       <input type="number" id="amount" value="100" min="1" step="10" />
@@ -243,10 +235,10 @@
 /* ============================================================
    CONFIG
 ============================================================ */
-const PAYOUT = 0.85;        // 85% profit on win
+const PAYOUT = 0.85;
 const START_BALANCE = 10000;
-const TICK_MS = 200;        // price updates every 200ms
-const HISTORY_LEN = 120;    // candles kept
+const TICK_MS = 200;
+const HISTORY_LEN = 120;
 
 /* ============================================================
    STATE
@@ -256,9 +248,10 @@ let currentAsset = null;
 let expirySec = 10;
 let openTrades = [];
 let tradeHistory = [];
+let trend = 0;
 
 /* ============================================================
-   ASSETS (synthetic live prices — no API needed)
+   ASSETS
 ============================================================ */
 const assetDefs = [
   { id:'BTC',  name:'BTC/USD',  price: 67420,  vol: 0.0009, dec:2, icon:'₿' },
@@ -273,71 +266,70 @@ const assetDefs = [
   { id:'NVDA', name:'NVDA',     price: 118.75, vol: 0.0013, dec:2, icon:'▣' },
 ];
 
-const assets = assetDefs.map(a => ({
-  ...a,
-  candles: [],
-  lastTick: a.price
-}));
+const assets = assetDefs.map(a => ({ ...a, candles: [], lastTick: a.price }));
 
 /* ============================================================
-   PRICE ENGINE — random walk with trend + volatility
+   PRICE ENGINE
 ============================================================ */
-let trend = 0;
 function nextPrice(asset) {
-  // occasional trend shifts
   if (Math.random() < 0.02) trend = (Math.random() - 0.5) * 0.6;
   const drift = trend * asset.vol * asset.price * 0.15;
   const shock = (Math.random() - 0.5) * asset.vol * asset.price * 2.2;
   let np = asset.lastTick + drift + shock;
-  // slight mean reversion so it doesn't run away
   const mid = asset.price;
   np += (mid - np) * 0.0008;
   return Math.max(np, 0.0001);
 }
 
 function tickAll() {
-  const now = Date.now();
-  assets.forEach(a => {
-    a.lastTick = nextPrice(a);
-    let c = a.candles[a.candles.length - 1];
-    if (!c || now - c.t >= 1000) {
-      a.candles.push({ t: now, o: a.lastTick, h: a.lastTick, l: a.lastTick, c: a.lastTick });
-      if (a.candles.length > HISTORY_LEN) a.candles.shift();
-    } else {
-      c.c = a.lastTick;
-      c.h = Math.max(c.h, a.lastTick);
-      c.l = Math.min(c.l, a.lastTick);
+  try {
+    const now = Date.now();
+    assets.forEach(a => {
+      a.lastTick = nextPrice(a);
+      let c = a.candles[a.candles.length - 1];
+      if (!c || now - c.t >= 1000) {
+        a.candles.push({ t: now, o: a.lastTick, h: a.lastTick, l: a.lastTick, c: a.lastTick });
+        if (a.candles.length > HISTORY_LEN) a.candles.shift();
+      } else {
+        c.c = a.lastTick;
+        c.h = Math.max(c.h, a.lastTick);
+        c.l = Math.min(c.l, a.lastTick);
+      }
+    });
+    renderAssetList();
+    if (currentAsset) {
+      renderChart();
+      const priceEl = document.getElementById('livePrice');
+      if (priceEl) {
+        priceEl.textContent = fmt(currentAsset.lastTick, currentAsset.dec);
+        const prev = currentAsset.candles.length > 1 ? currentAsset.candles[currentAsset.candles.length-2].c : currentAsset.lastTick;
+        priceEl.className = 'live-price ' + (currentAsset.lastTick >= prev ? 'green' : 'red');
+      }
     }
-  });
-  renderAssetList();
-  if (currentAsset) {
-    renderChart();
-    document.getElementById('livePrice').textContent = fmt(currentAsset.lastTick, currentAsset.dec);
-    document.getElementById('livePrice').className = 'live-price ' +
-      (currentAsset.candles.length > 1 && currentAsset.lastTick >= currentAsset.candles[currentAsset.candles.length-2].c ? 'green' : 'red');
+    updateCountdown();
+    updateOpenTrades();
+    checkSettlements();
+  } catch (e) {
+    console.error("Tick error:", e);
   }
-  updateCountdown();
-  updateOpenTrades();
-  checkSettlements();
 }
 
 /* ============================================================
-   RENDER: asset list
+   RENDER: ASSET LIST
 ============================================================ */
 function renderAssetList() {
   const el = document.getElementById('assetList');
+  if (!el) return;
   el.innerHTML = '<h3>Markets</h3>' + assets.map(a => `
     <div class="asset ${currentAsset && currentAsset.id===a.id?'active':''}" data-id="${a.id}">
       <span class="asset-name">${a.icon} ${a.name}</span>
       <span class="asset-price">${fmt(a.lastTick,a.dec)}</span>
     </div>`).join('');
-  el.querySelectorAll('.asset').forEach(n => {
-    n.onclick = () => selectAsset(n.dataset.id);
-  });
+  el.querySelectorAll('.asset').forEach(n => { n.onclick = () => selectAsset(n.dataset.id); });
 }
 
 /* ============================================================
-   RENDER: chart (candlesticks)
+   RENDER: CHART
 ============================================================ */
 const canvas = document.getElementById('chart');
 const ctx = canvas.getContext('2d');
@@ -345,24 +337,31 @@ let chartW = 0, chartH = 0;
 
 function resizeCanvas() {
   const wrap = document.getElementById('chartWrap');
+  if (!wrap) return;
   const dpr = window.devicePixelRatio || 1;
-  chartW = wrap.clientWidth;
-  chartH = wrap.clientHeight;
-  canvas.width = chartW * dpr;
-  canvas.height = chartH * dpr;
-  canvas.style.width = chartW + 'px';
-  canvas.style.height = chartH + 'px';
-  ctx.setTransform(dpr,0,0,dpr,0,0);
+  
+  // Wait for layout to settle on mobile
+  setTimeout(() => {
+    chartW = wrap.clientWidth;
+    chartH = wrap.clientHeight;
+    if (chartW === 0 || chartH === 0) return;
+    canvas.width = chartW * dpr;
+    canvas.height = chartH * dpr;
+    canvas.style.width = chartW + 'px';
+    canvas.style.height = chartH + 'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    renderChart();
+  }, 100);
 }
 
 function renderChart() {
-  if (!currentAsset || chartW === 0) return;
+  if (!currentAsset || chartW === 0 || chartH === 0) return;
   const candles = currentAsset.candles.slice(-60);
   if (candles.length < 2) return;
 
   ctx.clearRect(0,0,chartW,chartH);
 
-  // grid
+  // Grid
   ctx.strokeStyle = '#16223a';
   ctx.lineWidth = 1;
   for (let i=0;i<=5;i++){
@@ -370,7 +369,7 @@ function renderChart() {
     ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(chartW,y); ctx.stroke();
   }
 
-  const pad = { t: 20, b: 30, l: 8, r: 70 };
+  const pad = { t: 15, b: 25, l: 8, r: 60 };
   const innerW = chartW - pad.l - pad.r;
   const innerH = chartH - pad.t - pad.b;
 
@@ -386,39 +385,34 @@ function renderChart() {
   const yFor = p => pad.t + innerH - ((p - bot)/span)*innerH;
   const cw = innerW / candles.length;
 
-  // price axis labels
+  // Axis
   ctx.fillStyle = '#4b5b7d';
-  ctx.font = '11px -apple-system, sans-serif';
+  ctx.font = '10px -apple-system, sans-serif';
   ctx.textAlign = 'left';
   for (let i=0;i<=5;i++){
     const p = bot + (span/5)*i;
     const y = yFor(p);
-    ctx.fillText(fmt(p, currentAsset.dec), chartW - pad.r + 6, y + 4);
+    ctx.fillText(fmt(p, currentAsset.dec), chartW - pad.r + 4, y + 4);
   }
 
-  // candles
+  // Candles
   candles.forEach((c,i) => {
     const x = pad.l + i*cw + cw/2;
     const up = c.c >= c.o;
     const col = up ? '#22c55e' : '#ef4444';
     ctx.strokeStyle = col;
     ctx.fillStyle = col;
-    ctx.lineWidth = 1.2;
+    ctx.lineWidth = 1;
 
-    // wick
-    ctx.beginPath();
-    ctx.moveTo(x, yFor(c.h));
-    ctx.lineTo(x, yFor(c.l));
-    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x, yFor(c.h)); ctx.lineTo(x, yFor(c.l)); ctx.stroke();
 
-    // body
     const bw = Math.max(cw*0.62, 2);
     const yo = yFor(c.o), yc = yFor(c.c);
     const bh = Math.max(Math.abs(yc-yo), 1.2);
     ctx.fillRect(x - bw/2, Math.min(yo,yc), bw, bh);
   });
 
-  // current price line
+  // Current price line
   const last = candles[candles.length-1];
   const yLast = yFor(last.c);
   ctx.strokeStyle = 'rgba(245,158,11,.6)';
@@ -426,32 +420,32 @@ function renderChart() {
   ctx.beginPath(); ctx.moveTo(0,yLast); ctx.lineTo(chartW-pad.r,yLast); ctx.stroke();
   ctx.setLineDash([]);
 
-  // price tag
   ctx.fillStyle = '#f59e0b';
-  ctx.fillRect(chartW-pad.r+2, yLast-9, pad.r-4, 18);
+  ctx.fillRect(chartW-pad.r+2, yLast-8, pad.r-4, 16);
   ctx.fillStyle = '#06140a';
-  ctx.font = 'bold 11px -apple-system, sans-serif';
+  ctx.font = 'bold 10px -apple-system, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(fmt(last.c,currentAsset.dec), chartW-pad.r/2, yLast+4);
+  ctx.fillText(fmt(last.c,currentAsset.dec), chartW-pad.r/2, yLast+3);
   ctx.textAlign = 'left';
 
-  // draw entry markers for open trades on this asset
+  // Open trade lines
   openTrades.filter(t=>t.assetId===currentAsset.id).forEach(t=>{
     const y = yFor(t.entry);
     ctx.strokeStyle = t.dir==='up' ? 'rgba(34,197,94,.8)' : 'rgba(239,68,68,.8)';
     ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(chartW-pad.r,y); ctx.stroke();
     ctx.fillStyle = t.dir==='up' ? '#22c55e' : '#ef4444';
-    ctx.beginPath(); ctx.arc(pad.l+6, y, 5, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(pad.l+5, y, 4, 0, Math.PI*2); ctx.fill();
   });
 }
 
 /* ============================================================
-   TRADING
+   TRADING LOGIC
 ============================================================ */
 function placeTrade(dir) {
   if (!currentAsset) return;
-  const amount = parseFloat(document.getElementById('amount').value);
+  const amountInput = document.getElementById('amount');
+  const amount = parseFloat(amountInput.value);
   if (!amount || amount <= 0) return toast('Enter a valid amount','warn');
   if (amount > balance) return toast('Insufficient balance','warn');
 
@@ -472,7 +466,8 @@ function placeTrade(dir) {
   openTrades.push(trade);
   updateOpenTrades();
   toast(`${dir.toUpperCase()} ${currentAsset.name} • $${amount}`, dir==='up'?'':'loss');
-  document.getElementById('countdown').classList.add('show');
+  const cd = document.getElementById('countdown');
+  if (cd) cd.classList.add('show');
 }
 
 function checkSettlements() {
@@ -482,12 +477,13 @@ function checkSettlements() {
     t.settled = true;
 
     const a = assets.find(x=>x.id===t.assetId);
+    if (!a) return;
     const exit = a.lastTick;
     const won = t.dir === 'up' ? exit > t.entry : exit < t.entry;
     const profit = won ? t.amount * PAYOUT : -t.amount;
     const payout = won ? t.amount + t.amount*PAYOUT : 0;
 
-    if (won) { balance += payout; }
+    if (won) balance += payout;
     updateBalance();
 
     tradeHistory.unshift({
@@ -502,21 +498,10 @@ function checkSettlements() {
     });
     if (tradeHistory.length > 50) tradeHistory.pop();
 
-    toast(
-      `${won?'WIN':'LOSS'} • ${t.assetName} ${won?'+':''}$${profit.toFixed(2)}`,
-      won ? '' : 'loss'
-    );
-
+    toast(`${won?'WIN':'LOSS'} • ${t.assetName} ${won?'+':''}$${profit.toFixed(2)}`, won ? '' : 'loss');
     renderHistory();
   });
 
   openTrades = openTrades.filter(t => !t.settled);
   updateOpenTrades();
-
-  if (openTrades.length === 0) {
-    document.getElementById('countdown').classList.remove('show');
-  }
-}
-
-function updateOpenTrades() {
-  const el = document.getEl
+  if

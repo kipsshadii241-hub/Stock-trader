@@ -1,49 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>StockTrader - Volatility 10 (1s)</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-body{margin:0;background:#000;color:#fff;font-family:Arial}
-.header{display:flex;justify-content:space-between;padding:12px;background:#111;align-items:center}
-.balance{color:#0f0;font-weight:bold;font-size:18px}
-.deposit{background:#ff4444;color:#000;border:none;padding:10px 20px;border-radius:20px;font-weight:bold}
-#chart{height:60vh;background:#111;margin:10px;border-radius:10px}
-.trading{padding:15px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btn{padding:18px;border:none;border-radius:10px;font-weight:bold;font-size:18px}
-.even{background:#0f0;color:#000}
-.odd{background:#f00;color:#fff}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#fff;font-family:Arial,sans-serif}
+.header{background:#111;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;position:sticky;top:0;z-index:10}
+.logo{font-weight:bold;font-size:18px}
+.bal{color:#00ff00;font-weight:bold}
+.deposit-btn{background:#ff3b30;color:#fff;border:none;padding:8px 18px;border-radius:20px;font-weight:bold;cursor:pointer}
+.center{text-align:center;padding:15px 10px}
+h1{font-size:22px;margin-bottom:8px}
+.sub{color:#aaa;font-size:14px}
+.chart-wrap{background:#121212;margin:10px;border-radius:12px;padding:10px;height:55vh;position:relative}
+#price{font-size:28px;font-weight:bold;text-align:center;padding:10px}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:15px}
+.btn{padding:20px;border:none;border-radius:12px;font-size:20px;font-weight:bold;cursor:pointer}
+.btn-even{background:#00e676;color:#000}
+.btn-odd{background:#ff1744;color:#fff}
+.info{text-align:center;color:#666;font-size:12px;padding:10px}
+.dot{display:inline-block;width:8px;height:8px;background:#00ff00;border-radius:50%;animation:blink 1s infinite;margin-right:5px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 </style>
 </head>
 <body>
 <div class="header">
-<div>RQPtrade <span class="balance" id="bal">$70.50</span></div>
-<button class="deposit" onclick="window.open('https://app.deriv.com/cashier/deposit?app_id=34yOYkbTRmBuYtPnZYFit')">Deposit</button>
+<div class="logo">StockTrader <span class="bal">$70.50</span></div>
+<button class="deposit-btn" onclick="window.open('https://app.deriv.com/cashier/deposit?app_id=34yOYkbTRmBuYtPnZYFit','_blank')">Deposit</button>
 </div>
-<div style="text-align:center;padding:10px">
-<h2>Volatility 10 (1s) Index</h2>
-<p>Balance: <span id="bal2">$70.50</span></p>
+<div class="center">
+<h1>Volatility 10 (1s) Index</h1>
+<p class="sub"><span class="dot"></span>Balance: $70.50 | <span id="conn">Connecting...</span></p>
+<div id="price">Loading price...</div>
 </div>
-<div id="chart">
-<!-- TradingView will load here -->
-<iframe src="https://tradingview.com" style="width:100%;height:100%;border:none;background:#111"></iframe>
+<div class="chart-wrap">
+<canvas id="tickChart"></canvas>
 </div>
-<div class="trading">
-<button class="btn even" onclick="trade('even')">Even</button>
-<button class="btn odd" onclick="trade('odd')">Odd</button>
+<div class="controls">
+<button class="btn btn-even" onclick="placeTrade('even')">Even</button>
+<button class="btn btn-odd" onclick="placeTrade('odd')">Odd</button>
 </div>
-<p style="text-align:center;color:#888">Even/Odd trading - Live - App ID: 34yOYkbTRmBuYtPnZYFit (2.5% markup active)</p>
-
+<div class="info">
+App ID: 34yOYkbTRmBuYtPnZYFit | 2.5% markup active | Partner HTS3659JWWVA<br>
+Even/Odd trading - Live Chat - Demo $70.50 (Real $0.00 until you deposit)
+</div>
 <script>
-// Connect to Deriv with YOUR App ID and markup
 const app_id = '34yOYkbTRmBuYtPnZYFit';
-const ws = new WebSocket('wss://ws.derivws.com/websockets/v3?app_id='+app_id);
-ws.onopen = () => {
- ws.send(JSON.stringify({authorize: localStorage.getItem('token') || ''}));
- // subscribe to Volatility 10 1s
- ws.send(JSON.stringify({ticks: 'R_10', subscribe: 1}));
-};
-function trade(type){alert(type+' trade placed! Markup 2.5% will go to your wallet HTS3659JWWVA');}
+let prices = [];
+let labels = [];
+let chart;
+const maxPoints = 40;
+function initChart(){
+ const ctx = document.getElementById('tickChart').getContext('2d');
+ chart = new Chart(ctx, {
+  type: 'line',
+  data: { labels: labels, datasets: [{ label: 'Volatility 10 (1s)', data: prices, borderColor: '#00e676', backgroundColor: 'rgba(0,230,118,0.1)', borderWidth: 2, tension: 0.4, fill: true, pointRadius: 0 }] },
+  options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ x:{display:false}, y:{grid:{color:'#222'}, ticks:{color:'#888'}} }, animation:false }
+ });
+}
+function connect(){
+ const ws = new WebSocket('wss://ws.derivws.com/websockets/v3?app_id='+app_id);
+ ws.onopen = () => {
+  document.getElementById('conn').textContent = 'Live';
+  ws.send(JSON.stringify({ticks: 'R_10', subscribe: 1}));
+ };
+ ws.onmessage = (msg) => {
+  const data = JSON.parse(msg.data);
+  if(data.tick){
+   const price = data.tick.quote;
+   document.getElementById('price').textContent = '$' + price.toFixed(4);
+   prices.push(price);
+   labels.push('');
+   if(prices.length > maxPoints){ prices.shift(); labels.shift(); }
+   if(chart) chart.update();
+  }
+ };
+ ws.onerror = () => { document.getElementById('conn').textContent = 'Reconnecting...'; setTimeout(connect,2000); };
+}
+function placeTrade(type){
+ alert('Demo Trade: '+type.toUpperCase()+'\n\nIn REAL account this would place trade with 2.5% markup to your wallet HTS3659JWWVA\n\nSwitch to REAL account to trade real money!');
+}
+initChart();
+connect();
 </script>
 </body>
 </html>

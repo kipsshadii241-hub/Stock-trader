@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TradingPro Demo</title>
+<title>TradingPro Live Demo</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif}
 body{background:#0b1220;color:#e6edf7;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
 header{height:52px;background:#111a2e;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:14px;border-bottom:1px solid #1e2a44}
 #bal{font-weight:700;color:#22c55e}
-#sym{padding:8px 14px;background:#0e1729;font-size:15px;font-weight:700;border-bottom:1px solid #1e2a44}
-#sym span{color:#22c55e;font-weight:600;margin-left:10px}
+#sym{padding:8px 14px;background:#0e1729;font-size:15px;font-weight:700;border-bottom:1px solid #1e2a44;display:flex;justify-content:space-between}
+#px{color:#22c55e}
 #chart{flex:1;width:100%;display:block;min-height:0}
 #panel{padding:10px 14px;background:#0e1729;border-top:1px solid #1e2a44}
 #panel input{width:100%;padding:8px;background:#111a2e;border:1px solid #24324f;color:#fff;border-radius:6px;font-size:14px}
@@ -20,7 +20,7 @@ header{height:52px;background:#111a2e;display:flex;align-items:center;justify-co
 #btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 #btns button{padding:14px;border:none;border-radius:8px;color:#fff;font-weight:700;font-size:15px;cursor:pointer}
 .up{background:#22c55e}.down{background:#ef4444}
-#open{margin-top:8px;font-size:12px;color:#7c8db5}
+#open{margin-top:8px;font-size:12px;color:#7c8db5;min-height:20px}
 #toasts{position:fixed;top:60px;right:10px;z-index:9}
 .t{background:#16223a;border-left:3px solid #22c55e;padding:7px 12px;border-radius:5px;font-size:12px;margin-bottom:5px}
 .t.l{border-color:#ef4444}
@@ -28,10 +28,10 @@ header{height:52px;background:#111a2e;display:flex;align-items:center;justify-co
 </head>
 <body>
 <header>
-  <div>● TradingPro <small style="color:#6b7ea8">DEMO</small></div>
+  <div>● TradingPro <small style="color:#6b7ea8">LIVE DEMO</small></div>
   <div>Balance: <span id="bal">$10,000.00</span></div>
 </header>
-<div id="sym">BTC/USD <span id="px">—</span></div>
+<div id="sym">BTC/USDT (Binance Live) <span id="px">—</span></div>
 <canvas id="chart"></canvas>
 <div id="panel">
   <input id="amt" type="number" value="100" min="1">
@@ -49,75 +49,78 @@ header{height:52px;background:#111a2e;display:flex;align-items:center;justify-co
 
 <script>
 const PAY=0.85, START=10000;
-let bal=START, exp=10, price=67420, candles=[], trades=[], cv=chart, ctx=cv.getContext('2d'), W=0,H=0;
+let bal=START, exp=10, price=0, candles=[], trades=[], cv=chart, ctx=cv.getContext('2d'), W=0,H=0;
+let currentCandle=null;
 
-// seed candles
-let p=price;
-for(let i=60;i>=0;i--){
-  let o=p; p+= (Math.random()-.5)*p*.003;
-  candles.push({o,h:Math.max(o,p)+Math.random()*10,l:Math.min(o,p)-Math.random()*10,c:p});
-}
-price=candles[candles.length-1].c;
+// --- LIVE BINANCE WEBSOCKET (NO API KEY NEEDED) ---
+const ws = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@trade');
+ws.onmessage = (e) => {
+  const d = JSON.parse(e.data);
+  price = parseFloat(d.p);
+  document.getElementById('px').textContent = '$' + price.toFixed(2);
+  
+  const now = Date.now();
+  if (!currentCandle || now - currentCandle.t >= 5000) { // new candle every 5 sec
+    currentCandle = { t: now, o: price, h: price, l: price, c: price };
+    candles.push(currentCandle);
+    if (candles.length > 100) candles.shift();
+  } else {
+    currentCandle.c = price;
+    currentCandle.h = Math.max(currentCandle.h, price);
+    currentCandle.l = Math.min(currentCandle.l, price);
+  }
+  draw(); settle(); updateOpen();
+};
+ws.onerror = () => { document.getElementById('px').textContent = 'Connection error'; };
 
+// --- CHART DRAWING ---
 function resize(){
-  const r=cv.getBoundingClientRect();
-  W=r.width;H=r.height;
+  const r=cv.getBoundingClientRect(); W=r.width; H=r.height;
   const d=window.devicePixelRatio||1;
-  cv.width=W*d;cv.height=H*d;
+  cv.width=W*d; cv.height=H*d;
   ctx.setTransform(d,0,0,d,0,0);
 }
 window.addEventListener('resize',resize);
 
 function draw(){
-  if(!W||!H)return;
+  if(!W||!H||candles.length<2)return;
   ctx.clearRect(0,0,W,H);
-  const c=candles.slice(-50);
+  const c=candles.slice(-40);
   const hi=Math.max(...c.map(x=>x.h)), lo=Math.min(...c.map(x=>x.l));
   const span=(hi-lo)||1, pad=20, ih=H-pad*2;
   const y=v=>pad+ih-((v-lo)/span)*ih;
-  const cw=(W-60)/c.length;
+  const cw=(W-70)/c.length;
   c.forEach((k,i)=>{
-    const x=20+i*cw+cw/2, up=k.c>=k.o;
+    const x=10+i*cw+cw/2, up=k.c>=k.o;
     ctx.strokeStyle=ctx.fillStyle=up?'#22c55e':'#ef4444';
     ctx.beginPath();ctx.moveTo(x,y(k.h));ctx.lineTo(x,y(k.l));ctx.stroke();
     const bw=Math.max(cw*.6,2);
     ctx.fillRect(x-bw/2,Math.min(y(k.o),y(k.c)),bw,Math.max(Math.abs(y(k.c)-y(k.o)),1));
   });
-  // current price tag
+  // current price line
   const yl=y(price);
   ctx.strokeStyle='rgba(245,158,11,.7)';ctx.setLineDash([5,4]);
-  ctx.beginPath();ctx.moveTo(0,yl);ctx.lineTo(W-55,yl);ctx.stroke();ctx.setLineDash([]);
-  ctx.fillStyle='#f59e0b';ctx.fillRect(W-55,yl-9,55,18);
+  ctx.beginPath();ctx.moveTo(0,yl);ctx.lineTo(W-65,yl);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle='#f59e0b';ctx.fillRect(W-65,yl-9,65,18);
   ctx.fillStyle='#000';ctx.font='bold 11px sans-serif';ctx.textAlign='center';
-  ctx.fillText(price.toFixed(2),W-27,yl+4);
-  // open trade entry lines
+  ctx.fillText(price.toFixed(2),W-32,yl+4);
+  // entry lines for open trades
   trades.filter(t=>!t.done).forEach(t=>{
     const ty=y(t.entry);
     ctx.strokeStyle=t.dir==='up'?'rgba(34,197,94,.8)':'rgba(239,68,68,.8)';
-    ctx.beginPath();ctx.moveTo(0,ty);ctx.lineTo(W-55,ty);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(0,ty);ctx.lineTo(W-65,ty);ctx.stroke();
   });
 }
 
-function tick(){
-  price += (Math.random()-.5)*price*.0018;
-  const now=Date.now();
-  let last=candles[candles.length-1];
-  if(now-(last.t||0)>=1000){
-    candles.push({t:now,o:price,h:price,l:price,c:price});
-    if(candles.length>120)candles.shift();
-  } else { last.c=price; last.h=Math.max(last.h,price); last.l=Math.min(last.l,price); }
-  px.textContent='$'+price.toFixed(2);
-  px.style.color = price>=(candles[candles.length-1].o)?'#22c55e':'#ef4444';
-  settle(); draw(); updateOpen();
-}
-
+// --- TRADING LOGIC ---
 function place(dir){
+  if(!price) return toast('Waiting for live price...','l');
   const a=parseFloat(amt.value);
   if(!a||a<=0) return toast('Enter amount','l');
   if(a>bal) return toast('Insufficient balance','l');
-  bal-=a; bal_el.textContent='$'+bal.toFixed(2);
+  bal-=a; document.getElementById('bal').textContent='$'+bal.toFixed(2);
   trades.push({dir,amt:a,entry:price,exp:Date.now()+exp*1000,done:false});
-  toast(`${dir.toUpperCase()} $${a} @ ${price.toFixed(2)}`);
+  toast(`${dir.toUpperCase()} $${a} @ $${price.toFixed(2)}`);
 }
 
 function settle(){
@@ -127,16 +130,17 @@ function settle(){
     const won = t.dir==='up' ? price>t.entry : price<t.entry;
     const pnl = won ? t.amt*PAY : -t.amt;
     if(won) bal += t.amt + t.amt*PAY;
-    bal_el.textContent='$'+bal.toFixed(2);
-    toast(`${won?'WIN':'LOSS'} ${won?'+':''}$${pnl.toFixed(2)}`, won?'':'l');
+    document.getElementById('bal').textContent='$'+bal.toFixed(2);
+    toast(`${won?'✅ WIN':'❌ LOSS'} ${won?'+':''}$${pnl.toFixed(2)}`, won?'':'l');
   });
 }
 
 function updateOpen(){
   const a=trades.filter(t=>!t.done);
-  if(!a.length){open.textContent='No open trades';return;}
+  const el=document.getElementById('open');
+  if(!a.length){el.textContent='No open trades';return;}
   const now=Date.now();
-  open.innerHTML=a.map(t=>{
+  el.innerHTML=a.map(t=>{
     const r=Math.max(0,(t.exp-now)/1000);
     const win=t.dir==='up'?price>t.entry:price<t.entry;
     return `<span style="color:${t.dir==='up'?'#22c55e':'#ef4444'}">${t.dir.toUpperCase()}</span> $${t.amt} • ${r.toFixed(1)}s • ${win?'✅':'❌'}`;
@@ -145,23 +149,17 @@ function updateOpen(){
 
 function toast(m,cls=''){
   const d=document.createElement('div');d.className='t '+cls;d.textContent=m;
-  toasts.appendChild(d);setTimeout(()=>d.remove(),2500);
+  document.getElementById('toasts').appendChild(d);setTimeout(()=>d.remove(),2500);
 }
 
-bUp.onclick=()=>place('up');
-bDown.onclick=()=>place('down');
+document.getElementById('bUp').onclick=()=>place('up');
+document.getElementById('bDown').onclick=()=>place('down');
 document.querySelectorAll('#exp div').forEach(d=>d.onclick=()=>{
   document.querySelectorAll('#exp div').forEach(x=>x.classList.remove('on'));
   d.classList.add('on'); exp=+d.dataset.s;
 });
-amt.oninput=()=>{};
 
-const bal_el=document.getElementById('bal');
-const px=document.getElementById('px');
-
-setTimeout(resize,200);
-setInterval(tick,200);
-tick();
+setTimeout(resize,300);
 </script>
 </body>
 </html>

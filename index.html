@@ -6,7 +6,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial}
 body{background:#000;color:#fff;min-height:100vh}
-.top{height:36px;background:#ff1a1a;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-size:12px}
+.top{height:36px;background:#ff1a1a;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-size:12px;font-weight:900}
 .center{text-align:center;padding:15px 12px;background:#fff;min-height:100vh;color:#000}
 .plane{width:130px;margin:10px auto;display:block;filter:invert(16%) sepia(98%) saturate(6000%) hue-rotate(356deg)}
 .box{background:red;border-radius:20px;padding:8px;width:92%;margin:10px auto;display:flex;align-items:center}
@@ -20,7 +20,7 @@ body{background:#000;color:#fff;min-height:100vh}
 #g2{background:#fff;min-height:100vh;padding:15px 12px;color:#000;text-align:center}
 #g3{background:#000;min-height:100vh;padding:12px;text-align:center;color:#fff}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
-.b{padding:16px 4px;border-radius:10px;font-weight:900;text-align:center;font-size:11px;cursor:pointer;letter-spacing:0.3px}
+.b{padding:16px 4px;border-radius:10px;font-weight:900;text-align:center;font-size:11px;cursor:pointer}
 .p{background:#3a1a6e;color:#ff0}.r{background:red;color:#fff}.g{background:#0a3320;color:#ff0}.d{background:#0a1a33;color:#fff}.w{background:#fff;color:#c00;border:1px solid #ddd}.k{background:#222;color:#1e90ff}.o{background:#ff8c00;color:#fff}.y{background:#ffeb00;color:#000}
 .circle{width:230px;height:230px;margin:15px auto;border-radius:50%;border:3px solid red;box-shadow:0 0 25px red;display:flex;align-items:center;justify-content:center}
 .v{font-size:45px;color:#0f8;font-weight:900}
@@ -63,11 +63,11 @@ body{background:#000;color:#fff;min-height:100vh}
 <div class="b d" onclick="selectSite('BongoBongo')">BongoBongo</div>
 <div class="b y" onclick="selectSite('Gal Sport')">Gal Sport</div>
 </div>
-<p style="text-align:center;font-size:10px;color:#666;margin-top:18px">30 BOOKMAKERS SUPPORTED<br>Contact Admin: +254712681370</p>
+<p style="text-align:center;font-size:11px;color:#aaa;margin-top:18px">30 BOOKMAKERS SUPPORTED<br>Contact Admin: +254703683230</p>
 </div>
 
 <div id="g2" class="center">
-<div class="top"><span id="siteName">betPawa</span><span>4.5G 16</span></div>
+<div class="top"><span id="siteName">betPawa</span><span>4.5G</span></div>
 <img class="plane" src="https://cdn-icons-png.flaticon.com/512/86/86009.png">
 <h3 style="font-family:cursive;margin-top:5px">TNN PREDICTOR</h3>
 <div class="price">💰 ID PRICE: <b>149,000 UGX</b> - Lifetime</div>
@@ -75,7 +75,11 @@ body{background:#000;color:#fff;min-height:100vh}
 <div class="box">🔑<input id="idInput" type="password" placeholder="Enter secret ID"></div>
 <button class="cbtn" onclick="login()">CONTINUE</button>
 <div id="error"></div>
-<div style="margin-top:15px;font-size:12px">Don't have ID?<br><a href="https://wa.me/254703683230?text=Hello%20Admin%20I%20want%20TNN%20ID%20for%20149,000%20UGX%20BOOKMAKER:%20" style="background:#25D366;color:#fff;padding:10px 20px;border-radius:25px;text-decoration:none;font-weight:900;display:inline-block;margin-top:8px">📱 Buy ID - 149,000 UGX</a><br><button onclick="backToSites()" style="margin-top:12px;background:#eee;border:none;padding:8px 16px;border-radius:20px">← Change Bookmaker</button></div>
+<div style="margin-top:15px;font-size:12px">Don't have ID?<br>
+<a href="https://wa.me/254703683230?text=Hello%20Admin%20I%20want%20to%20buy%20TNN%20ID%20for%20149,000%20UGX" style="background:#25D366;color:#fff;padding:10px 20px;border-radius:25px;text-decoration:none;font-weight:900;display:inline-block;margin-top:8px">📱 Buy ID - 149,000 UGX</a>
+<br><p style="margin-top:8px;color:#888">+254703683230</p>
+<button onclick="backToSites()" style="margin-top:12px;background:#eee;border:none;padding:8px 16px;border-radius:20px">← Change Bookmaker</button>
+</div>
 </div>
 
 <div id="g3">
@@ -92,11 +96,43 @@ body{background:#000;color:#fff;min-height:100vh}
 <script>
 let selectedBookmaker="";
 const correctID="#pro750@";
+const adminNum="+254703683230";
+const waBase="https://wa.me/254703683230";
 function selectSite(name){selectedBookmaker=name;document.getElementById('siteName').innerText=name;document.getElementById('brand').innerText=name.toUpperCase();document.getElementById('g1').style.display='none';document.getElementById('g2').style.display='block';}
 function backToSites(){document.getElementById('g2').style.display='none';document.getElementById('g1').style.display='block';}
 function backToId(){document.getElementById('g3').style.display='none';document.getElementById('g2').style.display='block';}
-function login(){let v=document.getElementById('idInput').value.trim();let err=document.getElementById('error');if(v!==correctID){err.style.display='block';err.innerHTML=`❌ Invalid ID! Contact Admin<br>ID costs <b>149,000 UGX</b><br><a href="https://wa.me/254703683230?text=Hello%20I%20want%20ID%20for%20${encodeURIComponent(selectedBookmaker)}%20Price%20149k%20My%20tried%20ID%20${encodeURIComponent(v)}" target="_blank">📱 +254703683230 - WhatsApp</a>`;return;}err.style.display='none';document.getElementById('g2').style.display='none';document.getElementById('g3').style.display='block';gen();}
-let cur=2.64;function gen(){document.getElementById('val').innerText='...';setTimeout(()=>{let r=Math.random();if(r<0.5)cur=(Math.random()*1.8+1.1).toFixed(2);else if(r<0.85)cur=(Math.random()*3+2).toFixed(2);else cur=(Math.random()*6+4).toFixed(2);if(Math.random()>0.92)cur=(Math.random()*8+6).toFixed(2);document.getElementById('val').innerText=cur+'x';let amt=parseFloat(document.getElementById('amt').value)||0;document.getElementById('winInfo').innerText=`Potential: ${(amt*cur).toFixed(2)} UGX (${amt} x ${cur}x) - ${selectedBookmaker}`;let h=document.getElementById('hist');let s=document.createElement('span');s.innerText=cur+'x';s.style.cssText='font-size:11px;padding:4px 8px;background:#111;border-radius:10px;border:1px solid #222;color:'+(cur<2?'#f44':'#0f8');h.prepend(s);},700);}
+function login(){
+ let v=document.getElementById('idInput').value.trim();
+ let err=document.getElementById('error');
+ if(v!==correctID){
+   err.style.display='block';
+   err.innerHTML=`❌ Invalid ID! Contact Admin<br>ID costs <b>149,000 UGX</b><br><a href="${waBase}?text=Hello%20Admin%20Invalid%20ID%20${encodeURIComponent(v)}%20I%20want%20ID%20for%20${encodeURIComponent(selectedBookmaker)}%20for%20149,000%20UGX" target="_blank">📱 ${adminNum} - WhatsApp Admin</a>`;
+   return;
+ }
+ err.style.display='none';
+ document.getElementById('g2').style.display='none';
+ document.getElementById('g3').style.display='block';
+ gen();
+}
+let cur=2.64;
+function gen(){
+ document.getElementById('val').innerText='...';
+ setTimeout(()=>{
+   let r=Math.random();
+   if(r<0.5)cur=(Math.random()*1.8+1.1).toFixed(2);
+   else if(r<0.85)cur=(Math.random()*3+2).toFixed(2);
+   else cur=(Math.random()*6+4).toFixed(2);
+   if(Math.random()>0.92)cur=(Math.random()*8+6).toFixed(2);
+   document.getElementById('val').innerText=cur+'x';
+   let amt=parseFloat(document.getElementById('amt').value)||0;
+   document.getElementById('winInfo').innerText=`Potential: ${(amt*cur).toFixed(2)} UGX (${amt} x ${cur}x) - ${selectedBookmaker}`;
+   let h=document.getElementById('hist');
+   let s=document.createElement('span');
+   s.innerText=cur+'x';
+   s.style.cssText='font-size:11px;padding:4px 8px;background:#111;border-radius:10px;border:1px solid #222;color:'+(cur<2?'#f44':'#0f8');
+   h.prepend(s);
+ },700);
+}
 </script>
 </body>
 </html>

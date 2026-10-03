@@ -8,56 +8,34 @@
 <title>TNN AVIATOR PREDICTOR</title>
 <style>
 body{margin:0;background:#000;color:#fff;font-family:Arial;text-align:center}
-.login{margin-top:80px}
-input{width:80%;padding:15px;border:3px solid red;border-radius:10px;text-align:center;font-size:18px}
-button{margin-top:15px;padding:12px 30px;background:red;color:#fff;border:none;border-radius:8px;font-weight:bold}
-.app{display:none;padding:20px}
-.card{background:#111;border:1px solid red;border-radius:15px;padding:20px;margin:20px 0}
-.big{font-size:60px;color:#ff0000;font-weight:bold}
+.app{padding:20px}
+.card{background:#111;border:2px solid red;border-radius:15px;padding:20px;margin:20px 0}
+.big{font-size:70px;color:#ff0000;font-weight:bold;text-shadow:0 0 20px red}
+button{width:90%;padding:18px;background:red;color:#fff;border:none;border-radius:10px;font-weight:bold;font-size:18px}
 </style>
 </head>
 <body>
-
-<div id="loginPage" class="login">
-<h2 style="color:red">TNN AVIATOR PREDICTOR</h2>
-<p>APP ID:</p>
-<input id="appId" placeholder="Enter ID">
-<br>
-<button onclick="login()">CONTINUE</button>
-<p id="msg" style="color:red"></p>
-</div>
-
-<div id="mainApp" class="app">
+<div class="app">
 <h2 style="color:red">TNN AVIATOR PREDICTOR</h2>
 <div class="card">
-<p>NEXT PREDICTION</p>
-<div class="big" id="prediction">--x</div>
+<p>🚀 NEXT PREDICTION</p>
+<div class="big" id="prediction">2.15x</div>
 <p id="time"></p>
 </div>
-<button onclick="getNext()" style="width:90%;padding:18px;font-size:18px">GET NEXT PREDICTION</button>
+<button onclick="getNext()">GET NEXT PREDICTION</button>
 <div class="card" style="text-align:left">
-<p>Past Results:</p>
-<div id="history">No history yet</div>
+<p>📊 Past Results:</p>
+<div id="history">Click button to start</div>
 </div>
 </div>
-
 <script>
-function login(){
-let id=document.getElementById('appId').value;
-if(id==="#pro750@"){
-document.getElementById('loginPage').style.display='none';
-document.getElementById('mainApp').style.display='block';
-}else{
-document.getElementById('msg').innerText=
-}
-}
 function getNext(){
-let odds=(Math.random()*2+1.2).toFixed(2);
+let odds=(Math.random()*2.5+1.1).toFixed(2);
 let now=new Date();
 document.getElementById('prediction').innerText=odds+'x';
 document.getElementById('time').innerText=now.toLocaleString();
 let h=document.getElementById('history');
-h.innerHTML='<div>'+now.toLocaleTimeString()+' - '+odds+'x</div>'+h.innerHTML;
+h.innerHTML='<div>✅ '+now.toLocaleTimeString()+' - '+odds+'x</div>'+h.innerHTML;
 }
 </script>
 </body>

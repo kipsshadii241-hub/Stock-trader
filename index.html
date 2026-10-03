@@ -8,62 +8,123 @@
 <title>TNN AVIATOR PREDICTOR</title>
 <style>
 body{margin:0;background:#000;color:#fff;font-family:Arial;text-align:center}
-.login{margin-top:100px;padding:20px}
-input{width:85%;padding:16px;border:3px solid red;border-radius:12px;text-align:center;font-size:18px;background:#111;color:#fff}
-button{padding:14px 35px;background:red;color:#fff;border:none;border-radius:10px;font-weight:bold}
-.app{display:none;padding:15px}
-.card{background:#111;border:2px solid red;border-radius:15px;padding:15px;margin:15px 0}
+.card{background:#111;border:2px solid red;border-radius:15px;padding:15px;margin:15px}
 .big{font-size:70px;color:#ff0000;font-weight:bold}
-.site{display:inline-block;background:#222;border:1px solid red;margin:5px;padding:8px 12px;border-radius:8px;font-size:12px}
+button{padding:14px 30px;background:red;color:#fff;border:none;border-radius:10px;font-weight:bold;font-size:16px}
+.site-btn{background:#222;border:1px solid red;color:#fff;margin:6px;padding:12px 16px;border-radius:10px;min-width:90px}
+input{width:85%;padding:16px;border:3px solid red;border-radius:12px;text-align:center;font-size:18px;background:#111;color:#fff}
 .history-item{display:inline-block;background:#222;margin:4px;padding:8px 14px;border-radius:8px;color:#0f0;font-weight:bold;border:1px solid #333}
+.loader{border:4px solid #222;border-top:4px solid red;border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite;margin:20px auto}
+@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 
-<div id="loginPage" class="login">
+<!-- STEP 1: SITES FIRST -->
+<div id="sitesPage" style="padding:10px">
 <h1 style="color:red">TNN AVIATOR PREDICTOR</h1>
-<p>APP ID:</p>
+<div class="card">
+<p>🌐 SELECT YOUR SITE (18)</p>
+<div id="sitesGrid">
+<button class="site-btn" onclick="selectSite('1xBet')">1xBet</button>
+<button class="site-btn" onclick="selectSite('Melbet')">Melbet</button>
+<button class="site-btn" onclick="selectSite('22Bet')">22Bet</button>
+<button class="site-btn" onclick="selectSite('1Win')">1Win</button>
+<button class="site-btn" onclick="selectSite('Paripesa')">Paripesa</button>
+<button class="site-btn" onclick="selectSite('Betwinner')">Betwinner</button>
+<button class="site-btn" onclick="selectSite('Mostbet')">Mostbet</button>
+<button class="site-btn" onclick="selectSite('888Starz')">888Starz</button>
+<button class="site-btn" onclick="selectSite('Betway')">Betway</button>
+<button class="site-btn" onclick="selectSite('Odibets')">Odibets</button>
+<button class="site-btn" onclick="selectSite('Sportpesa')">Sportpesa</button>
+<button class="site-btn" onclick="selectSite('Mozzart')">Mozzart</button>
+<button class="site-btn" onclick="selectSite('Betika')">Betika</button>
+<button class="site-btn" onclick="selectSite('Bangbet')">Bangbet</button>
+<button class="site-btn" onclick="selectSite('SAFARIBET')">SAFARIBET</button>
+<button class="site-btn" onclick="selectSite('PariPesa KE')">PariPesa KE</button>
+<button class="site-btn" onclick="selectSite('Helabet')">Helabet</button>
+<button class="site-btn" onclick="selectSite('Linebet')">Linebet</button>
+</div>
+</div>
+</div>
+
+<!-- STEP 2: ASK ID -->
+<div id="loginPage" style="display:none;padding:20px;margin-top:80px">
+<h2 style="color:red" id="selectedSiteTitle"></h2>
+<p>Enter APP ID to Connect</p>
 <input id="appId" type="password" placeholder="Enter ID"><br><br>
 <button onclick="login()">CONTINUE</button>
 <p id="msg" style="color:#ff4444"></p>
+<button onclick="goBack()" style="background:#222;margin-top:15px">⬅ Back to Sites</button>
 </div>
 
-<div id="mainApp" class="app">
-<h2 style="color:red">TNN AVIATOR PREDICTOR</h2>
+<!-- STEP 2.5: CONNECTING -->
+<div id="connectingPage" style="display:none;padding:50px 20px;margin-top:80px">
+<h2 style="color:red" id="connectingText">Connecting...</h2>
+<div class="loader"></div>
+<p id="connectingSub">Please wait</p>
+</div>
 
+<!-- STEP 3: PREDICTIONS -->
+<div id="mainApp" style="display:none;padding:15px">
+<h2 style="color:red">TNN AVIATOR PREDICTOR</h2>
+<p id="connectedSite" style="color:#aaa"></p>
 <div class="card">
 <p>🚀 NEXT PREDICTION</p>
 <div class="big" id="prediction">--x</div>
 <p id="time"></p>
 </div>
-
-<button onclick="getNext()" style="width:95%;padding:18px;font-size:18px;margin-bottom:10px">GET NEXT PREDICTION</button>
-
-<div class="card">
-<p>🌐 SUPPORTED SITES (18)</p>
-<div>
-<span class="site">1xBet</span><span class="site">Melbet</span><span class="site">22Bet</span><span class="site">1Win</span><span class="site">Paripesa</span><span class="site">Betwinner</span><span class="site">Mostbet</span><span class="site">888Starz</span><span class="site">Betway</span><span class="site">Odibets</span><span class="site">Sportpesa</span><span class="site">Mozzart</span><span class="site">Betika</span><span class="site">Bangbet</span><span class="site">SAFARIBET</span><span class="site">PariPesa KE</span><span class="site">Helabet</span><span class="site">Linebet</span>
-</div>
-</div>
-
+<button onclick="getNext()" style="width:95%;padding:18px;font-size:18px">GET NEXT PREDICTION</button>
 <div class="card" style="text-align:left">
 <p>📊 Past Results:</p>
 <div id="history" style="text-align:center"><span style="color:#777">Click GET NEXT</span></div>
 </div>
+<button onclick="goBack()" style="background:#222;margin-top:10px">⬅ Change Site</button>
 </div>
 
 <script>
+let currentSite="";
 const SECRET="#pro750@";
+function selectSite(site){
+currentSite=site;
+document.getElementById('sitesPage').style.display='none';
+document.getElementById('loginPage').style.display='block';
+document.getElementById('selectedSiteTitle').innerText="🔒 "+site;
+}
+function goBack(){
+document.getElementById('sitesPage').style.display='block';
+document.getElementById('loginPage').style.display='none';
+document.getElementById('connectingPage').style.display='none';
+document.getElementById('mainApp').style.display='none';
+document.getElementById('appId').value='';
+document.getElementById('msg').innerText='';
+}
 function login(){
 let id=document.getElementById('appId').value.trim();
-if(id===SECRET){document.getElementById('loginPage').style.display='none';document.getElementById('mainApp').style.display='block';}
-else{document.getElementById('msg').innerText='Invalid ID! Contact Admin';}
+if(id===SECRET){
+document.getElementById('loginPage').style.display='none';
+document.getElementById('connectingPage').style.display='block';
+document.getElementById('connectingText').innerText="Connecting to "+currentSite+"...";
+let dots=0;
+let interval=setInterval(()=>{
+dots=(dots+1)%4;
+document.getElementById('connectingSub').innerText="Establishing secure connection"+".".repeat(dots);
+},300);
+setTimeout(()=>{
+clearInterval(interval);
+document.getElementById('connectingPage').style.display='none';
+document.getElementById('mainApp').style.display='block';
+document.getElementById('connectedSite').innerText="✅ Connected to "+currentSite;
+},3000);
+}else{
+document.getElementById('msg').innerText='Invalid ID! Contact Admin';
+}
 }
 function getNext(){
 let odds=(Math.random()*3+1.10).toFixed(2);
 let now=new Date();
 document.getElementById('prediction').innerText=odds+'x';
-document.getElementById('time').innerText=now.toLocaleString();
+document.getElementById('time').innerText=now.toLocaleString()+" • "+currentSite;
 let h=document.getElementById('history');
 if(h.innerHTML.includes('Click GET NEXT')) h.innerHTML='';
 h.innerHTML='<span class="history-item">✅ '+odds+'x</span>'+h.innerHTML;

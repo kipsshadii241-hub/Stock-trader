@@ -1,92 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>TNN AVIATOR PREDICTOR</title>
+<link rel="manifest" href="manifest.json">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TNN Selector</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#000;color:#fff;min-height:100vh;overflow:hidden}
-.top{padding:8px;text-align:center;background:#000;border-bottom:1px solid #222}
-.top b{color:red;font-size:12px;letter-spacing:2px}
-.center{margin-top:15px;text-align:center}
-.flew{font-size:13px;letter-spacing:3px;color:#fff;font-weight:900}
-.date-time{margin-top:5px;line-height:14px}
-.date{font-size:11px;color:#ff3333}
-.time{font-size:18px;color:#00ff88;font-weight:900;letter-spacing:2px;text-shadow:0 0 10px #00ff88;margin-top:3px}
-.circle-wrap{margin:25px auto;width:220px;height:220px;position:relative;display:flex;align-items:center;justify-content:center}
-.circle{width:100%;height:100%;border-radius:50%;border:3px solid #ff0000;box-shadow:0 0 30px #ff0000, inset 0 0 20px #ff000055;display:flex;align-items:center;justify-content:center;position:relative;animation:glow 1.5s infinite alternate}
-@keyframes glow{0%{box-shadow:0 0 20px #ff0000}100%{box-shadow:0 0 40px #ff0000,0 0 60px #ff000088}}
-.multi{font-size:55px;font-weight:900;color:#00ff88;text-shadow:0 0 15px #00ff88}
-.btn{width:85%;max-width:320px;margin:20px auto;display:block;padding:16px;border-radius:30px;border:none;background:#00ff55;color:#000;font-weight:900;font-size:16px;letter-spacing:1px;box-shadow:0 0 20px #00ff55}
-.status{margin-top:10px;text-align:center;font-size:12px;color:#00ff88}
-.history{display:flex;gap:5px;justify-content:center;margin-top:10px;flex-wrap:wrap;padding:0 10px}
-.history span{font-size:11px;padding:3px 8px;background:#111;border-radius:10px;border:1px solid #222}
-.link{color:red;font-size:11px;text-align:center;margin-top:15px;letter-spacing:1px}
-.radar{position:fixed;bottom:0;left:0;width:100%;height:160px;opacity:0.9;pointer-events:none}
-.radar-inner{width:300px;height:300px;margin:0 auto;border:1px solid #ff000066;border-radius:50%;position:relative;overflow:hidden}
+body{margin:0;background:#000;font-family:Arial;padding:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{padding:18px 10px;border-radius:12px;font-weight:900;text-align:center;font-size:14px;border:2px solid #222}
+.purple{background:#3a1a6e;color:#ffdd00}
+.red{background:#ff0000;color:#fff}
+.green{background:#0a3320;color:#ffdd00}
+.dark{background:#0a1a33;color:#fff}
+.white{background:#fff;color:#cc0000}
+.black{background:#111;color:#1e90ff;border-color:#333}
+h3{color:#fff;text-align:center;font-size:12px;letter-spacing:2px}
+.footer{color:#555;font-size:9px;text-align:center;margin-top:20px;line-height:1.4}
 </style>
 </head>
 <body>
-<div class="top"><b>✈️ TNN AVIATOR PREDICTOR</b></div>
-
-<div class="center">
-<div class="flew">FLEW AWAY</div>
-<div class="date-time">
-<div class="date" id="date">03/10/2026 - SATURDAY</div>
-<div class="time" id="clock">13:59:00</div>
+<h3>✈️ TNN AVIATOR - SELECT BOOKMAKER SIMULATOR</h3>
+<div class="grid">
+<div class="btn purple" onclick="openSim('HOLLYWOODbets')">★ HOLLYWOODbets</div>
+<div class="btn red" onclick="openSim('SportyBet')">.SportyBet</div>
+<div class="btn green" onclick="openSim('BETWINNER')">BETWINNER</div>
+<div class="btn dark" onclick="openSim('PREMIER Bet')">PREMIER Bet</div>
+<div class="btn white" onclick="openSim('Pin-UP.bet')">Pin-UP.bet</div>
+<div class="btn black" onclick="openSim('1win')">1win</div>
+<div class="btn dark" onclick="openSim('BetKing')">BetKing</div>
+<div class="btn black" onclick="openSim('1XBET')">1XBET</div>
+<div class="btn white" onclick="openSim('lotto star')">lotto ★ star</div>
+<div class="btn black" onclick="openSim('M.SPORT')">M.SPORT</div>
+<div class="btn white" onclick="openSim('Bongo bongo ug')">Bongo bongo ug</div>
+<div class="btn red" onclick="openSim('super bet')">super bet</div>
+<div class="btn dark" onclick="openSim('Elephant Bet')">Elephant Bet</div>
+<div class="btn black" onclick="openSim('betway')">betway</div>
+<div class="btn green" onclick="openSim('20BET')">20BET</div>
+<div class="btn green" onclick="openSim('bet365')">bet365</div>
+<div class="btn black" onclick="openSim('betPawa')">betPawa</div>
+<div class="btn purple" onclick="openSim('betfair')">betfair</div>
+<div class="btn white" onclick="openSim('Cloudbet')">Cloudbet</div>
+<div class="btn white" onclick="openSim('sportingbet')">sportingbet</div>
 </div>
 
-<div class="circle-wrap">
-<div class="circle">
-<div class="multi" id="pred">8.07x</div>
+<div class="footer">
+Offline Simulator Hub for entertainment only.<br>
+Not affiliated with, sponsored by, or connected to any betting brand listed.<br>
+Does NOT predict real Aviator / Crash results.<br>
+TNN Simulator - rader-nu.vercel.app
 </div>
-</div>
-
-<button class="btn" id="btn" onclick="getSignal()">GET SIGNAL</button>
-<div class="status" id="status">Ready</div>
-<div class="history" id="hist"></div>
-<div class="link">www.aviatorpredictor.betpawa.com</div>
-</div>
-
-<div class="radar"><div class="radar-inner"></div></div>
 
 <script>
-let preds=[8.07,6.49,22.13,1.85,4.15,2.22,3.96,1.07,2.86,1.45,2.13,1.27,8.07,2.86,1.07];
-let idx=0;
-function updateClock(){
-let now=new Date();
-let dStr=now.toLocaleDateString('en-GB').replace(/\//g,'/')+' - '+now.toLocaleDateString('en-US',{weekday:'long'}).toUpperCase();
-let tStr=now.toLocaleTimeString('en-GB',{hour12:false});
-document.getElementById('date').innerText=dStr;
-document.getElementById('clock').innerText=tStr;
+function openSim(name){
+  localStorage.setItem('brand', name);
+  window.location.href='sim.html';
 }
-updateClock();
-setInterval(updateClock,1000);
-
-function getSignal(){
-let btn=document.getElementById('btn');
-btn.innerText='ANALYZING...';
-setTimeout(()=>{
-idx=(idx+1)%preds.length;
-let val=preds[idx].toFixed(2)+'x';
-document.getElementById('pred').innerText=val;
-btn.innerText='GET SIGNAL';
-document.getElementById('status').innerText='Next round: '+val;
-let h=document.getElementById('hist');
-let sp=document.createElement('span');
-sp.innerText=val;
-sp.style.color=parseFloat(val)<2?'#ff4444':'#00ff88';
-h.prepend(sp);
-if(h.children.length>15) h.lastChild.remove();
-},1200);
-}
-let h=document.getElementById('hist');
-preds.slice(0,14).forEach(v=>{
-let sp=document.createElement('span');
-sp.innerText=v.toFixed(2)+'x';
-sp.style.color=v<2?'#ff4444':'#00ff88';
-h.appendChild(sp);
-});
 </script>
 </body>
 </html>

@@ -80,7 +80,27 @@ body{background:#000;color:#fff;min-height:100vh}
 <button class="cbtn" onclick="login()">CONTINUE</button>
 <div id="error"></div>
 <div style="margin-top:15px;font-size:12px">Don't have ID?<br>
-<a href="https://wa.me/254703683230?text=Hello%20Admin%20I%20want%20ID%20149,000%20UGX" style="background:#25D366;color:#fff;padding:10px 20px;border-radius:25px;text-decoration:none;font-weight:900;display:inline-block;margin-top:8px">📱 Buy ID - 149,000 UGX</a>
+<a href="<script>
+function predict(){
+let c = document.getElementById('crash');
+let s = document.getElementById('status');
+s.innerHTML = "● CALCULATING...";
+s.style.color = "#ff0";
+setTimeout(()=>{
+let val = (Math.random()*4 + 1.2).toFixed(2);
+c.innerHTML = val + "x";
+s.innerHTML = "● PREDICTION READY - BET NOW!";
+s.style.color = "#0f0";
+},1500);
+}
+
+function buyID(){
+  let phone = "254703683230";
+  let message = "Hello Admin I want to purchase the ID";
+  let url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+  window.open(url, "_blank");
+}
+</script> style="background:#25D366;color:#fff;padding:10px 20px;border-radius:25px;text-decoration:none;font-weight:900;display:inline-block;margin-top:8px">📱 Buy ID - 149,000 UGX</a>
 <br><p style="margin-top:8px;color:#888">+254703683230</p>
 <button onclick="backToSites()" style="margin-top:12px;background:#eee;border:none;padding:8px 16px;border-radius:20px">← Change Bookmaker</button>
 </div>

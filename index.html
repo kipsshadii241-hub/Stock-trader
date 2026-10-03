@@ -127,8 +127,7 @@ function login(){
  let err=document.getElementById('error');
  if(v!==correctID){
    err.style.display='block';
-   err.innerHTML=`❌ Invalid ID! Contact Admin<br>ID costs <b>149,000 UGX</b><br><a href="${waBase}?text=Hello%20Admin%20Invalid%20ID%20${encodeURIComponent(v)}%20I%20want%20ID%20for%20${encodeURIComponent(selectedBookmaker)}" target="_blank">📱 ${adminNum} - WhatsApp</a>`;
-   return;
+   err.innerHTML=`❌ Invalid ID! Contact Admin<br>ID costs <b>149,000 UGX</b><br><a href="${waBase;
  }
  err.style.display='none';
  document.getElementById('g2').style.display='none';

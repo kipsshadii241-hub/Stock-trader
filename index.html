@@ -1,59 +1,183 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<link rel="manifest" href="manifest.json">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TNN Selector</title>
+<title>Random Aviator Guess - Not a Predictor</title>
 <style>
-body{margin:0;background:#000;font-family:Arial;padding:12px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btn{padding:18px 10px;border-radius:12px;font-weight:900;text-align:center;font-size:14px;border:2px solid #222}
-.purple{background:#3a1a6e;color:#ffdd00}
-.red{background:#ff0000;color:#fff}
-.green{background:#0a3320;color:#ffdd00}
-.dark{background:#0a1a33;color:#fff}
-.white{background:#fff;color:#cc0000}
-.black{background:#111;color:#1e90ff;border-color:#333}
-h3{color:#fff;text-align:center;font-size:12px;letter-spacing:2px}
-.footer{color:#555;font-size:9px;text-align:center;margin-top:20px;line-height:1.4}
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  .container {
+    max-width: 600px;
+    width: 100%;
+    background: #1e293b;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    align-self: center;
+  }
+  h1 {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 0;
+    color: #f8fafc;
+  }
+  .warning {
+    background: #7f1d1d;
+    color: #fecaca;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    text-align: center;
+    border: 1px solid #ef4444;
+    line-height: 1.4;
+  }
+  .display {
+    background: #0f172a;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    margin-bottom: 20px;
+    border: 1px solid #334155;
+  }
+  .multiplier {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #38bdf8;
+    margin: 8px 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .label {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  button {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  button:hover { background: #2563eb; }
+  button:active { transform: scale(0.98); }
+  .history {
+    margin-top: 24px;
+  }
+  .history h2 {
+    font-size: 1rem;
+    color: #94a3b8;
+    margin-bottom: 8px;
+  }
+  .history ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  .history li {
+    background: #0f172a;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    border-left: 3px solid #38bdf8;
+  }
+  .history li span.time {
+    color: #64748b;
+    font-size: 0.8rem;
+  }
+  .footer {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-top: 20px;
+    line-height: 1.4;
+  }
 </style>
 </head>
 <body>
-<h3>✈️ TNN AVIATOR - SELECT BOOKMAKER SIMULATOR</h3>
-<div class="grid">
-<div class="btn purple" onclick="openSim('HOLLYWOODbets')">★ HOLLYWOODbets</div>
-<div class="btn red" onclick="openSim('SportyBet')">.SportyBet</div>
-<div class="btn green" onclick="openSim('BETWINNER')">BETWINNER</div>
-<div class="btn dark" onclick="openSim('PREMIER Bet')">PREMIER Bet</div>
-<div class="btn white" onclick="openSim('Pin-UP.bet')">Pin-UP.bet</div>
-<div class="btn black" onclick="openSim('1win')">1win</div>
-<div class="btn dark" onclick="openSim('BetKing')">BetKing</div>
-<div class="btn black" onclick="openSim('1XBET')">1XBET</div>
-<div class="btn white" onclick="openSim('lotto star')">lotto ★ star</div>
-<div class="btn black" onclick="openSim('M.SPORT')">M.SPORT</div>
-<div class="btn white" onclick="openSim('Bongo bongo ug')">Bongo bongo ug</div>
-<div class="btn red" onclick="openSim('super bet')">super bet</div>
-<div class="btn dark" onclick="openSim('Elephant Bet')">Elephant Bet</div>
-<div class="btn black" onclick="openSim('betway')">betway</div>
-<div class="btn green" onclick="openSim('20BET')">20BET</div>
-<div class="btn green" onclick="openSim('bet365')">bet365</div>
-<div class="btn black" onclick="openSim('betPawa')">betPawa</div>
-<div class="btn purple" onclick="openSim('betfair')">betfair</div>
-<div class="btn white" onclick="openSim('Cloudbet')">Cloudbet</div>
-<div class="btn white" onclick="openSim('sportingbet')">sportingbet</div>
+<div class="container">
+  <h1>✈️ Aviator Random Guess</h1>
+  <div class="warning">
+    ⚠️ FOR ENTERTAINMENT ONLY. This is a random number generator, <strong>NOT a real predictor</strong>. It will be wrong often. No app can predict Aviator.
+  </div>
+  <div class="display">
+    <div class="label">Next Random Guess</div>
+    <div class="multiplier" id="multiplier">--</div>
+  </div>
+  <button id="generateBtn">Generate Random Guess</button>
+  <div class="history">
+    <h2>History (last 10)</h2>
+    <ul id="historyList"></ul>
+  </div>
+  <div class="footer">
+    Not affiliated with any gambling site. Do not use for betting.<br>
+    Each guess is independent and random.
+  </div>
 </div>
-
-<div class="footer">
-predicting real Aviator / Crash results.<br>
-TNN Simulator - rader-nu.vercel.app
-</div>
-
 <script>
-function openSim(name){
-  localStorage.setItem('brand', name);
-  window.location.href='sim.html';
-}
+  const multiplierEl = document.getElementById('multiplier');
+  const generateBtn = document.getElementById('generateBtn');
+  const historyList = document.getElementById('historyList');
+  const history = [];
+
+  // Generates a random crash-point-like multiplier.
+  // Uses P(M >= x) = 1/x to look realistic, but it is still 100% random.
+  function randomMultiplier() {
+    const u = Math.random(); // uniform [0,1)
+    const raw = 1 / (1 - u); // heavy-tailed distribution
+    const clamped = Math.min(Math.max(raw, 1.00), 100.00);
+    return clamped.toFixed(2);
+  }
+
+  function addToHistory(value) {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+    history.unshift({ value, time: timeStr });
+    if (history.length > 10) history.pop();
+    renderHistory();
+  }
+
+  function renderHistory() {
+    historyList.innerHTML = '';
+    history.forEach(item => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span>${item.value}x</span><span class="time">${item.time}</span>`;
+      historyList.appendChild(li);
+    });
+  }
+
+  generateBtn.addEventListener('click', () => {
+    const value = randomMultiplier();
+    multiplierEl.textContent = value + 'x';
+    addToHistory(value);
+  });
+
+  // Initial state
+  multiplierEl.textContent = '--';
 </script>
 </body>
 </html>

@@ -1,67 +1,173 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TNN Aviator Tool - Choose Country</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff0000">
+<title>TNN AVIATOR PREDICTOR</title>
 <style>
-body{background:#0a0a0a;color:white;font-family:Arial;text-align:center;padding:20px}
-.card{background:#1a1a1a;border-radius:20px;padding:25px;max-width:500px;margin:auto;border:2px solid #e11d48}
-select{width:100%;padding:15px;border-radius:10px;font-size:18px;background:#222;color:white;border:1px solid #e11d48;margin:15px 0}
-#amount{font-size:36px;color:#e11d48;font-weight:bold;margin:20px 0}
-.btn{display:block;background:#25D366;color:white;padding:15px;border-radius:12px;text-decoration:none;margin-top:20px;font-weight:bold;font-size:18px}
-.btn2{background:#e11d48;margin-top:10px}
-.small{font-size:11px;color:gray;margin-top:20px;line-height:1.4}
+body{margin:0;background:#000;color:#fff;font-family:Arial;text-align:center}
+.card{background:#111;border:2px solid red;border-radius:15px;padding:15px;margin:15px}
+.big{font-size:70px;color:#ff0000;font-weight:bold}
+button{padding:14px 30px;background:red;color:#fff;border:none;border-radius:10px;font-weight:bold;font-size:16px}
+.site-btn{background:#222;border:1px solid red;color:#fff;margin:6px;padding:12px 16px;border-radius:10px;min-width:95px}
+input{width:85%;padding:16px;border:3px solid red;border-radius:12px;text-align:center;font-size:18px;background:#111;color:#fff}
+.history-item{display:inline-block;background:#222;margin:4px;padding:8px 14px;border-radius:8px;color:#0f0;font-weight:bold;border:1px solid #333}
+.loader{border:4px solid #222;border-top:4px solid red;border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite;margin:20px auto}
+@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+select{width:90%;padding:14px;border-radius:10px;background:#222;color:white;border:2px solid red;font-size:16px}
 </style>
 </head>
 <body>
-<div class="card">
-<h2>✈️ TNN AVIATOR</h2>
-<p>Select your country:</p>
 
+<div id="sitesPage" style="padding:10px">
+<h1 style="color:red">TNN AVIATOR PREDICTOR</h1>
+
+<!-- ADDED: Country selector - NEW, doesn't remove sites -->
+<div class="card" style="border-color:#e11d48">
+<p>🌍 SELECT YOUR COUNTRY TO SEE PRICE</p>
 <select id="country" onchange="showPrice()">
 <option value="">-- Choose Country --</option>
-<option value="450 BWP - Botswana Pula">🇧🇼 Botswana</option>
-<option value="4,185 KES - Kenya Shilling">🇰🇪 Kenya</option>
-<option value="129,500 UGX - Uganda Shilling">🇺🇬 Uganda</option>
-<option value="84,500 TZS - Tanzania Shilling">🇹🇿 Tanzania</option>
-<option value="865 ZMW - Zambian Kwacha">🇿🇲 Zambia</option>
-<option value="585 ZAR - South African Rand">🇿🇦 South Africa</option>
-<option value="32 USD - US Dollar">🇿🇼 Zimbabwe</option>
-<option value="1,850 NAD - Namibian Dollar">🇳🇦 Namibia</option>
-<option value="420 BWP - Lesotho (via BWP)">🇱🇸 Lesotho</option>
-<option value="585 ZAR - Eswatini (via ZAR)">🇸🇿 Eswatini</option>
-<option value="49,500 NGN - Nigerian Naira">🇳🇬 Nigeria</option>
-<option value="505 GHS - Ghana Cedi">🇬🇭 Ghana</option>
-<option value="19,500 XOF - Ivory Coast / Senegal CFA">🇨🇮🇸🇳 Ivory Coast / Senegal</option>
-<option value="19,500 XAF - Cameroon / Congo CFA">🇨🇲🇨🇬 Cameroon</option>
-<option value="42,500 RWF - Rwanda Franc">🇷🇼 Rwanda</option>
-<option value="56,500 MWK - Malawi Kwacha">🇲🇼 Malawi</option>
-<option value="2,070 MZN - Mozambique Metical">🇲🇿 Mozambique</option>
-<option value="32 USD - Ethiopia (USD)">🇪🇹 Ethiopia</option>
-<option value="11,500 ETB - Ethiopia Birr">🇪🇹 Ethiopia Birr</option>
-<option value="12,500 DZD - Algeria Dinar">🇩🇿 Algeria</option>
-<option value="98 TND - Tunisia Dinar">🇹🇳 Tunisia</option>
-<option value="32 USD / 120 AED - International">🌍 Other / USA / UAE</option>
+<option value="450 BWP">🇧🇼 Botswana - 450 BWP</option>
+<option value="4,185 KES">🇰🇪 Kenya - 4,185 KES</option>
+<option value="129,500 UGX">🇺🇬 Uganda - 129,500 UGX</option>
+<option value="84,500 TZS">🇹🇿 Tanzania - 84,500 TZS</option>
+<option value="865 ZMW">🇿🇲 Zambia - 865 ZMW</option>
+<option value="585 ZAR">🇿🇦 South Africa - 585 ZAR</option>
+<option value="32 USD">🇿🇼 Zimbabwe - 32 USD</option>
+<option value="1,850 NAD">🇳🇦 Namibia - 1,850 NAD</option>
+<option value="49,500 NGN">🇳🇬 Nigeria - 49,500 NGN</option>
+<option value="505 GHS">🇬🇭 Ghana - 505 GHS</option>
+<option value="19,500 XOF">🇨🇮 Ivory Coast - 19,500 XOF</option>
+<option value="42,500 RWF">🇷🇼 Rwanda - 42,500 RWF</option>
+<option value="56,500 MWK">🇲🇼 Malawi - 56,500 MWK</option>
+<option value="2,070 MZN">🇲🇿 Mozambique - 2,070 MZN</option>
+<option value="12,500 DZD">🇩🇿 Algeria - 12,500 DZD</option>
+<option value="32 USD">🌍 Other - 32 USD</option>
 </select>
+<div id="amount" style="font-size:26px;color:#e11d48;font-weight:bold;margin:12px 0">Choose to see price</div>
+<a id="waLink" href="https://wa.me/254703683230" style="display:block;background:#25D366;color:white;padding:12px;border-radius:10px;text-decoration:none;font-weight:bold">💬 Buy on WhatsApp +254703683230</a>
+<p style="font-size:11px;color:gray;margin-top:10px">Base 450 BWP. Tool for analysis only - Aviator is random. No guarantee.</p>
+</div>
 
-<div id="amount">Select country</div>
-<div id="countryName" style="color:#aaa"></div>
+<div class="card">
+<p>🌐 SELECT YOUR SITE (20)</p>
+<div id="sitesGrid">
+<button class="site-btn" onclick="selectSite('1xBet')">1xBet</button>
+<button class="site-btn" onclick="selectSite('Melbet')">Melbet</button>
+<button class="site-btn" onclick="selectSite('22Bet')">22Bet</button>
+<button class="site-btn" onclick="selectSite('1Win')">1Win</button>
+<button class="site-btn" onclick="selectSite('Paripesa')">Paripesa</button>
+<button class="site-btn" onclick="selectSite('Betwinner')">Betwinner</button>
+<button class="site-btn" onclick="selectSite('Mostbet')">Mostbet</button>
+<button class="site-btn" onclick="selectSite('888Starz')">888Starz</button>
+<button class="site-btn" onclick="selectSite('Betway')">Betway</button>
+<button class="site-btn" onclick="selectSite('Odibets')">Odibets</button>
+<button class="site-btn" onclick="selectSite('Sportpesa')">Sportpesa</button>
+<button class="site-btn" onclick="selectSite('Mozzart')">Mozzart</button>
+<button class="site-btn" onclick="selectSite('Betika')">Betika</button>
+<button class="site-btn" onclick="selectSite('Bangbet')">Bangbet</button>
+<button class="site-btn" onclick="selectSite('SAFARIBET')">SAFARIBET</button>
+<button class="site-btn" onclick="selectSite('PariPesa KE')">PariPesa KE</button>
+<button class="site-btn" onclick="selectSite('Helabet')">Helabet</button>
+<button class="site-btn" onclick="selectSite('Linebet')">Linebet</button>
+<button class="site-btn" onclick="selectSite('Betpawa')">Betpawa</button>
+<button class="site-btn" onclick="selectSite('BongoBongo')">BongoBongo</button>
+</div>
+</div>
+</div>
 
-<a id="waLink" class="btn" href="https://wa.me/254703683230?text=Hello%20TNN%20I%20want%20license">💬 Buy on WhatsApp</a>
-<a class="btn btn2" href="https://rader-nu.vercel.app">✈️ Open Tool Demo</a>
+<div id="loginPage" style="display:none;padding:20px;margin-top:80px">
+<h2 style="color:red" id="selectedSiteTitle"></h2>
+<p>Enter APP ID to Connect</p>
+<input id="appId" type="password" placeholder="Enter ID"><br><br>
+<button onclick="login()">CONTINUE</button>
+<p id="msg" style="color:#ff4444"></p>
+<button onclick="goBack()" style="background:#222;margin-top:15px">⬅ Back to Sites</button>
+</div>
 
-<p class="small">Base: 450 BWP. Rates today. Tool is for analysis & bankroll management only. Aviator is random - no guarantee of 60.85x or any multiplier. Play responsibly.<br>Contact: +254703683230</p>
+<div id="connectingPage" style="display:none;padding:50px 20px;margin-top:80px">
+<h2 style="color:red" id="connectingText">Connecting...</h2>
+<div class="loader"></div>
+<p id="connectingSub">Please wait</p>
+</div>
+
+<div id="mainApp" style="display:none;padding:15px">
+<h2 style="color:red">TNN AVIATOR PREDICTOR</h2>
+<p id="connectedSite" style="color:#aaa"></p>
+<div class="card">
+<p>🚀 NEXT PREDICTION</p>
+<div class="big" id="prediction">--x</div>
+<p id="time"></p>
+</div>
+<button onclick="getNext()" style="width:95%;padding:18px;font-size:18px">GET NEXT PREDICTION</button>
+<div class="card" style="text-align:left">
+<p>📊 Past Results:</p>
+<div id="history" style="text-align:center"><span style="color:#777">Click GET NEXT</span></div>
+</div>
+<button onclick="goBack()" style="background:#222;margin-top:10px">⬅ Change Site</button>
 </div>
 
 <script>
+let currentSite="";
+const SECRET="#pro750@";
+let lastOdds=[];
+function selectSite(site){
+currentSite=site;
+document.getElementById('sitesPage').style.display='none';
+document.getElementById('loginPage').style.display='block';
+document.getElementById('selectedSiteTitle').innerText="🔒 "+site;
+}
+function goBack(){
+document.getElementById('sitesPage').style.display='block';
+document.getElementById('loginPage').style.display='none';
+document.getElementById('connectingPage').style.display='none';
+document.getElementById('mainApp').style.display='none';
+document.getElementById('appId').value='';
+document.getElementById('msg').innerText='';
+}
+function login(){
+let id=document.getElementById('appId').value.trim();
+if(id===SECRET){
+document.getElementById('loginPage').style.display='none';
+document.getElementById('connectingPage').style.display='block';
+document.getElementById('connectingText').innerText="Connecting to "+currentSite+"...";
+let dots=0;
+let interval=setInterval(()=>{dots=(dots+1)%4;document.getElementById('connectingSub').innerText="Establishing secure connection"+".".repeat(dots);},300);
+setTimeout(()=>{clearInterval(interval);document.getElementById('connectingPage').style.display='none';document.getElementById('mainApp').style.display='block';document.getElementById('connectedSite').innerText="✅ Connected to "+currentSite;},2500);
+}else{document.getElementById('msg').innerText='Invalid ID! Contact Admin';}
+}
+function getNext(){
+let r=Math.random();
+let odds;
+if(r<0.35){odds=(Math.random()*0.99+1.00).toFixed(2);}
+else if(r<0.70){odds=(Math.random()*2.99+2.00).toFixed(2);}
+else if(r<0.88){odds=(Math.random()*14.99+5.00).toFixed(2);}
+else if(r<0.97){odds=(Math.random()*80+20).toFixed(2);}
+else{odds=(Math.random()*200+100).toFixed(2);}
+if(lastOdds.includes(odds)){return getNext();}
+lastOdds.push(odds);
+if(lastOdds.length>5) lastOdds.shift();
+let now=new Date();
+document.getElementById('prediction').innerText=odds+'x';
+document.getElementById('time').innerText=now.toLocaleString()+" • "+currentSite;
+let h=document.getElementById('history');
+if(h.innerHTML.includes('Click GET NEXT')) h.innerHTML='';
+h.innerHTML='<span class="history-item">✅ '+odds+'x</span>'+h.innerHTML;
+let predEl=document.getElementById('prediction');
+if(parseFloat(odds)<2) predEl.style.color='#ff4444';
+else if(parseFloat(odds)<5) predEl.style.color='#ff0000';
+else if(parseFloat(odds)<20) predEl.style.color='#00ff88';
+else predEl.style.color='#ffcc00';
+}
 function showPrice(){
-let sel=document.getElementById("country");
-let val=sel.value;
-let text=sel.options[sel.selectedIndex].text;
-if(!val){document.getElementById("amount").innerText="Select country";return}
-document.getElementById("amount").innerText=val;
-document.getElementById("countryName").innerText=text + " license";
-let msg="Hello TNN I want license for "+text+" Price: "+val+" Website rader-nu.vercel.app";
+let s=document.getElementById("country");
+let v=s.value;
+let t=s.options[s.selectedIndex].text;
+if(!v)return;
+document.getElementById("amount").innerText=t;
+let msg="Hello TNN I want license for "+t+" Website: rader-nu.vercel.app";
 document.getElementById("waLink").href="https://wa.me/254703683230?text="+encodeURIComponent(msg);
 }
 </script>

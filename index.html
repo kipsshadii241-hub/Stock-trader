@@ -1,165 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TradingPro Live Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TNN AVIATOR GAME</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif}
-body{background:#0b1220;color:#e6edf7;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
-header{height:52px;background:#111a2e;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:14px;border-bottom:1px solid #1e2a44}
-#bal{font-weight:700;color:#22c55e}
-#sym{padding:8px 14px;background:#0e1729;font-size:15px;font-weight:700;border-bottom:1px solid #1e2a44;display:flex;justify-content:space-between}
-#px{color:#22c55e}
-#chart{flex:1;width:100%;display:block;min-height:0}
-#panel{padding:10px 14px;background:#0e1729;border-top:1px solid #1e2a44}
-#panel input{width:100%;padding:8px;background:#111a2e;border:1px solid #24324f;color:#fff;border-radius:6px;font-size:14px}
-#exp{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:8px 0}
-#exp div{padding:7px;text-align:center;background:#16223a;border:1px solid #24324f;border-radius:5px;font-size:12px;cursor:pointer}
-#exp div.on{background:#22c55e;color:#000;font-weight:700}
-#btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-#btns button{padding:14px;border:none;border-radius:8px;color:#fff;font-weight:700;font-size:15px;cursor:pointer}
-.up{background:#22c55e}.down{background:#ef4444}
-#open{margin-top:8px;font-size:12px;color:#7c8db5;min-height:20px}
-#toasts{position:fixed;top:60px;right:10px;z-index:9}
-.t{background:#16223a;border-left:3px solid #22c55e;padding:7px 12px;border-radius:5px;font-size:12px;margin-bottom:5px}
-.t.l{border-color:#ef4444}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#0f0f0f;color:#fff;min-height:100vh}
+.top{ background:#e00000; color:#fff; padding:12px; text-align:center; font-weight:900; font-size:14px; letter-spacing:1px;}
+.game{ width:94%; max-width:500px; margin:15px auto; background:#1a1a1a; border-radius:20px; border:1px solid #333; overflow:hidden; }
+.canvas{ height:45vh; background:radial-gradient(circle at bottom,#222,#000); position:relative; display:flex; align-items:center; justify-content:center;}
+.plane{ position:absolute; left:10%; bottom:20%; font-size:38px; transition:0.1s; z-index:2;}
+.mult{ font-size:65px; font-weight:900; z-index:3; text-shadow:0 0 20px #000; }
+.status{ text-align:center; padding:8px; color:#22c55e; font-weight:bold;}
+.bet-box{ padding:15px; display:flex; gap:10px; }
+.btn{ flex:1; padding:18px; border-radius:30px; border:none; font-weight:900; font-size:18px; color:#fff; }
+.bet{ background:#22c55e; }
+.cash{ background:#f59e0b; }
+.hist{ display:flex; gap:6px; padding:10px; overflow-x:auto; }
+.hist span{ background:#222; padding:5px 10px; border-radius:20px; font-size:12px; white-space:nowrap;}
 </style>
 </head>
 <body>
-<header>
-  <div>● TradingPro <small style="color:#6b7ea8">LIVE DEMO</small></div>
-  <div>Balance: <span id="bal">$10,000.00</span></div>
-</header>
-<div id="sym">BTC/USDT (Binance Live) <span id="px">—</span></div>
-<canvas id="chart"></canvas>
-<div id="panel">
-  <input id="amt" type="number" value="100" min="1">
-  <div id="exp">
-    <div data-s="5">5s</div><div class="on" data-s="10">10s</div>
-    <div data-s="30">30s</div><div data-s="60">60s</div>
-  </div>
-  <div id="btns">
-    <button class="up" id="bUp">▲ HIGHER</button>
-    <button class="down" id="bDown">▼ LOWER</button>
-  </div>
-  <div id="open">No open trades</div>
+<div class="top">TNN AVIATOR v12.9.2 - REAL MONEY GAME - BALANCE SYSTEM</div>
+<div class="game">
+<div class="canvas" id="canvas"><div class="plane" id="plane">✈️</div><div class="mult" id="mult">1.00x</div></div>
+<div class="status" id="stat">Waiting for next round...</div>
+<div class="hist" id="hist"></div>
+<div class="bet-box"><button class="btn bet" id="btn" onclick="doBet()">BET $10 - BAL $70.00</button></div>
+<div style="text-align:center;padding:10px;color:#888;font-size:11px">TNN Binary Zimbabwe • Real Aviator Engine • No Fake Predictor</div>
 </div>
-<div id="toasts"></div>
-
 <script>
-const PAY=0.85, START=10000;
-let bal=START, exp=10, price=0, candles=[], trades=[], cv=chart, ctx=cv.getContext('2d'), W=0,H=0;
-let currentCandle=null;
-
-// --- LIVE BINANCE WEBSOCKET (NO API KEY NEEDED) ---
-const ws = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@trade');
-ws.onmessage = (e) => {
-  const d = JSON.parse(e.data);
-  price = parseFloat(d.p);
-  document.getElementById('px').textContent = '$' + price.toFixed(2);
-  
-  const now = Date.now();
-  if (!currentCandle || now - currentCandle.t >= 5000) { // new candle every 5 sec
-    currentCandle = { t: now, o: price, h: price, l: price, c: price };
-    candles.push(currentCandle);
-    if (candles.length > 100) candles.shift();
-  } else {
-    currentCandle.c = price;
-    currentCandle.h = Math.max(currentCandle.h, price);
-    currentCandle.l = Math.min(currentCandle.l, price);
-  }
-  draw(); settle(); updateOpen();
-};
-ws.onerror = () => { document.getElementById('px').textContent = 'Connection error'; };
-
-// --- CHART DRAWING ---
-function resize(){
-  const r=cv.getBoundingClientRect(); W=r.width; H=r.height;
-  const d=window.devicePixelRatio||1;
-  cv.width=W*d; cv.height=H*d;
-  ctx.setTransform(d,0,0,d,0,0);
-}
-window.addEventListener('resize',resize);
-
-function draw(){
-  if(!W||!H||candles.length<2)return;
-  ctx.clearRect(0,0,W,H);
-  const c=candles.slice(-40);
-  const hi=Math.max(...c.map(x=>x.h)), lo=Math.min(...c.map(x=>x.l));
-  const span=(hi-lo)||1, pad=20, ih=H-pad*2;
-  const y=v=>pad+ih-((v-lo)/span)*ih;
-  const cw=(W-70)/c.length;
-  c.forEach((k,i)=>{
-    const x=10+i*cw+cw/2, up=k.c>=k.o;
-    ctx.strokeStyle=ctx.fillStyle=up?'#22c55e':'#ef4444';
-    ctx.beginPath();ctx.moveTo(x,y(k.h));ctx.lineTo(x,y(k.l));ctx.stroke();
-    const bw=Math.max(cw*.6,2);
-    ctx.fillRect(x-bw/2,Math.min(y(k.o),y(k.c)),bw,Math.max(Math.abs(y(k.c)-y(k.o)),1));
-  });
-  // current price line
-  const yl=y(price);
-  ctx.strokeStyle='rgba(245,158,11,.7)';ctx.setLineDash([5,4]);
-  ctx.beginPath();ctx.moveTo(0,yl);ctx.lineTo(W-65,yl);ctx.stroke();ctx.setLineDash([]);
-  ctx.fillStyle='#f59e0b';ctx.fillRect(W-65,yl-9,65,18);
-  ctx.fillStyle='#000';ctx.font='bold 11px sans-serif';ctx.textAlign='center';
-  ctx.fillText(price.toFixed(2),W-32,yl+4);
-  // entry lines for open trades
-  trades.filter(t=>!t.done).forEach(t=>{
-    const ty=y(t.entry);
-    ctx.strokeStyle=t.dir==='up'?'rgba(34,197,94,.8)':'rgba(239,68,68,.8)';
-    ctx.beginPath();ctx.moveTo(0,ty);ctx.lineTo(W-65,ty);ctx.stroke();
-  });
-}
-
-// --- TRADING LOGIC ---
-function place(dir){
-  if(!price) return toast('Waiting for live price...','l');
-  const a=parseFloat(amt.value);
-  if(!a||a<=0) return toast('Enter amount','l');
-  if(a>bal) return toast('Insufficient balance','l');
-  bal-=a; document.getElementById('bal').textContent='$'+bal.toFixed(2);
-  trades.push({dir,amt:a,entry:price,exp:Date.now()+exp*1000,done:false});
-  toast(`${dir.toUpperCase()} $${a} @ $${price.toFixed(2)}`);
-}
-
-function settle(){
-  trades.forEach(t=>{
-    if(t.done||Date.now()<t.exp)return;
-    t.done=true;
-    const won = t.dir==='up' ? price>t.entry : price<t.entry;
-    const pnl = won ? t.amt*PAY : -t.amt;
-    if(won) bal += t.amt + t.amt*PAY;
-    document.getElementById('bal').textContent='$'+bal.toFixed(2);
-    toast(`${won?'✅ WIN':'❌ LOSS'} ${won?'+':''}$${pnl.toFixed(2)}`, won?'':'l');
-  });
-}
-
-function updateOpen(){
-  const a=trades.filter(t=>!t.done);
-  const el=document.getElementById('open');
-  if(!a.length){el.textContent='No open trades';return;}
-  const now=Date.now();
-  el.innerHTML=a.map(t=>{
-    const r=Math.max(0,(t.exp-now)/1000);
-    const win=t.dir==='up'?price>t.entry:price<t.entry;
-    return `<span style="color:${t.dir==='up'?'#22c55e':'#ef4444'}">${t.dir.toUpperCase()}</span> $${t.amt} • ${r.toFixed(1)}s • ${win?'✅':'❌'}`;
-  }).join('<br>');
-}
-
-function toast(m,cls=''){
-  const d=document.createElement('div');d.className='t '+cls;d.textContent=m;
-  document.getElementById('toasts').appendChild(d);setTimeout(()=>d.remove(),2500);
-}
-
-document.getElementById('bUp').onclick=()=>place('up');
-document.getElementById('bDown').onclick=()=>place('down');
-document.querySelectorAll('#exp div').forEach(d=>d.onclick=()=>{
-  document.querySelectorAll('#exp div').forEach(x=>x.classList.remove('on'));
-  d.classList.add('on'); exp=+d.dataset.s;
-});
-
-setTimeout(resize,300);
+let bal=70, mul=1, crash=0, playing=false, inBet=false, betAmt=10, pos=0, timer;
+function randCrash(){ let r=Math.random(); if(r<0.55) return 1.05+Math.random()*0.9; if(r<0.85) return 2+Math.random()*3; if(r<0.95) return 5+Math.random()*5; return 10+Math.random()*20; }
+function newRound(){ mul=1; pos=0; crash=randCrash(); playing=true; inBet=false; document.getElementById('stat').innerText='Round started...'; document.getElementById('stat').style.color='#22c55e'; document.getElementById('mult').style.color='#fff'; document.getElementById('mult').innerText='1.00x'; document.getElementById('btn').className='btn bet'; document.getElementById('btn').innerText='BET $10 - BAL $'+bal.toFixed(2); clearInterval(timer); timer=setInterval(()=>{ if(!playing) return; mul+=0.02+mul*0.015; pos+=0.6; document.getElementById('mult').innerText=mul.toFixed(2)+'x'; document.getElementById('plane').style.left=(10+pos*0.8)+'%'; document.getElementById('plane').style.bottom=(20+pos*0.6)+'%'; if(inBet){ document.getElementById('btn').innerText='CASHOUT $'+(betAmt*mul).toFixed(2); } if(mul>=crash){ playing=false; clearInterval(timer); document.getElementById('mult').innerText='CRASHED @ '+crash.toFixed(2)+'x'; document.getElementById('mult').style.color='red'; document.getElementById('stat').innerText='Crashed @ '+crash.toFixed(2)+'x'; document.getElementById('stat').style.color='red'; let h=document.getElementById('hist'); let sp=document.createElement('span'); sp.innerText=crash.toFixed(2)+'x'; sp.style.color=crash<2?'#ef4444':crash<5?'#22c55e':'#a855f7'; h.prepend(sp); if(inBet){ inBet=false; document.getElementById('btn').innerText='LOST - BET AGAIN'; document.getElementById('btn').style.background='#ef4444'; } setTimeout(newRound,3000); } },80); }
+function doBet(){ if(!playing) return; if(!inBet){ if(bal<betAmt){ alert('Low balance!'); return; } bal-=betAmt; inBet=true; document.getElementById('btn').className='btn cash'; document.getElementById('btn').innerText='CASHOUT $'+(betAmt*mul).toFixed(2); } else { let win=betAmt*mul; bal+=win; inBet=false; document.getElementById('btn').className='btn bet'; document.getElementById('btn').innerText='WON $'+win.toFixed(2)+' - BAL $'+bal.toFixed(2); setTimeout(()=>{ document.getElementById('btn').innerText='BET $10 - BAL $'+bal.toFixed(2); },1500); } }
+newRound();
 </script>
 </body>
 </html>

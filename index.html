@@ -5,26 +5,29 @@
 *{box-sizing:border-box}body{margin:0;font-family:Arial;background:#fff}
 .top{height:36px;background:#ff1a1a;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 8px;font-size:12px}
 .center{text-align:center;padding:20px 12px;min-height:100vh}
-.plane{width:180px;margin:30px auto;display:block}
+.plane{width:180px;margin:20px auto;display:block}
 .idlabel{font-weight:900;margin:10px;font-family:cursive}
-.box{background:red;border-radius:20px;padding:8px;width:85%;margin:10px auto;display:flex;align-items:center}
+.box{background:red;border-radius:20px;padding:8px;width:90%;margin:10px auto;display:flex;align-items:center}
 .box input{flex:1;border:none;border-radius:12px;padding:12px;text-align:center;font-size:16px}
 .cbtn{padding:12px 30px;border:none;border-radius:12px;box-shadow:0 4px 10px #0002;font-weight:900;margin-top:20px;background:#fff}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.b{padding:16px 5px;border-radius:10px;font-weight:900;text-align:center;font-size:12px}
-.p{background:#3a1a6e;color:#ff0}.r{background:red;color:#fff}.g{background:#0a3320;color:#ff0}.d{background:#0a1a33;color:#fff}.w{background:#fff;color:#c00}.k{background:#111;color:#1e90ff}
 #g2,#g3{display:none;background:#000;min-height:100vh;padding:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-bottom:60px}
+.b{padding:16px 5px;border-radius:12px;font-weight:900;text-align:center;font-size:12px}
+.p{background:#3a1a6e;color:#ff0}.r{background:#ff0000;color:#fff}.g{background:#0a3320;color:#ff0}.d{background:#0a1a33;color:#fff}.w{background:#fff;color:#c00}.k{background:#111;color:#1e90ff}.y{background:#4a0a6e;color:#ff0}.lb{background:#001a4d;color:#fff}
 .circle{width:250px;height:250px;margin:20px auto;border-radius:50%;border:3px solid red;box-shadow:0 0 25px red;display:flex;align-items:center;justify-content:center}
 .v{font-size:50px;color:#0f8;font-weight:900}
 </style></head><body>
+
 <div id="g1" class="center">
-<div class="top"><span>15:25 ✈️</span><span>4.5G</span></div>
-<div style="font-size:80px;margin:20px">🔄</div>
+<div class="top"><span>15:27 ✈️</span><span>4.5G 32</span></div>
+<div style="font-size:70px;margin:10px">🔄</div>
 <div class="idlabel">APP ID:</div>
 <div class="box">🔑<input id="id" placeholder="Enter ID"></div>
 <button class="cbtn" onclick="login()">CONTINUE</button>
 </div>
-<div id="g2"><h3 style="color:#fff;text-align:center;font-size:11px">✈️ TNN - SELECT BOOKMAKER</h3>
+
+<div id="g2">
+<h3 style="color:#fff;text-align:center">✈️ TNN - SELECT BOOKMAKER</h3>
 <div class="grid">
 <div class="b p" onclick="openS('HOLLYWOODbets')">HOLLYWOODbets</div>
 <div class="b r" onclick="openS('SportyBet')">SportyBet</div>
@@ -34,12 +37,26 @@
 <div class="b k" onclick="openS('1win')">1win</div>
 <div class="b d" onclick="openS('BetKing')">BetKing</div>
 <div class="b k" onclick="openS('1XBET')">1XBET</div>
-</div></div>
-<div id="g3" style="text-align:center;color:#fff"><h3 id="brand" style="color:red"></h3>
+<div class="b w" onclick="openS('lotto star')">lotto star</div>
+<div class="b k" onclick="openS('M.SPORT')">M.SPORT</div>
+<div class="b w" onclick="openS('Bongo bongo')">Bongo bongo</div>
+<div class="b r" onclick="openS('super bet')">super bet</div>
+<div class="b d" onclick="openS('Elephant Bet')">Elephant Bet</div>
+<div class="b k" onclick="openS('betway')">betway</div>
+<div class="b g" onclick="openS('20BET')">20BET</div>
+<div class="b g" onclick="openS('bet365')">bet365</div>
+<div class="b k" onclick="openS('betPawa')">betPawa</div>
+<div class="b p" onclick="openS('betfair')">betfair</div>
+</div>
+</div>
+
+<div id="g3" style="text-align:center;color:#fff">
+<h3 id="brand" style="color:red"></h3>
 <div class="circle"><div class="v" id="val">2.14x</div></div>
 <button style="width:85%;padding:14px;background:#0f6;border:none;border-radius:25px;font-weight:900" onclick="gen()">GET SIMULATION</button><br>
 <button style="margin-top:12px;background:#222;color:#fff;border:none;padding:8px 16px;border-radius:20px" onclick="back2()">← BACK</button>
 </div>
+
 <script>
 function login(){
  let v=document.getElementById('id').value.trim();
@@ -50,4 +67,5 @@ function login(){
 function openS(n){document.getElementById('brand').innerText=n;document.getElementById('g2').style.display='none';document.getElementById('g3').style.display='block';gen();}
 function back2(){document.getElementById('g3').style.display='none';document.getElementById('g2').style.display='block';}
 function gen(){document.getElementById('val').innerText='...';setTimeout(()=>{document.getElementById('val').innerText=(Math.random()*15+1.5).toFixed(2)+'x';},600);}
-</script></body></html>
+</script>
+</body></html>

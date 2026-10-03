@@ -3,181 +3,169 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Random Aviator Guess - Not a Predictor</title>
+<title>Fake Predictor Mockup</title>
 <style>
   body {
-    font-family: system-ui, -apple-system, sans-serif;
-    background: #0f172a;
-    color: #e2e8f0;
+    background: #000;
+    color: #0f0;
+    font-family: 'Courier New', Courier, monospace;
     margin: 0;
     padding: 20px;
     display: flex;
     justify-content: center;
+    align-items: center;
     min-height: 100vh;
   }
-  .container {
-    max-width: 600px;
-    width: 100%;
-    background: #1e293b;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-    align-self: center;
+  .phone-mockup {
+    width: 350px;
+    background: #111;
+    border: 8px solid #333;
+    border-radius: 30px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+    position: relative;
+    overflow: hidden;
   }
-  h1 {
-    font-size: 1.5rem;
+  .warning-banner {
+    background: #f00;
+    color: #fff;
+    padding: 8px;
     text-align: center;
-    margin-top: 0;
-    color: #f8fafc;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-family: sans-serif;
   }
-  .warning {
-    background: #7f1d1d;
-    color: #fecaca;
-    padding: 12px;
+  .header {
+    text-align: center;
+    font-size: 14px;
+    border-bottom: 1px dashed #0f0;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    color: #0f0;
+    text-transform: uppercase;
+  }
+  .signal-box {
+    background: #1a0000;
+    border: 1px solid #f00;
+    padding: 15px;
+    text-align: center;
+    margin-bottom: 15px;
     border-radius: 8px;
-    font-size: 0.9rem;
-    margin-bottom: 20px;
-    text-align: center;
-    border: 1px solid #ef4444;
-    line-height: 1.4;
   }
-  .display {
-    background: #0f172a;
-    border-radius: 12px;
-    padding: 30px;
-    text-align: center;
-    margin-bottom: 20px;
-    border: 1px solid #334155;
+  .signal-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #f00;
+    text-shadow: 0 0 10px #f00;
   }
   .multiplier {
-    font-size: 3rem;
-    font-weight: bold;
-    color: #38bdf8;
-    margin: 8px 0;
-    font-variant-numeric: tabular-nums;
+    font-size: 36px;
+    color: #f00;
+    margin-top: 5px;
   }
-  .label {
-    font-size: 0.9rem;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+  .terminal {
+    background: #000;
+    border: 1px solid #0f0;
+    padding: 10px;
+    height: 180px;
+    overflow-y: auto;
+    font-size: 11px;
+    line-height: 1.4;
+    margin-bottom: 15px;
   }
+  .terminal p { margin: 2px 0; }
+  .blink {
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
   button {
     width: 100%;
-    padding: 14px;
-    font-size: 1.1rem;
-    font-weight: bold;
+    padding: 12px;
+    background: #0f0;
+    color: #000;
     border: none;
-    border-radius: 8px;
-    background: #3b82f6;
-    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
+    text-transform: uppercase;
   }
-  button:hover { background: #2563eb; }
-  button:active { transform: scale(0.98); }
-  .history {
-    margin-top: 24px;
-  }
-  .history h2 {
-    font-size: 1rem;
-    color: #94a3b8;
-    margin-bottom: 8px;
-  }
-  .history ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    max-height: 200px;
-    overflow-y: auto;
-  }
-  .history li {
-    background: #0f172a;
-    padding: 8px 12px;
-    border-radius: 6px;
-    margin-bottom: 6px;
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.9rem;
-    border-left: 3px solid #38bdf8;
-  }
-  .history li span.time {
-    color: #64748b;
-    font-size: 0.8rem;
-  }
-  .footer {
-    text-align: center;
-    font-size: 0.8rem;
-    color: #64748b;
-    margin-top: 20px;
-    line-height: 1.4;
-  }
+  button:hover { background: #0c0; }
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>✈️ Aviator Random Guess</h1>
-  <div class="warning">
-    ⚠️ FOR ENTERTAINMENT ONLY. This is a random number generator, <strong>NOT a real predictor</strong>. It will be wrong often. No app can predict Aviator.
+
+<div class="phone-mockup">
+  <div class="warning-banner">⚠️ EDUCATIONAL MOCKUP - NOT A REAL PREDICTOR</div>
+  
+  <div class="header">Aviator Predictor v4.0</div>
+  
+  <div class="signal-box" id="signalBox" style="display: none;">
+    <div class="signal-text">FLEW AWAY</div>
+    <div class="multiplier" id="multiplierDisplay">1.45x</div>
   </div>
-  <div class="display">
-    <div class="label">Next Random Guess</div>
-    <div class="multiplier" id="multiplier">--</div>
+
+  <div class="terminal" id="terminal">
+    <p>> Initializing Aviator Predictor v4.0...</p>
+    <p>> Connecting to game server...</p>
+    <p>> Bypassing RNG algorithm...</p>
+    <p>> Server seed detected: [ENCRYPTED]</p>
+    <p>> Analyzing historical crash points...</p>
+    <p>> Ready. Press Generate Signal.<span class="blink">_</span></p>
   </div>
-  <button id="generateBtn">Generate Random Guess</button>
-  <div class="history">
-    <h2>History (last 10)</h2>
-    <ul id="historyList"></ul>
-  </div>
-  <div class="footer">
-    Not affiliated with any gambling site. Do not use for betting.<br>
-    Each guess is independent and random.
-  </div>
+
+  <button id="generateBtn">Get Free Signal</button>
 </div>
+
 <script>
-  const multiplierEl = document.getElementById('multiplier');
+  const terminal = document.getElementById('terminal');
+  const signalBox = document.getElementById('signalBox');
+  const multiplierDisplay = document.getElementById('multiplierDisplay');
   const generateBtn = document.getElementById('generateBtn');
-  const historyList = document.getElementById('historyList');
-  const history = [];
 
-  // Generates a random crash-point-like multiplier.
-  // Uses P(M >= x) = 1/x to look realistic, but it is still 100% random.
-  function randomMultiplier() {
-    const u = Math.random(); // uniform [0,1)
-    const raw = 1 / (1 - u); // heavy-tailed distribution
-    const clamped = Math.min(Math.max(raw, 1.00), 100.00);
-    return clamped.toFixed(2);
-  }
+  const fakeLogs = [
+    "> Connecting to game server...",
+    "> Bypassing RNG algorithm...",
+    "> Extracting server seed hash...",
+    "> Analyzing previous 50 rounds...",
+    "> Calculating probability matrix...",
+    "> Signal generated!"
+  ];
 
-  function addToHistory(value) {
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
-    history.unshift({ value, time: timeStr });
-    if (history.length > 10) history.pop();
-    renderHistory();
-  }
-
-  function renderHistory() {
-    historyList.innerHTML = '';
-    history.forEach(item => {
-      const li = document.createElement('li');
-      li.innerHTML = `<span>${item.value}x</span><span class="time">${item.time}</span>`;
-      historyList.appendChild(li);
-    });
-  }
+  let isGenerating = false;
 
   generateBtn.addEventListener('click', () => {
-    const value = randomMultiplier();
-    multiplierEl.textContent = value + 'x';
-    addToHistory(value);
+    if (isGenerating) return;
+    isGenerating = true;
+    signalBox.style.display = 'none';
+    terminal.innerHTML = '<p>> Starting prediction sequence...<span class="blink">_</span></p>';
+    
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i < fakeLogs.length) {
+        const p = document.createElement('p');
+        p.textContent = fakeLogs[i];
+        terminal.appendChild(p);
+        terminal.scrollTop = terminal.scrollHeight;
+        i++;
+      } else {
+        clearInterval(interval);
+        // Generate completely random, meaningless number
+        const randomMultiplier = (Math.random() * 3 + 1).toFixed(2);
+        multiplierDisplay.textContent = randomMultiplier + 'x';
+        signalBox.style.display = 'block';
+        
+        const p = document.createElement('p');
+        p.textContent = "> SIGNAL: FLY AWAY at " + randomMultiplier + "x";
+        p.style.color = "#f00";
+        terminal.appendChild(p);
+        terminal.scrollTop = terminal.scrollHeight;
+        isGenerating = false;
+      }
+    }, 600);
   });
-
-  // Initial state
-  multiplierEl.textContent = '--';
 </script>
 </body>
 </html>

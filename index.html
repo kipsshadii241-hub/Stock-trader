@@ -1,46 +1,96 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#000000">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TNN Simulator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>TNN AVIATOR PREDICTOR</title>
 <style>
-body{margin:0;background:#080808;color:#fff;font-family:monospace;text-align:center}
-.top{font-size:12px;padding:10px;color:#888}
-.card{width:92%;max-width:360px;margin:20px auto;background:#111;border:1px solid #222;border-radius:12px;padding:20px 0}
-.flew{color:#666;font-size:12px;letter-spacing:2px}
-.val{color:#ff1a1a;font-size:48px;font-weight:900;margin:10px 0;text-shadow:0 0 20px #ff0000}
-.green{background:#00ff66;color:#000;padding:8px 20px;border-radius:4px;font-weight:bold;font-size:12px;display:inline-block;margin:10px 0}
-.link{color:#00ff66;font-size:10px;margin:10px 0}
-.info{background:#000;border:1px solid #00ff66;color:#00ff66;text-align:left;font-size:10px;padding:10px;margin:15px;border-radius:6px;line-height:1.4}
-.btn{width:90%;background:#00ff66;color:#000;border:none;padding:14px;border-radius:6px;font-weight:900;margin-top:10px}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#000;color:#fff;min-height:100vh;overflow:hidden}
+.top{padding:8px;text-align:center;background:#000;border-bottom:1px solid #222}
+.top b{color:red;font-size:12px;letter-spacing:2px}
+.plane-icon{font-size:20px}
+.center{margin-top:20px;text-align:center}
+.flew{font-size:12px;letter-spacing:3px;color:#fff;font-weight:900}
+.date{font-size:10px;color:#ff3333;margin-top:5px}
+.circle-wrap{margin:30px auto;width:220px;height:220px;position:relative;display:flex;align-items:center;justify-content:center}
+.circle{width:100%;height:100%;border-radius:50%;border:3px solid #ff0000;box-shadow:0 0 30px #ff0000, inset 0 0 20px #ff000055;display:flex;align-items:center;justify-content:center;position:relative;animation:glow 1.5s infinite alternate}
+@keyframes glow{0%{box-shadow:0 0 20px #ff0000}100%{box-shadow:0 0 40px #ff0000,0 0 60px #ff000088}}
+.circle::before{content:'';position:absolute;width:90%;height:90%;border-radius:50%;border:1px dashed #ff000044;animation:spin 6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.multi{font-size:55px;font-weight:900;color:#00ff88;text-shadow:0 0 15px #00ff88}
+.btn{width:85%;max-width:320px;margin:20px auto;display:block;padding:16px;border-radius:30px;border:none;background:#00ff55;color:#000;font-weight:900;font-size:16px;letter-spacing:1px;box-shadow:0 0 20px #00ff55}
+.link{color:red;font-size:11px;text-align:center;margin-top:15px;letter-spacing:1px}
+.radar{position:fixed;bottom:0;left:0;width:100%;height:160px;opacity:0.9}
+.radar-inner{width:300px;height:300px;margin:0 auto;border:1px solid #ff000066;border-radius:50%;position:relative;overflow:hidden}
+.line{position:absolute;width:50%;height:1px;background:linear-gradient(90deg,transparent,#ff0000);top:50%;left:50%;transform-origin:left;animation:radar 2s linear infinite}
+@keyframes radar{to{transform:rotate(360deg)}}
+.status{margin-top:10px;text-align:center;font-size:12px;color:#00ff88}
+.history{display:flex;gap:5px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.history span{font-size:11px;padding:3px 8px;background:#111;border-radius:10px;border:1px solid #222}
 </style>
 </head>
 <body>
-<div class="top">TNN AVIATOR  SIMULATOR</div>
-<div class="card">
-<div class="flew">FLEW AWAY</div>
-<div class="val" id="val">18.68x</div>
-<div class="green">NEXT SIMULATION</div>
-<div class="link">Simulator Mode - For Entertainment</div>
-<div class="info">
-> Crash Simulator v2<br>
-> This is connected to BetPawa / Aviator<br>
+<div class="top"><b>✈️ TNN AVIATOR PREDICTOR</b></div>
 
-> predict real gambling
+<div class="center">
+<div class="flew">FLEW AWAY</div>
+<div class="date" id="date">15.05.2025 - THURSDAY</div>
+
+<div class="circle-wrap">
+<div class="circle">
+<div class="multi" id="pred">8.07x</div>
 </div>
-<button class="btn" onclick="gen()">GENERATE NEXT</button>
 </div>
+
+<button class="btn" id="btn" onclick="getSignal()">GET SIGNAL</button>
+<div class="status" id="status">Ready to predict next round</div>
+
+<div class="history" id="hist"></div>
+<div class="link">www.aviatorpredictor.betpawa.com</div>
+</div>
+
+<div class="radar">
+<div class="radar-inner">
+<div class="line"></div>
+<div style="position:absolute;top:50%;left:50%;width:4px;height:4px;background:red;border-radius:50%;transform:translate(-50%,-50%)"></div>
+</div>
+</div>
+
 <script>
-function gen(){
- document.getElementById('val').innerText="Loading...";
- setTimeout(()=>{
-   let v=(Math.random()*20+1).toFixed(2);
-   document.getElementById('val').innerText=v+"x";
- },600);
+let preds=[1.45,2.13,1.27,8.07,2.86,1.07,3.96,2.22,4.15,1.85,22.13,6.49,8.07,3.98,5.20,7.08];
+let idx=3;
+function updateDate(){
+let d=new Date();
+document.getElementById('date').innerText=d.toLocaleDateString('en-GB')+' - '+d.toLocaleDateString('en-US',{weekday:'long'}).toUpperCase();
 }
+updateDate();
+function getSignal(){
+let btn=document.getElementById('btn');
+btn.innerText='PREDICTING...';
+btn.style.background='#ffaa00';
+document.getElementById('status').innerText='Analyzing BetPawa algorithm...';
+setTimeout(()=>{
+idx=(idx+1)%preds.length;
+let val=preds[idx].toFixed(2)+'x';
+document.getElementById('pred').innerText=val;
+btn.innerText='GET SIGNAL';
+btn.style.background='#00ff55';
+document.getElementById('status').innerText='Next round: '+val+' - Place bet now on BetPawa!';
+let h=document.getElementById('hist');
+let sp=document.createElement('span');
+sp.innerText=val;
+sp.style.color=parseFloat(val)<2?'#ff4444':'#00ff88';
+h.prepend(sp);
+},2000);
+}
+// auto history
+let h=document.getElementById('hist');
+preds.slice(0,6).forEach(v=>{
+let sp=document.createElement('span');
+sp.innerText=v.toFixed(2)+'x';
+sp.style.color=v<2?'#ff4444':'#00ff88';
+h.appendChild(sp);
+});
 </script>
 </body>
 </html>

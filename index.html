@@ -2,89 +2,80 @@
 <html>
 <head>
 <link rel="manifest" href="manifest.json">
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>TNN</title>
 <style>
-*{box-sizing:border-box} body{margin:0;font-family:Arial;background:#fff}
-.topbar{height:38px;background:#ff1a1a;display:flex;align-items:center;padding:0 10px;color:#fff;justify-content:space-between;font-size:14px}
-.center{text-align:center;padding-top:30px}
-.plane{width:200px;margin:20px auto;display:block;filter:hue-rotate(-10deg)}
-.label{font-family:cursive;font-weight:900;margin-top:20px;font-size:18px}
-.idbox{background:#ff0000;border-radius:18px;padding:10px 14px;display:flex;align-items:center;width:78%;margin:12px auto;box-shadow:0 8px 20px rgba(255,0,0,.3)}
-.idbox span{font-size:22px;margin-right:8px}
-.idbox input{flex:1;border:none;border-radius:12px;padding:12px;text-align:center;font-family:cursive;font-size:16px;outline:none}
-.contbtn{margin:22px auto;background:#fff;border:none;padding:14px 40px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,.15);font-family:cursive;font-weight:900;letter-spacing:1px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btn{padding:18px 10px;border-radius:12px;font-weight:900;text-align:center;font-size:13px;border:2px solid #222}
-.purple{background:#3a1a6e;color:#ffdd00}.red{background:#ff0000;color:#fff}.green{background:#0a3320;color:#ffdd00}.dark{background:#0a1a33;color:#fff}.white{background:#fff;color:#cc0000;border-color:#ddd}.black{background:#111;color:#1e90ff;border-color:#333}
-#page1,#page2,#page3{padding:12px} #page2,#page3{display:none} #page2{background:#000;min-height:100vh} #page3{background:#000;min-height:100vh;text-align:center;color:#fff}
-.circle{width:260px;height:260px;margin:20px auto;border-radius:50%;border:3px solid red;box-shadow:0 0 30px red;display:flex;align-items:center;justify-content:center}
-.val{font-size:56px;color:#00ff88;font-weight:900}
+*{box-sizing:border-box}body{margin:0;font-family:Arial}
+.top{height:36px;background:#ff1a1a;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 8px;font-size:12px}
+.center{text-align:center;padding:20px 12px;background:#fff;min-height:100vh}
+.plane{width:180px;margin:30px auto;display:block;filter:invert(16%) sepia(98%) saturate(6000%) hue-rotate(356deg)}
+.idlabel{font-weight:900;margin:10px;font-family:cursive}
+.box{background:red;border-radius:20px;padding:8px;width:85%;margin:10px auto;display:flex;align-items:center}
+.box input{flex:1;border:none;border-radius:12px;padding:12px;text-align:center;font-size:16px}
+.cbtn{padding:12px 30px;border:none;border-radius:12px;box-shadow:0 4px 10px #0002;font-weight:900;margin-top:20px;background:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.b{padding:16px 5px;border-radius:10px;font-weight:900;text-align:center;font-size:12px}
+.p{background:#3a1a6e;color:#ff0}.r{background:red;color:#fff}.g{background:#0a3320;color:#ff0}.d{background:#0a1a33;color:#fff}.w{background:#fff;color:#c00}.k{background:#111;color:#1e90ff}
+#g2,#g3{display:none;background:#000;min-height:100vh;padding:12px}
+.circle{width:250px;height:250px;margin:20px auto;border-radius:50%;border:3px solid red;box-shadow:0 0 25px red;display:flex;align-items:center;justify-content:center}
+.v{font-size:50px;color:#0f8;font-weight:900}
 </style>
 </head>
 <body>
-<div class="topbar"><span>15:03 ✈️ f 🎵</span><span style="font-size:10px">2.13 KB/s 📶 4.5G 4.5G 35</span></div>
-
-<div id="page1" class="center">
-<img class="plane" src="https://cdn-icons-png.flaticon.com/512/86/86009.png" style="filter: invert(16%) sepia(98%) saturate(6000%) hue-rotate(356deg)">
-<div class="label">APP ID:</div>
-<div class="idbox"><span>🔑</span><input id="appid" placeholder="ID"></div>
-<button class="contbtn" onclick="goGrid()">CONTINUE</button>
+<div id="g1" class="center">
+<div class="top"><span>15:03 ✈️ f 🎵</span><span>4.5G 35</span></div>
+<img class="plane" src="https://cdn-icons-png.flaticon.com/512/86/86009.png">
+<div class="idlabel">APP ID:</div>
+<div class="box">🔑<input id="id" placeholder="Enter ID"></div>
+<button class="cbtn" onclick="login()">CONTINUE</button>
+<p style="font-size:9px;color:#888;margin-top:40px">Enter ID: #pro750@</p>
 </div>
 
-<div id="page2">
-<h3 style="color:#fff;text-align:center;font-size:12px;letter-spacing:2px">✈️ TNN AVIATOR - SELECT BOOKMAKER</h3>
+<div id="g2">
+<h3 style="color:#fff;text-align:center;font-size:11px">✈️ TNN - SELECT BOOKMAKER</h3>
 <div class="grid">
-<div class="btn purple" onclick="openSim('HOLLYWOODbets')">★ HOLLYWOODbets</div>
-<div class="btn red" onclick="openSim('SportyBet')">.SportyBet</div>
-<div class="btn green" onclick="openSim('BETWINNER')">BETWINNER</div>
-<div class="btn dark" onclick="openSim('PREMIER Bet')">PREMIER Bet</div>
-<div class="btn white" onclick="openSim('Pin-UP.bet')">Pin-UP.bet</div>
-<div class="btn black" onclick="openSim('1win')">1win</div>
-<div class="btn dark" onclick="openSim('BetKing')">BetKing</div>
-<div class="btn black" onclick="openSim('1XBET')">1XBET</div>
-<div class="btn white" onclick="openSim('lotto star')">lotto ★ star</div>
-<div class="btn black" onclick="openSim('M.SPORT')">M.SPORT</div>
-<div class="btn white" onclick="openSim('Bongo bongo ug')">Bongo bongo ug</div>
-<div class="btn red" onclick="openSim('super bet')">super bet</div>
-<div class="btn dark" onclick="openSim('Elephant Bet')">Elephant Bet</div>
-<div class="btn black" onclick="openSim('betway')">betway</div>
-<div class="btn green" onclick="openSim('20BET')">20BET</div>
-<div class="btn green" onclick="openSim('bet365')">bet365</div>
-<div class="btn black" onclick="openSim('betPawa')">betPawa</div>
-<div class="btn purple" onclick="openSim('betfair')">betfair</div>
-<div class="btn white" onclick="openSim('Cloudbet')">Cloudbet</div>
-<div class="btn white" onclick="openSim('sportingbet')">sportingbet</div>
+<div class="b p" onclick="openS('HOLLYWOODbets')">★ HOLLYWOODbets</div>
+<div class="b r" onclick="openS('SportyBet')">SportyBet</div>
+<div class="b g" onclick="openS('BETWINNER')">BETWINNER</div>
+<div class="b d" onclick="openS('PREMIER Bet')">PREMIER Bet</div>
+<div class="b w" onclick="openS('Pin-UP')">Pin-UP</div>
+<div class="b k" onclick="openS('1win')">1win</div>
+<div class="b d" onclick="openS('BetKing')">BetKing</div>
+<div class="b k" onclick="openS('1XBET')">1XBET</div>
+<div class="b w" onclick="openS('lotto star')">lotto star</div>
+<div class="b k" onclick="openS('M.SPORT')">M.SPORT</div>
+<div class="b w" onclick="openS('Bongo bongo')">Bongo bongo</div>
+<div class="b r" onclick="openS('super bet')">super bet</div>
+<div class="b d" onclick="openS('Elephant Bet')">Elephant Bet</div>
+<div class="b k" onclick="openS('betway')">betway</div>
+<div class="b g" onclick="openS('20BET')">20BET</div>
+<div class="b g" onclick="openS('bet365')">bet365</div>
+<div class="b k" onclick="openS('betPawa')">betPawa</div>
+<div class="b p" onclick="openS('betfair')">betfair</div>
 </div>
 </div>
 
-<div id="page3">
-<h3 id="brand" style="color:red;margin-top:10px">BET</h3>
-<div style="letter-spacing:2px;font-size:12px">FLEW AWAY</div>
-<div style="color:red;font-size:11px" id="time"></div>
-<div class="circle"><div class="val" id="val">2.14x</div></div>
-<button style="width:85%;padding:14px;background:#00ff66;border:none;border-radius:25px;font-weight:900" onclick="gen()">GET SIMULATION</button><br>
-<button style="margin-top:10px;background:#222;color:#fff;border:none;padding:8px 18px;border-radius:20px" onclick="document.getElementById('page3').style.display='none';document.getElementById('page2').style.display='block'">← BACK</button>
-<div style="font-size:8px;color:#444;margin-top:15px">Offline simulator - entertainment only - not real prediction</div>
+<div id="g3" style="text-align:center;color:#fff">
+<h3 id="brand" style="color:red"></h3>
+<div style="font-size:10px">FLEW AWAY</div>
+<div id="tm" style="color:red;font-size:10px"></div>
+<div class="circle"><div class="v" id="val">2.14x</div></div>
+<button style="width:85%;padding:14px;background:#0f6;border:none;border-radius:25px;font-weight:900" onclick="gen()">GET SIMULATION</button><br>
+<button style="margin-top:12px;background:#222;color:#fff;border:none;padding:8px 16px;border-radius:20px" onclick="back2()">← BACK</button>
 </div>
 
 <script>
-function goGrid(){
- let id=document.getElementById('appid').value.trim();
- if(!id){alert('Enter APP ID boss');return;}
- localStorage.setItem('appid',id);
- document.getElementById('page1').style.display='none';
- document.getElementById('page2').style.display='block';
+function login(){
+ let v=document.getElementById('id').value.trim();
+ if(v !== '#pro750@'){alert('Wrong ID boss! Use #pro750@');return;}
+ document.getElementById('g1').style.display='none';
+ document.getElementById('g2').style.display='block';
 }
-function openSim(name){
- document.getElementById('brand').innerText=name;
- document.getElementById('page2').style.display='none';
- document.getElementById('page3').style.display='block';
- gen();
-}
-function gen(){ document.getElementById('val').innerText='...'; setTimeout(()=>{document.getElementById('val').innerText=(Math.random()*15+1.5).toFixed(2)+'x'},600); updateTime(); }
-function updateTime(){let d=new Date(); let el=document.getElementById('time'); if(el) el.innerText=d.toLocaleDateString('en-GB')+' - '+d.toLocaleDateString('en-US',{weekday:'long'}).toUpperCase()+' - '+d.toLocaleTimeString();}
-setInterval(updateTime,1000);
+function openS(n){document.getElementById('brand').innerText=n;document.getElementById('g2').style.display='none';document.getElementById('g3').style.display='block';gen();}
+function back2(){document.getElementById('g3').style.display='none';document.getElementById('g2').style.display='block';}
+function gen(){document.getElementById('val').innerText='...';setTimeout(()=>{document.getElementById('val').innerText=(Math.random()*15+1.5).toFixed(2)+'x';},600); upd();}
+function upd(){let d=new Date();document.getElementById('tm').innerText=d.toLocaleDateString()+' '+d.toLocaleTimeString();}
+setInterval(upd,1000);
 </script>
 </body>
 </html>

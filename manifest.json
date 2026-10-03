@@ -1,14 +1,14 @@
 {
   "name": "TNN AVIATOR PREDICTOR",
-  "short_name": "TNN AVIATOR",
-  "description": "TNN Aviator Predictor 149K UGX - 30 Bookmakers",
+  "short_name": "TNN PREDICTOR",
+  "description": "TNN Aviator Predictor 149K UGX - Premium",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#ff0000",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/86/86009.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/732/732084.png",
       "sizes": "512x512",
       "type": "image/png"
     }

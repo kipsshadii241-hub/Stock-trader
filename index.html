@@ -22,9 +22,8 @@ body{background:#000;color:#fff;min-height:100vh}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
 .b{padding:16px 4px;border-radius:10px;font-weight:900;text-align:center;font-size:11px;cursor:pointer}
 .p{background:#3a1a6e;color:#ff0}.r{background:red;color:#fff}.g{background:#0a3320;color:#ff0}.d{background:#0a1a33;color:#fff}.w{background:#fff;color:#c00;border:1px solid #ddd}.k{background:#222;color:#1e90ff}.o{background:#ff8c00;color:#fff}.y{background:#ffeb00;color:#000}
-.circle{width:230px;height:230px;margin:15px auto;border-radius:50%;border:3px solid red;box-shadow:0 0 25px red;display:flex;align-items:center;justify-content:center}
-.v{font-size:45px;color:#0f8;font-weight:900}
-#liveTime{color:#0f8;font-size:14px;font-weight:900;margin-top:8px;letter-spacing:1px}
+.circle{width:260px;height:260px;margin:20px auto;border-radius:50%;border:4px solid red;box-shadow:0 0 30px red;display:flex;align-items:center;justify-content:center}
+.v{font-size:55px;color:#0f8;font-weight:900}
 </style>
 </head>
 <body>
@@ -84,23 +83,20 @@ body{background:#000;color:#fff;min-height:100vh}
 </div>
 
 <div id="g3">
-<h3 id="brand" style="color:red;margin-top:10px"></h3>
-<div style="font-size:10px;letter-spacing:3px">FLEW AWAY - LIVE</div>
+<h3 id="brand" style="color:red;margin-top:15px;letter-spacing:2px"></h3>
+<div style="font-size:10px;letter-spacing:3px;color:#aaa">FLEW AWAY - LIVE</div>
 <div class="circle"><div class="v" id="val">2.64x</div></div>
-<div style="width:92%;margin:10px auto;background:#111;border:1px solid #333;border-radius:12px;padding:10px;display:flex;gap:8px;align-items:center"><label style="font-size:11px">BET UGX:</label><input id="amt" type="number" value="5000" style="flex:1;background:#222;border:1px solid #333;color:#0f8;padding:10px;border-radius:8px;text-align:center;font-weight:900"></div>
 
-<div id="liveTime">📅 Loading time...</div>
-
-<button style="width:92%;padding:16px;background:#0f6;border:none;border-radius:25px;font-weight:900;margin-top:12px" onclick="gen()">GET SIGNAL</button><br>
-<button style="margin-top:10px;background:#222;color:#fff;border:none;padding:8px 16px;border-radius:20px" onclick="backToId()">← BACK</button>
-<div id="hist" style="display:flex;gap:5px;justify-content:center;margin-top:12px;flex-wrap:wrap"></div>
+<button style="width:92%;padding:18px;background:#00ff66;border:none;border-radius:25px;font-weight:900;margin-top:20px;font-size:16px;color:#000" onclick="gen()">GET SIGNAL</button><br>
+<button style="margin-top:14px;background:#222;color:#fff;border:none;padding:10px 20px;border-radius:20px" onclick="backToId()">← BACK</button>
+<div id="hist" style="display:flex;gap:6px;justify-content:center;margin-top:18px;flex-wrap:wrap"></div>
 </div>
 
 <script>
 let selectedBookmaker="";
 const correctID="#pro750@";
-const adminNum="+254703683230";
 const waBase="https://wa.me/254703683230";
+const adminNum="+254703683230";
 function selectSite(name){selectedBookmaker=name;document.getElementById('siteName').innerText=name;document.getElementById('brand').innerText=name.toUpperCase();document.getElementById('g1').style.display='none';document.getElementById('g2').style.display='block';}
 function backToSites(){document.getElementById('g2').style.display='none';document.getElementById('g1').style.display='block';}
 function backToId(){document.getElementById('g3').style.display='none';document.getElementById('g2').style.display='block';}
@@ -116,13 +112,6 @@ function login(){
  document.getElementById('g2').style.display='none';
  document.getElementById('g3').style.display='block';
  gen();
- updateTime();
- setInterval(updateTime,1000);
-}
-function updateTime(){
- const now=new Date();
- const options={weekday:'short',year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true};
- document.getElementById('liveTime').innerText='📅 ' + now.toLocaleString('en-UG',options);
 }
 let cur=2.64;
 function gen(){
@@ -137,8 +126,9 @@ function gen(){
    let h=document.getElementById('hist');
    let s=document.createElement('span');
    s.innerText=cur+'x';
-   s.style.cssText='font-size:11px;padding:4px 8px;background:#111;border-radius:10px;border:1px solid #222;color:'+(cur<2?'#f44':'#0f8');
+   s.style.cssText='font-size:11px;padding:5px 9px;background:#111;border-radius:10px;border:1px solid #222;color:'+(cur<2?'#f44':'#0f8');
    h.prepend(s);
+   if(h.children.length>12) h.removeChild(h.lastChild);
  },700);
 }
 </script>

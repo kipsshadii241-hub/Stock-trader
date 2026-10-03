@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-<link rel="manifest" href="manifest.json">
+<!DOCTYPE html><html><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>TNN</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial}
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#fff}
 .top{height:36px;background:#ff1a1a;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 8px;font-size:12px}
-.center{text-align:center;padding:20px 12px;background:#fff;min-height:100vh}
-.plane{width:180px;margin:30px auto;display:block;filter:invert(16%) sepia(98%) saturate(6000%) hue-rotate(356deg)}
+.center{text-align:center;padding:20px 12px;min-height:100vh}
+.plane{width:180px;margin:30px auto;display:block}
 .idlabel{font-weight:900;margin:10px;font-family:cursive}
 .box{background:red;border-radius:20px;padding:8px;width:85%;margin:10px auto;display:flex;align-items:center}
 .box input{flex:1;border:none;border-radius:12px;padding:12px;text-align:center;font-size:16px}
@@ -19,22 +16,17 @@
 #g2,#g3{display:none;background:#000;min-height:100vh;padding:12px}
 .circle{width:250px;height:250px;margin:20px auto;border-radius:50%;border:3px solid red;box-shadow:0 0 25px red;display:flex;align-items:center;justify-content:center}
 .v{font-size:50px;color:#0f8;font-weight:900}
-</style>
-</head>
-<body>
+</style></head><body>
 <div id="g1" class="center">
-<div class="top"><span>15:03 ✈️ f 🎵</span><span>4.5G 35</span></div>
-<img class="plane" src="https://cdn-icons-png.flaticon.com/512/86/86009.png">
+<div class="top"><span>15:25 ✈️</span><span>4.5G</span></div>
+<div style="font-size:80px;margin:20px">🔄</div>
 <div class="idlabel">APP ID:</div>
-<div class="box">🔑<input id="id" placeholder="Enter ID"></div>if(v !== '){alert('Wrong ID');return;}
+<div class="box">🔑<input id="id" placeholder="Enter ID"></div>
 <button class="cbtn" onclick="login()">CONTINUE</button>
-<p style="font-size:9px;color:#888;margin-top:40px">Enter ID: </p>
 </div>
-
-<div id="g2">
-<h3 style="color:#fff;text-align:center;font-size:11px">✈️ TNN - SELECT BOOKMAKER</h3>
+<div id="g2"><h3 style="color:#fff;text-align:center;font-size:11px">✈️ TNN - SELECT BOOKMAKER</h3>
 <div class="grid">
-<div class="b p" onclick="openS('HOLLYWOODbets')">★ HOLLYWOODbets</div>
+<div class="b p" onclick="openS('HOLLYWOODbets')">HOLLYWOODbets</div>
 <div class="b r" onclick="openS('SportyBet')">SportyBet</div>
 <div class="b g" onclick="openS('BETWINNER')">BETWINNER</div>
 <div class="b d" onclick="openS('PREMIER Bet')">PREMIER Bet</div>
@@ -42,40 +34,20 @@
 <div class="b k" onclick="openS('1win')">1win</div>
 <div class="b d" onclick="openS('BetKing')">BetKing</div>
 <div class="b k" onclick="openS('1XBET')">1XBET</div>
-<div class="b w" onclick="openS('lotto star')">lotto star</div>
-<div class="b k" onclick="openS('M.SPORT')">M.SPORT</div>
-<div class="b w" onclick="openS('Bongo bongo')">Bongo bongo</div>
-<div class="b r" onclick="openS('super bet')">super bet</div>
-<div class="b d" onclick="openS('Elephant Bet')">Elephant Bet</div>
-<div class="b k" onclick="openS('betway')">betway</div>
-<div class="b g" onclick="openS('20BET')">20BET</div>
-<div class="b g" onclick="openS('bet365')">bet365</div>
-<div class="b k" onclick="openS('betPawa')">betPawa</div>
-<div class="b p" onclick="openS('betfair')">betfair</div>
-</div>
-</div>
-
-<div id="g3" style="text-align:center;color:#fff">
-<h3 id="brand" style="color:red"></h3>
-<div style="font-size:10px">FLEW AWAY</div>
-<div id="tm" style="color:red;font-size:10px"></div>
+</div></div>
+<div id="g3" style="text-align:center;color:#fff"><h3 id="brand" style="color:red"></h3>
 <div class="circle"><div class="v" id="val">2.14x</div></div>
 <button style="width:85%;padding:14px;background:#0f6;border:none;border-radius:25px;font-weight:900" onclick="gen()">GET SIMULATION</button><br>
 <button style="margin-top:12px;background:#222;color:#fff;border:none;padding:8px 16px;border-radius:20px" onclick="back2()">← BACK</button>
 </div>
-
 <script>
 function login(){
  let v=document.getElementById('id').value.trim();
- if(v !== '#pro750@'){alert('Wrong ID boss! Use #pro750@');return;}
+ if(v !== '#pro750@'){alert('Wrong ID');return;}
  document.getElementById('g1').style.display='none';
  document.getElementById('g2').style.display='block';
 }
 function openS(n){document.getElementById('brand').innerText=n;document.getElementById('g2').style.display='none';document.getElementById('g3').style.display='block';gen();}
 function back2(){document.getElementById('g3').style.display='none';document.getElementById('g2').style.display='block';}
-function gen(){document.getElementById('val').innerText='...';setTimeout(()=>{document.getElementById('val').innerText=(Math.random()*15+1.5).toFixed(2)+'x';},600); upd();}
-function upd(){let d=new Date();document.getElementById('tm').innerText=d.toLocaleDateString()+' '+d.toLocaleTimeString();}
-setInterval(upd,1000);
-</script>
-</body>
-</html>
+function gen(){document.getElementById('val').innerText='...';setTimeout(()=>{document.getElementById('val').innerText=(Math.random()*15+1.5).toFixed(2)+'x';},600);}
+</script></body></html>

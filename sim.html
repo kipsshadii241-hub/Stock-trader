@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Sim</title>
+<style>body{margin:0;background:#000;color:#fff;font-family:Arial;text-align:center} .circle{width:260px;height:260px;margin:20px auto;border-radius:50%;border:3px solid red;box-shadow:0 0 30px red;display:flex;align-items:center;justify-content:center} .val{font-size:56px;color:#00ff88;font-weight:900} .btn{width:85%;padding:14px;background:#00ff66;border:none;border-radius:25px;font-weight:900;margin-top:15px} .time{color:red;font-size:12px}</style>
+</head>
+<body>
+<h3 id="brand" style="color:red">BET</h3>
+<div style="letter-spacing:2px;font-size:12px">FLEW AWAY</div>
+<div class="time" id="time"></div>
+<div class="circle"><div class="val" id="val">2.14x</div></div>
+<button class="btn" onclick="gen()">GET SIMULATION</button>
+<div style="font-size:9px;color:#444;margin-top:20px">Offline simulator - not real prediction - for fun only</div>
+<script>
+document.getElementById('brand').innerText=localStorage.getItem('brand')||'TNN';
+function gen(){ document.getElementById('val').innerText='...'; setTimeout(()=>{let v=(Math.random()*20+1).toFixed(2); document.getElementById('val').innerText=v+'x';},600); updateTime(); }
+function updateTime(){let d=new Date(); document.getElementById('time').innerText=d.toLocaleDateString('en-GB')+' - '+d.toLocaleDateString('en-US',{weekday:'long'}).toUpperCase()+' - '+d.toLocaleTimeString();}
+updateTime(); setInterval(updateTime,1000);
+</script>
+</body>
+</html>

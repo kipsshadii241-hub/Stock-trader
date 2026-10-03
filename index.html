@@ -1,137 +1,69 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TNN AVIATOR 149K</title>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TNN Aviator Tool - Choose Country</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}
-body{background:#000;color:#fff;min-height:100vh}
-.top{height:36px;background:red;color:#fff;display:flex;justify-content:space-between;padding:0 10px;align-items:center;font-weight:900;font-size:12px}
-.center{text-align:center;padding:15px 12px;background:#fff;min-height:100vh;color:#000}
-.plane{width:130px;margin:10px auto;display:block;filter:invert(16%) sepia(98%) saturate(6000%) hue-rotate(356deg)}
-.box{background:red;border-radius:20px;padding:8px;width:92%;margin:10px auto;display:flex;align-items:center}
-.box input{flex:1;border:none;border-radius:12px;padding:14px;text-align:center;font-size:16px;outline:none}
-.cbtn{padding:14px 40px;border:none;border-radius:12px;font-weight:900;margin-top:15px;background:#000;color:#fff}
-.price{background:red;color:#fff;padding:10px;border-radius:12px;width:92%;margin:10px auto;font-weight:900;font-size:12px}
-#error{color:red;font-weight:900;margin-top:15px;display:none;line-height:1.6;font-size:13px}
-#error a{background:#25D366;color:#fff;padding:10px 18px;border-radius:25px;text-decoration:none;display:inline-block;margin-top:8px;font-weight:900}
-#g1{display:block;background:#000;min-height:100vh;padding:12px}
-#g2,#g3{display:none}
-#g2{background:#fff;min-height:100vh;padding:15px 12px;color:#000;text-align:center}
-#g3{background:#000;min-height:100vh;padding:12px;text-align:center;color:#fff}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
-.b{padding:16px 4px;border-radius:10px;font-weight:900;text-align:center;font-size:11px;cursor:pointer}
-.p{background:#3a1a6e;color:#ff0}.r{background:red;color:#fff}.g{background:#0a3320;color:#ff0}.d{background:#0a1a33;color:#fff}.w{background:#fff;color:#c00;border:1px solid #ddd}.k{background:#222;color:#1e90ff}.o{background:#ff8c00;color:#fff}.y{background:#ffeb00;color:#000}
-.circle{width:260px;height:260px;margin:18px auto 8px;border-radius:50%;border:4px solid red;box-shadow:0 0 30px red;display:flex;align-items:center;justify-content:center}
-.v{font-size:55px;color:#0f8;font-weight:900}
-#liveDate{color:#0f8;font-size:13px;margin:8px 0 10px;line-height:1.5;font-weight:900;background:#111;padding:8px;border-radius:10px;border:1px solid #222}
-</style></head><body>
-<div id="g1">
-<h3 style="text-align:center;letter-spacing:2px;padding:8px 0">✈️ TNN AVIATOR PREDICTOR</h3>
-<p style="text-align:center;font-size:11px;color:#aaa">SELECT BOOKMAKER - ID 149,000 UGX</p>
-<div class="grid">
-<div class="b k" onclick="selectSite('betPawa UGX')">betPawa UGX</div>
-<div class="b r" onclick="selectSite('SportyBet')">SportyBet</div>
-<div class="b k" onclick="selectSite('1XBET')">1XBET</div>
-<div class="b g" onclick="selectSite('BETWINNER')">BETWINNER</div>
-<div class="b d" onclick="selectSite('betway')">betway</div>
-<div class="b k" onclick="selectSite('1win')">1win</div>
-<div class="b p" onclick="selectSite('HOLLYWOODbets')">HOLLYWOODbets</div>
-<div class="b d" onclick="selectSite('PREMIER Bet')">PREMIER Bet</div>
-<div class="b w" onclick="selectSite('M.SPORT')">M.SPORT</div>
-<div class="b r" onclick="selectSite('Superbet')">Superbet</div>
-<div class="b g" onclick="selectSite('bet365')">bet365</div>
-<div class="b w" onclick="selectSite('20BET')">20BET</div>
-<div class="b o" onclick="selectSite('Melbet')">Melbet</div>
-<div class="b k" onclick="selectSite('Paripesa')">Paripesa</div>
-<div class="b r" onclick="selectSite('22BET')">22BET</div>
-<div class="b d" onclick="selectSite('BetKing')">BetKing</div>
-<div class="b w" onclick="selectSite('Betika')">Betika</div>
-<div class="b y" onclick="selectSite('Odibets')">Odibets</div>
-<div class="b k" onclick="selectSite('Mozzartbet')">Mozzartbet</div>
-<div class="b g" onclick="selectSite('Dafabet')">Dafabet</div>
-<div class="b r" onclick="selectSite('888Starz')">888Starz</div>
-<div class="b p" onclick="selectSite('1xBit')">1xBit</div>
-<div class="b d" onclick="selectSite('Elephant Bet')">Elephant Bet</div>
-<div class="b w" onclick="selectSite('WasafiBet')">WasafiBet</div>
-<div class="b k" onclick="selectSite('Bangbet')">Bangbet</div>
-<div class="b o" onclick="selectSite('Palmsbet')">Palmsbet</div>
-<div class="b r" onclick="selectSite('LottoStar')">LottoStar</div>
-<div class="b g" onclick="selectSite('Betfair')">Betfair</div>
-<div class="b d" onclick="selectSite('BongoBongo')">BongoBongo</div>
-<div class="b y" onclick="selectSite('Gal Sport')">Gal Sport</div>
+body{background:#0a0a0a;color:white;font-family:Arial;text-align:center;padding:20px}
+.card{background:#1a1a1a;border-radius:20px;padding:25px;max-width:500px;margin:auto;border:2px solid #e11d48}
+select{width:100%;padding:15px;border-radius:10px;font-size:18px;background:#222;color:white;border:1px solid #e11d48;margin:15px 0}
+#amount{font-size:36px;color:#e11d48;font-weight:bold;margin:20px 0}
+.btn{display:block;background:#25D366;color:white;padding:15px;border-radius:12px;text-decoration:none;margin-top:20px;font-weight:bold;font-size:18px}
+.btn2{background:#e11d48;margin-top:10px}
+.small{font-size:11px;color:gray;margin-top:20px;line-height:1.4}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>✈️ TNN AVIATOR</h2>
+<p>Select your country:</p>
+
+<select id="country" onchange="showPrice()">
+<option value="">-- Choose Country --</option>
+<option value="450 BWP - Botswana Pula">🇧🇼 Botswana</option>
+<option value="4,185 KES - Kenya Shilling">🇰🇪 Kenya</option>
+<option value="129,500 UGX - Uganda Shilling">🇺🇬 Uganda</option>
+<option value="84,500 TZS - Tanzania Shilling">🇹🇿 Tanzania</option>
+<option value="865 ZMW - Zambian Kwacha">🇿🇲 Zambia</option>
+<option value="585 ZAR - South African Rand">🇿🇦 South Africa</option>
+<option value="32 USD - US Dollar">🇿🇼 Zimbabwe</option>
+<option value="1,850 NAD - Namibian Dollar">🇳🇦 Namibia</option>
+<option value="420 BWP - Lesotho (via BWP)">🇱🇸 Lesotho</option>
+<option value="585 ZAR - Eswatini (via ZAR)">🇸🇿 Eswatini</option>
+<option value="49,500 NGN - Nigerian Naira">🇳🇬 Nigeria</option>
+<option value="505 GHS - Ghana Cedi">🇬🇭 Ghana</option>
+<option value="19,500 XOF - Ivory Coast / Senegal CFA">🇨🇮🇸🇳 Ivory Coast / Senegal</option>
+<option value="19,500 XAF - Cameroon / Congo CFA">🇨🇲🇨🇬 Cameroon</option>
+<option value="42,500 RWF - Rwanda Franc">🇷🇼 Rwanda</option>
+<option value="56,500 MWK - Malawi Kwacha">🇲🇼 Malawi</option>
+<option value="2,070 MZN - Mozambique Metical">🇲🇿 Mozambique</option>
+<option value="32 USD - Ethiopia (USD)">🇪🇹 Ethiopia</option>
+<option value="11,500 ETB - Ethiopia Birr">🇪🇹 Ethiopia Birr</option>
+<option value="12,500 DZD - Algeria Dinar">🇩🇿 Algeria</option>
+<option value="98 TND - Tunisia Dinar">🇹🇳 Tunisia</option>
+<option value="32 USD / 120 AED - International">🌍 Other / USA / UAE</option>
+</select>
+
+<div id="amount">Select country</div>
+<div id="countryName" style="color:#aaa"></div>
+
+<a id="waLink" class="btn" href="https://wa.me/254703683230?text=Hello%20TNN%20I%20want%20license">💬 Buy on WhatsApp</a>
+<a class="btn btn2" href="https://rader-nu.vercel.app">✈️ Open Tool Demo</a>
+
+<p class="small">Base: 450 BWP. Rates today. Tool is for analysis & bankroll management only. Aviator is random - no guarantee of 60.85x or any multiplier. Play responsibly.<br>Contact: +254703683230</p>
 </div>
-<p style="text-align:center;font-size:11px;color:#aaa;margin-top:18px">30 BOOKMAKERS<br>Admin: +254703683230</p>
-</div>
-<div id="g2" class="center">
-<div class="top"><span id="siteName">betPawa</span><span>4.5G</span></div>
-<img class="plane" src="https://cdn-icons-png.flaticon.com/512/86/86009.png">
-<h3 style="font-family:cursive">TNN PREDICTOR</h3>
-<div class="price">ID PRICE: 149,000 UGX</div>
-<div style="font-weight:900;margin:8px;font-family:cursive">ENTER YOUR APP ID:</div>
-<div class="box">🔑<input id="idInput" type="password" placeholder="Enter secret ID"></div>
-<button class="cbtn" onclick="login()">CONTINUE</button>
-<div id="error"></div>
-<div style="margin-top:15px;font-size:12px">Don't have ID?<br>
-<a href="https://wa.me/254703683230?text=Hello%20Admin%20I%20want%20to%20purchase%20the%20id" style="background:#25D366;color:#fff;padding:10px 20px;border-radius:25px;text-decoration:none;font-weight:900;display:inline-block;margin-top:8px">📱 Buy ID - 149,000 UGX</a>
-<br><p style="margin-top:8px;color:#888">+254703683230</p>
-<button onclick="backToSites()" style="margin-top:12px;background:#eee;border:none;padding:8px 16px;border-radius:20px">← Change Bookmaker</button>
-</div>
-</div>
-<div id="g3">
-<h3 id="brand" style="color:red;margin-top:10px;letter-spacing:2px"></h3>
-<div style="font-size:10px;letter-spacing:3px;color:#aaa">FLEW AWAY - LIVE</div>
-<div class="circle"><div class="v" id="val">1.00x</div></div>
-<div id="liveDate">📅 Loading Date...<br>⏰ Loading Time...</div>
-<button style="width:92%;padding:18px;background:#00ff66;border:none;border-radius:25px;font-weight:900;margin-top:6px;font-size:16px;color:#000" onclick="gen()">GET SIGNAL</button><br>
-<button style="margin-top:14px;background:#222;color:#fff;border:none;padding:10px 20px;border-radius:20px" onclick="backToId()">← BACK</button>
-<div id="hist" style="display:flex;gap:6px;justify-content:center;margin-top:18px;flex-wrap:wrap"></div>
-</div>
+
 <script>
-let selectedBookmaker="";
-const correctID="#pro750@";
-const waBase="https://wa.me/254703683230";
-const adminNum="+254703683230";
-function selectSite(n){selectedBookmaker=n;document.getElementById('siteName').innerText=n;document.getElementById('brand').innerText=n.toUpperCase();document.getElementById('g1').style.display='none';document.getElementById('g2').style.display='block';}
-function backToSites(){document.getElementById('g2').style.display='none';document.getElementById('g1').style.display='block';}
-function backToId(){document.getElementById('g3').style.display='none';document.getElementById('g2').style.display='block';}
-function login(){
- let v=document.getElementById('idInput').value.trim();
- let err=document.getElementById('error');
- if(v!==correctID){
-   err.style.display='block';
-   err.innerHTML=`❌ Invalid ID! Contact Admin<br>ID costs <b>149,000 UGX</b><br><a href="${waBase}?text=Hello%20Admin%20I%20want%20to%20purchase%20the%20id" target="_blank">📱 ${adminNum} - WhatsApp</a>`;
-   return;
- }
- err.style.display='none';
- document.getElementById('g2').style.display='none';
- document.getElementById('g3').style.display='block';
- gen();updateDate();setInterval(updateDate,1000);
+function showPrice(){
+let sel=document.getElementById("country");
+let val=sel.value;
+let text=sel.options[sel.selectedIndex].text;
+if(!val){document.getElementById("amount").innerText="Select country";return}
+document.getElementById("amount").innerText=val;
+document.getElementById("countryName").innerText=text + " license";
+let msg="Hello TNN I want license for "+text+" Price: "+val+" Website rader-nu.vercel.app";
+document.getElementById("waLink").href="https://wa.me/254703683230?text="+encodeURIComponent(msg);
 }
-function updateDate(){
- const now=new Date();
- const d=now.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
- const t=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
- document.getElementById('liveDate').innerHTML='📅 '+d+'<br>⏰ '+t;
-}
-let cur=1.00;
-function gen(){
- document.getElementById('val').innerText='...';
- setTimeout(()=>{
-   let r=Math.random()*100;
-   if(r<15)cur=(Math.random()*0.20+1.00).toFixed(2);
-   else if(r<35)cur=(Math.random()*0.80+1.20).toFixed(2);
-   else if(r<60)cur=(Math.random()*3+2).toFixed(2);
-   else if(r<78)cur=(Math.random()*5+5).toFixed(2);
-   else if(r<90)cur=(Math.random()*20+10).toFixed(2);
-   else if(r<97)cur=(Math.random()*50+30).toFixed(2);
-   else cur=(Math.random()*100+80).toFixed(2);
-   document.getElementById('val').innerText=cur+'x';
-   let h=document.getElementById('hist');
-   let s=document.createElement('span');
-   s.innerText=cur+'x';
-   let col=cur<1.3?'#ff4444':cur<2?'#ff8844':cur<10?'#0f8':'#ffff00';
-   s.style.cssText=`font-size:11px;padding:5px 9px;background:#111;border-radius:10px;border:1px solid #222;color:${col};font-weight:900`;
-   h.prepend(s);
-   if(h.children.length>14)h.removeChild(h.lastChild);
- },500);
-}
-</script></body></html>
+</script>
+</body>
+</html>

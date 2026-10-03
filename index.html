@@ -2,56 +2,59 @@
 <html>
 <head>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#ff0000">
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>TNN AVIATOR SIMULATOR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TNN Aviator Simulator</title>
 <style>
-body { background:#000; color:#fff; font-family:Arial; text-align:center; margin:0; padding:20px; }
-.top { color:#ff0000; font-weight:bold; letter-spacing:2px; margin-top:20px; }
-.circle { width:280px; height:280px; border:3px solid #ff0000; border-radius:50%; margin:30px auto; display:flex; align-items:center; justify-content:center; box-shadow:0 0 30px rgba(255,0,0,0.3); }
-.mult { font-size:60px; color:#00ff88; font-weight:bold; text-shadow:0 0 10px #00ff88; }
-.btn { background:#00ff88; color:#000; border:none; padding:18px 40px; border-radius:30px; font-size:18px; font-weight:bold; width:90%; max-width:300px; margin-top:20px; }
-.history { margin-top:30px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
-.history span { background:#111; border:1px solid #333; padding:5px 10px; border-radius:15px; font-size:12px; }
-.disclaimer { margin-top:40px; font-size:11px; color:#666; }
+body{margin:0;background:#0a0a0a;color:#fff;font-family:Arial;text-align:center}
+.header{background:#ff0000;padding:12px;font-weight:bold;font-size:13px;letter-spacing:1px}
+.logo{margin:20px auto;width:50px;height:50px;border:2px solid #ff0000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px}
+.graph{position:relative;width:90%;max-width:340px;height:200px;margin:10px auto;background:radial-gradient(circle at center,#1a0000 0%,#000 70%);border-radius:15px;overflow:hidden;border:1px solid #222}
+.plane{position:absolute;right:20px;top:40px;font-size:28px;transform:rotate(-10deg)}
+.line{position:absolute;bottom:20px;left:10px;width:85%;height:80px;background:linear-gradient(to top right,rgba(255,0,0,0.6),transparent);clip-path:polygon(0 100%,30% 80%,60% 40%,100% 0%,100% 100%);border-left:2px solid #ff4444;border-bottom:2px solid #ff4444}
+.mult{font-size:48px;color:#ffaa00;font-weight:900;margin-top:50px;text-shadow:0 0 20px #ff4400}
+.dots{display:flex;justify-content:center;gap:6px;margin:15px 0}
+.dot{width:6px;height:6px;background:#333;border-radius:50%}
+.dot.active{background:#ff0000}
+.btn{background:#00ff66;color:#000;border:none;padding:14px 50px;border-radius:25px;font-weight:900;font-size:16px;margin:15px 0}
+.box{width:90%;max-width:340px;margin:0 auto;border:1px solid #ff0000;border-radius:8px;overflow:hidden;font-size:11px}
+.box1{background:#111;padding:6px}
+.box2{background:#ff0000;padding:8px;color:#fff}
+.small{color:#666;font-size:10px;margin-top:20px;padding:0 20px}
 </style>
 </head>
 <body>
+<div class="header">TNN AVIATOR SIMULATOR - FOR FUN</div>
+<div class="logo">✈️</div>
 
-<div class="top">✈️ TNN AVIATOR SIMULATOR</div>
-<div style="color:#666; font-size:12px; margin-top:5px;">FOR ENTERTAINMENT ONLY</div>
-<div style="color:#ff4444; font-size:12px; margin-top:5px;" id="date"></div>
-
-<div class="circle">
-<div class="mult" id="mult">2.14x</div>
+<div class="graph">
+<div class="line"></div>
+<div class="plane">🛩️</div>
+<div class="mult" id="mult">2.31x</div>
 </div>
 
-<button class="btn" onclick="generate()">START SIMULATION</button>
+<div class="dots"><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
 
-<div class="history" id="history"></div>
+<button class="btn" onclick="generate()">NEXT GAME</button>
 
-<div class="disclaimer">
-This is a fun simulator. It does NOT predict real BetPawa or Aviator results.<br>
-Play responsibly. For entertainment only.
+<div class="box">
+<div class="box1" id="time"></div>
+<div class="box2">SIMULATOR MODE - ENTERTAINMENT ONLY<br>Does NOT predict real Aviator</div>
 </div>
+
+<div class="small">This is a visual simulator for entertainment. Aviator results are random and cannot be predicted. Play responsibly.</div>
 
 <script>
-const el = document.getElementById('mult');
-const hist = document.getElementById('history');
-document.getElementById('date').innerText = new Date().toLocaleDateString('en-GB', {day:'2-digit', month:'2-digit', year:'numeric'}) + ' - SIMULATOR';
-
 function generate(){
- let v = (Math.random()*10+1).toFixed(2);
- el.innerText = v+'x';
- let s = document.createElement('span');
- s.innerText = v+'x';
- s.style.color = v>2?'#00ff88':'#ff4444';
- hist.prepend(s);
- if(hist.children.length>14) hist.lastChild.remove();
+ document.getElementById('mult').innerText="Connecting...";
+ setTimeout(()=>{
+   let v=(Math.random()*50+1).toFixed(2);
+   document.getElementById('mult').innerText=v+"x";
+ },800);
 }
+document.getElementById('time').innerText="SIM - "+new Date().toLocaleTimeString()+" - "+new Date().toLocaleDateString();
 generate();
 </script>
-
 </body>
 </html>

@@ -1,94 +1,64 @@
-<!DOCTYPE html><html><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TNN AVIATOR PREDICTOR</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff0000">
+<title>TNN AVIATOR PREDICTOR</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#000;color:#fff}
-.center{text-align:center;padding:20px 12px;min-height:100vh;background:#fff;color:#000}
-.top{height:36px;background:#ff1a1a;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 8px;font-size:12px}
-.box{background:red;border-radius:20px;padding:8px;width:90%;margin:10px auto;display:flex;align-items:center}
-.box input{flex:1;border:none;border-radius:12px;padding:12px;text-align:center;font-size:16px}
-.cbtn{padding:16px 40px;border:2px solid #000;border-radius:12px;font-weight:900;margin-top:25px;background:#fff;color:#000;cursor:pointer}
-#g2,#g3{display:none;min-height:100vh;padding:12px;background:#000;color:#fff}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-bottom:20px}
-.b{padding:16px 5px;border-radius:12px;font-weight:900;text-align:center;font-size:12px;cursor:pointer}
-.p{background:#3a1a6e;color:#ff0}.r{background:red;color:#fff}.g{background:#0a3320;color:#ff0}.d{background:#0a1a33;color:#fff}.w{background:#fff;color:#c00}.k{background:#111;color:#1e90ff}
-.circle{width:260px;height:260px;margin:20px auto;border-radius:50%;border:3px solid red;box-shadow:0 0 30px red;display:flex;align-items:center;justify-content:center}
-.v{font-size:55px;color:#0f8;font-weight:900}
-.sim{width:90%;padding:16px;background:#00ff66;border:none;border-radius:30px;font-weight:900;font-size:14px;margin-top:15px;cursor:pointer}
-.tm{margin-top:10px;color:#ff0;font-size:12px}
-.history{margin-top:20px;text-align:left;background:#111;border-radius:12px;padding:10px;max-height:200px;overflow-y:auto}
-.hist-item{padding:6px 8px;border-bottom:1px solid #222;font-size:12px;display:flex;justify-content:space-between}
-.hist-item span:first-child{color:#0f8;font-weight:900}
-</style></head><body>
+body{margin:0;background:#000;color:#fff;font-family:Arial;text-align:center}
+.login{margin-top:80px}
+input{width:80%;padding:15px;border:3px solid red;border-radius:10px;text-align:center;font-size:18px}
+button{margin-top:15px;padding:12px 30px;background:red;color:#fff;border:none;border-radius:8px;font-weight:bold}
+.app{display:none;padding:20px}
+.card{background:#111;border:1px solid red;border-radius:15px;padding:20px;margin:20px 0}
+.big{font-size:60px;color:#ff0000;font-weight:bold}
+</style>
+</head>
+<body>
 
-<div id="g1" class="center">
-<div class="top"><span>15:28 ✈️</span><span>4.5G</span></div>
-<div style="font-size:70px;margin:10px">🔄</div>
-<div style="font-weight:900;margin:10px">APP ID:</div>
-<div class="box">🔑<input id="appId" placeholder="Enter ID" type="text"></div>
-<button class="cbtn" id="contBtn">CONTINUE</button>
+<div id="loginPage" class="login">
+<h2 style="color:red">TNN AVIATOR PREDICTOR</h2>
+<p>APP ID:</p>
+<input id="appId" placeholder="Enter ID">
+<br>
+<button onclick="login()">CONTINUE</button>
+<p id="msg" style="color:red"></p>
 </div>
 
-<div id="g2">
-<h3 style="text-align:center">✈️ TNN - SELECT BOOKMAKER</h3>
-<div class="grid">
-<div class="b p" onclick="openS('HOLLYWOODbets')">HOLLYWOODbets</div>
-<div class="b r" onclick="openS('SportyBet')">SportyBet</div>
-<div class="b g" onclick="openS('BETWINNER')">BETWINNER</div>
-<div class="b d" onclick="openS('PREMIER Bet')">PREMIER Bet</div>
-<div class="b w" onclick="openS('Pin-UP')">Pin-UP</div>
-<div class="b k" onclick="openS('1win')">1win</div>
-<div class="b d" onclick="openS('BetKing')">BetKing</div>
-<div class="b k" onclick="openS('1XBET')">1XBET</div>
-<div class="b w" onclick="openS('lotto star')">lotto star</div>
-<div class="b k" onclick="openS('M.SPORT')">M.SPORT</div>
-<div class="b w" onclick="openS('Bongo bongo')">Bongo bongo</div>
-<div class="b r" onclick="openS('super bet')">super bet</div>
-<div class="b d" onclick="openS('Elephant Bet')">Elephant Bet</div>
-<div class="b k" onclick="openS('betway')">betway</div>
-<div class="b g" onclick="openS('20BET')">20BET</div>
-<div class="b g" onclick="openS('bet365')">bet365</div>
-<div class="b k" onclick="openS('betPawa')">betPawa</div>
-<div class="b p" onclick="openS('betfair')">betfair</div>
+<div id="mainApp" class="app">
+<h2 style="color:red">TNN AVIATOR PREDICTOR</h2>
+<div class="card">
+<p>NEXT PREDICTION</p>
+<div class="big" id="prediction">--x</div>
+<p id="time"></p>
 </div>
+<button onclick="getNext()" style="width:90%;padding:18px;font-size:18px">GET NEXT PREDICTION</button>
+<div class="card" style="text-align:left">
+<p>Past Results:</p>
+<div id="history">No history yet</div>
 </div>
-
-<div id="g3" style="text-align:center">
-<h3 id="brand" style="color:red;margin-top:10px"></h3>
-<div class="circle"><div class="v" id="val">--x</div></div>
-<button class="sim" onclick="gen()">GET NEXT PREDICTION</button>
-<div id="tm" class="tm"></div>
-<div class="history" id="histBox" style="display:none"><h4 style="text-align:center;color:red;font-size:12px">📊 PAST RESULTS</h4><div id="hist"></div></div>
-<br><button style="margin-top:12px;background:#222;color:#fff;border:none;padding:8px 16px;border-radius:20px" onclick="back2()">← BACK</button>
 </div>
 
 <script>
-function doLogin(){
- let v=document.getElementById('appId').value.trim();
- if(v !== '#pro750@'){alert('Wrong ID');return;}
- document.getElementById('g1').style.display='none';
- document.getElementById('g2').style.display='block';
+function login(){
+let id=document.getElementById('appId').value;
+if(id==="#pro750@"){
+document.getElementById('loginPage').style.display='none';
+document.getElementById('mainApp').style.display='block';
+}else{
+document.getElementById('msg').innerText='Wrong ID! Use #pro750@';
 }
-document.getElementById('contBtn').addEventListener('click', doLogin);
-document.getElementById('appId').addEventListener('keypress', function(e){ if(e.key==='Enter'){doLogin();} });
-function openS(n){document.getElementById('brand').innerText=n;document.getElementById('g2').style.display='none';document.getElementById('g3').style.display='block';document.getElementById('hist').innerHTML='';document.getElementById('histBox').style.display='none';gen();}
-function back2(){document.getElementById('g3').style.display='none';document.getElementById('g2').style.display='block';}
-function gen(){
- document.getElementById('val').innerText='...';
- setTimeout(()=>{
-   let x=(Math.random()*12+1.2).toFixed(2)+'x';
-   document.getElementById('val').innerText=x;
-   let now=new Date();
-   let time=now.toLocaleTimeString();
-   let date=now.toLocaleDateString();
-   document.getElementById('tm').innerText='⏰ '+time+' | 📅 '+date;
-   document.getElementById('histBox').style.display='block';
-   let item=document.createElement('div');
-   item.className='hist-item';
-   item.innerHTML='<span>'+x+'</span><span>'+time+' | '+date+'</span>';
-   document.getElementById('hist').prepend(item);
- },700);
+}
+function getNext(){
+let odds=(Math.random()*2+1.2).toFixed(2);
+let now=new Date();
+document.getElementById('prediction').innerText=odds+'x';
+document.getElementById('time').innerText=now.toLocaleString();
+let h=document.getElementById('history');
+h.innerHTML='<div>'+now.toLocaleTimeString()+' - '+odds+'x</div>'+h.innerHTML;
 }
 </script>
-</body></html>
+</body>
+</html>

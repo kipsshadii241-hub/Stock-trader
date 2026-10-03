@@ -1,6 +1,7 @@
 <!DOCTYPE html><html><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TNN</title><link rel="manifest" href="manifest.json">
+<title>TNN</title>
+<link rel="manifest" href="manifest.json">
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial;background:#000;color:#fff}
 .center{text-align:center;padding:20px 12px;min-height:100vh;background:#fff;color:#000}
@@ -71,7 +72,6 @@ function doLogin(){
 }
 document.getElementById('contBtn').addEventListener('click', doLogin);
 document.getElementById('appId').addEventListener('keypress', function(e){ if(e.key==='Enter'){doLogin();} });
-
 function openS(n){document.getElementById('brand').innerText=n;document.getElementById('g2').style.display='none';document.getElementById('g3').style.display='block';document.getElementById('hist').innerHTML='';document.getElementById('histBox').style.display='none';gen();}
 function back2(){document.getElementById('g3').style.display='none';document.getElementById('g2').style.display='block';}
 function gen(){

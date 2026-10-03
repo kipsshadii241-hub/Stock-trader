@@ -83,6 +83,7 @@ input{width:85%;padding:16px;border:3px solid red;border-radius:12px;text-align:
 <script>
 let currentSite="";
 const SECRET="#pro750@";
+let lastOdds=[];
 function selectSite(site){
 currentSite=site;
 document.getElementById('sitesPage').style.display='none';
@@ -109,13 +110,27 @@ setTimeout(()=>{clearInterval(interval);document.getElementById('connectingPage'
 }else{document.getElementById('msg').innerText='Invalid ID! Contact Admin';}
 }
 function getNext(){
-let odds=(Math.random()*3+1.10).toFixed(2);
+let r=Math.random();
+let odds;
+if(r<0.35){odds=(Math.random()*0.99+1.00).toFixed(2);}
+else if(r<0.70){odds=(Math.random()*2.99+2.00).toFixed(2);}
+else if(r<0.88){odds=(Math.random()*14.99+5.00).toFixed(2);}
+else if(r<0.97){odds=(Math.random()*80+20).toFixed(2);}
+else{odds=(Math.random()*200+100).toFixed(2);}
+if(lastOdds.includes(odds)){return getNext();}
+lastOdds.push(odds);
+if(lastOdds.length>5) lastOdds.shift();
 let now=new Date();
 document.getElementById('prediction').innerText=odds+'x';
 document.getElementById('time').innerText=now.toLocaleString()+" • "+currentSite;
 let h=document.getElementById('history');
 if(h.innerHTML.includes('Click GET NEXT')) h.innerHTML='';
 h.innerHTML='<span class="history-item">✅ '+odds+'x</span>'+h.innerHTML;
+let predEl=document.getElementById('prediction');
+if(parseFloat(odds)<2) predEl.style.color='#ff4444';
+else if(parseFloat(odds)<5) predEl.style.color='#ff0000';
+else if(parseFloat(odds)<20) predEl.style.color='#00ff88';
+else predEl.style.color='#ffcc00';
 }
 </script>
 </body>

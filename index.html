@@ -1,171 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fake Predictor Mockup</title>
+<link rel="manifest" href="manifest.json">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TNN</title>
 <style>
-  body {
-    background: #000;
-    color: #0f0;
-    font-family: 'Courier New', Courier, monospace;
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-  }
-  .phone-mockup {
-    width: 350px;
-    background: #111;
-    border: 8px solid #333;
-    border-radius: 30px;
-    padding: 20px;
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
-    position: relative;
-    overflow: hidden;
-  }
-  .warning-banner {
-    background: #f00;
-    color: #fff;
-    padding: 8px;
-    text-align: center;
-    font-size: 12px;
-    font-weight: bold;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    font-family: sans-serif;
-  }
-  .header {
-    text-align: center;
-    font-size: 14px;
-    border-bottom: 1px dashed #0f0;
-    padding-bottom: 5px;
-    margin-bottom: 15px;
-    color: #0f0;
-    text-transform: uppercase;
-  }
-  .signal-box {
-    background: #1a0000;
-    border: 1px solid #f00;
-    padding: 15px;
-    text-align: center;
-    margin-bottom: 15px;
-    border-radius: 8px;
-  }
-  .signal-text {
-    font-size: 24px;
-    font-weight: bold;
-    color: #f00;
-    text-shadow: 0 0 10px #f00;
-  }
-  .multiplier {
-    font-size: 36px;
-    color: #f00;
-    margin-top: 5px;
-  }
-  .terminal {
-    background: #000;
-    border: 1px solid #0f0;
-    padding: 10px;
-    height: 180px;
-    overflow-y: auto;
-    font-size: 11px;
-    line-height: 1.4;
-    margin-bottom: 15px;
-  }
-  .terminal p { margin: 2px 0; }
-  .blink {
-    animation: blink 1s step-end infinite;
-  }
-  @keyframes blink { 50% { opacity: 0; } }
-  button {
-    width: 100%;
-    padding: 12px;
-    background: #0f0;
-    color: #000;
-    border: none;
-    font-weight: bold;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    text-transform: uppercase;
-  }
-  button:hover { background: #0c0; }
+*{box-sizing:border-box} body{margin:0;font-family:Arial;background:#fff}
+.topbar{height:38px;background:#ff1a1a;display:flex;align-items:center;padding:0 10px;color:#fff;justify-content:space-between;font-size:14px}
+.center{text-align:center;padding-top:30px}
+.plane{width:200px;margin:20px auto;display:block;filter:hue-rotate(-10deg)}
+.label{font-family:cursive;font-weight:900;margin-top:20px;font-size:18px}
+.idbox{background:#ff0000;border-radius:18px;padding:10px 14px;display:flex;align-items:center;width:78%;margin:12px auto;box-shadow:0 8px 20px rgba(255,0,0,.3)}
+.idbox span{font-size:22px;margin-right:8px}
+.idbox input{flex:1;border:none;border-radius:12px;padding:12px;text-align:center;font-family:cursive;font-size:16px;outline:none}
+.contbtn{margin:22px auto;background:#fff;border:none;padding:14px 40px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,.15);font-family:cursive;font-weight:900;letter-spacing:1px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{padding:18px 10px;border-radius:12px;font-weight:900;text-align:center;font-size:13px;border:2px solid #222}
+.purple{background:#3a1a6e;color:#ffdd00}.red{background:#ff0000;color:#fff}.green{background:#0a3320;color:#ffdd00}.dark{background:#0a1a33;color:#fff}.white{background:#fff;color:#cc0000;border-color:#ddd}.black{background:#111;color:#1e90ff;border-color:#333}
+#page1,#page2,#page3{padding:12px} #page2,#page3{display:none} #page2{background:#000;min-height:100vh} #page3{background:#000;min-height:100vh;text-align:center;color:#fff}
+.circle{width:260px;height:260px;margin:20px auto;border-radius:50%;border:3px solid red;box-shadow:0 0 30px red;display:flex;align-items:center;justify-content:center}
+.val{font-size:56px;color:#00ff88;font-weight:900}
 </style>
 </head>
 <body>
+<div class="topbar"><span>15:03 ✈️ f 🎵</span><span style="font-size:10px">2.13 KB/s 📶 4.5G 4.5G 35</span></div>
 
-<div class="phone-mockup">
-  <div class="warning-banner">⚠️ NO SHARING APP- REAL PREDICTOR</div>
-  
-  <div class="header">Aviator Predictor v4.0</div>
-  
-  <div class="signal-box" id="signalBox" style="display: none;">
-    <div class="signal-text">FLEW AWAY</div>
-    <div class="multiplier" id="multiplierDisplay">1.45x</div>
-  </div>
+<div id="page1" class="center">
+<img class="plane" src="https://cdn-icons-png.flaticon.com/512/86/86009.png" style="filter: invert(16%) sepia(98%) saturate(6000%) hue-rotate(356deg)">
+<div class="label">APP ID:</div>
+<div class="idbox"><span>🔑</span><input id="appid" placeholder="ID"></div>
+<button class="contbtn" onclick="goGrid()">CONTINUE</button>
+</div>
 
-  <div class="terminal" id="terminal">
-    <p>> Initializing Aviator Predictor v4.0...</p>
-    <p>> Connecting to game server...</p>
-    <p>> Bypassing RNG algorithm...</p>
-    <p>> Server seed detected: [ENCRYPTED]</p>
-    <p>> Analyzing historical crash points...</p>
-    <p>> Ready. Press Generate Signal.<span class="blink">_</span></p>
-  </div>
+<div id="page2">
+<h3 style="color:#fff;text-align:center;font-size:12px;letter-spacing:2px">✈️ TNN AVIATOR - SELECT BOOKMAKER</h3>
+<div class="grid">
+<div class="btn purple" onclick="openSim('HOLLYWOODbets')">★ HOLLYWOODbets</div>
+<div class="btn red" onclick="openSim('SportyBet')">.SportyBet</div>
+<div class="btn green" onclick="openSim('BETWINNER')">BETWINNER</div>
+<div class="btn dark" onclick="openSim('PREMIER Bet')">PREMIER Bet</div>
+<div class="btn white" onclick="openSim('Pin-UP.bet')">Pin-UP.bet</div>
+<div class="btn black" onclick="openSim('1win')">1win</div>
+<div class="btn dark" onclick="openSim('BetKing')">BetKing</div>
+<div class="btn black" onclick="openSim('1XBET')">1XBET</div>
+<div class="btn white" onclick="openSim('lotto star')">lotto ★ star</div>
+<div class="btn black" onclick="openSim('M.SPORT')">M.SPORT</div>
+<div class="btn white" onclick="openSim('Bongo bongo ug')">Bongo bongo ug</div>
+<div class="btn red" onclick="openSim('super bet')">super bet</div>
+<div class="btn dark" onclick="openSim('Elephant Bet')">Elephant Bet</div>
+<div class="btn black" onclick="openSim('betway')">betway</div>
+<div class="btn green" onclick="openSim('20BET')">20BET</div>
+<div class="btn green" onclick="openSim('bet365')">bet365</div>
+<div class="btn black" onclick="openSim('betPawa')">betPawa</div>
+<div class="btn purple" onclick="openSim('betfair')">betfair</div>
+<div class="btn white" onclick="openSim('Cloudbet')">Cloudbet</div>
+<div class="btn white" onclick="openSim('sportingbet')">sportingbet</div>
+</div>
+</div>
 
-  <button id="generateBtn">Get real Signal</button>
+<div id="page3">
+<h3 id="brand" style="color:red;margin-top:10px">BET</h3>
+<div style="letter-spacing:2px;font-size:12px">FLEW AWAY</div>
+<div style="color:red;font-size:11px" id="time"></div>
+<div class="circle"><div class="val" id="val">2.14x</div></div>
+<button style="width:85%;padding:14px;background:#00ff66;border:none;border-radius:25px;font-weight:900" onclick="gen()">GET SIMULATION</button><br>
+<button style="margin-top:10px;background:#222;color:#fff;border:none;padding:8px 18px;border-radius:20px" onclick="document.getElementById('page3').style.display='none';document.getElementById('page2').style.display='block'">← BACK</button>
+<div style="font-size:8px;color:#444;margin-top:15px">Offline simulator - entertainment only - not real prediction</div>
 </div>
 
 <script>
-  const terminal = document.getElementById('terminal');
-  const signalBox = document.getElementById('signalBox');
-  const multiplierDisplay = document.getElementById('multiplierDisplay');
-  const generateBtn = document.getElementById('generateBtn');
-
-  const fakeLogs = [
-    "> Connecting to game server...",
-    "> Bypassing RNG algorithm...",
-    "> Extracting server seed hash...",
-    "> Analyzing previous 50 rounds...",
-    "> Calculating probability matrix...",
-    "> Signal generated!"
-  ];
-
-  let isGenerating = false;
-
-  generateBtn.addEventListener('click', () => {
-    if (isGenerating) return;
-    isGenerating = true;
-    signalBox.style.display = 'none';
-    terminal.innerHTML = '<p>> Starting prediction sequence...<span class="blink">_</span></p>';
-    
-    let i = 0;
-    const interval = setInterval(() => {
-      if (i < fakeLogs.length) {
-        const p = document.createElement('p');
-        p.textContent = fakeLogs[i];
-        terminal.appendChild(p);
-        terminal.scrollTop = terminal.scrollHeight;
-        i++;
-      } else {
-        clearInterval(interval);
-        // Generate completely random, meaningless number
-        const randomMultiplier = (Math.random() * 3 + 1).toFixed(2);
-        multiplierDisplay.textContent = randomMultiplier + 'x';
-        signalBox.style.display = 'block';
-        
-        const p = document.createElement('p');
-        p.textContent = "> SIGNAL: FLY AWAY at " + randomMultiplier + "x";
-        p.style.color = "#f00";
-        terminal.appendChild(p);
-        terminal.scrollTop = terminal.scrollHeight;
-        isGenerating = false;
-      }
-    }, 600);
-  });
+function goGrid(){
+ let id=document.getElementById('appid').value.trim();
+ if(!id){alert('Enter APP ID boss');return;}
+ localStorage.setItem('appid',id);
+ document.getElementById('page1').style.display='none';
+ document.getElementById('page2').style.display='block';
+}
+function openSim(name){
+ document.getElementById('brand').innerText=name;
+ document.getElementById('page2').style.display='none';
+ document.getElementById('page3').style.display='block';
+ gen();
+}
+function gen(){ document.getElementById('val').innerText='...'; setTimeout(()=>{document.getElementById('val').innerText=(Math.random()*15+1.5).toFixed(2)+'x'},600); updateTime(); }
+function updateTime(){let d=new Date(); let el=document.getElementById('time'); if(el) el.innerText=d.toLocaleDateString('en-GB')+' - '+d.toLocaleDateString('en-US',{weekday:'long'}).toUpperCase()+' - '+d.toLocaleTimeString();}
+setInterval(updateTime,1000);
 </script>
 </body>
 </html>

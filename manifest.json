@@ -1,13 +1,13 @@
 {
-  "name": "Stock Trader",
-  "short_name": "Stock Trader",
+  "name": "TNN Aviator",
+  "short_name": "TNN",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
-  "theme_color": "#00ff00",
+  "theme_color": "#ff0000",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/138/138292.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/2972/2972185.png",
       "sizes": "512x512",
       "type": "image/png"
     }
